@@ -48,28 +48,29 @@
 #' # You can also use the function with a vector of standard deviations
 #' set.seed(123)
 #' sample_lognormal(1:10, sd = 1:10)
+#' @export
 sample_lognormal <- function(x, sd = 1) {
   # Check if x and sd are numeric
   if (any(!is.numeric(x)) || any(!is.numeric(sd))) {
     cli::cli_abort(c(
-      x = "Both {.var x} and {.var sd} need to be numeric",
-      i = "{.var x} is {.cls {class(x)}}",
-      i = "{.var sd} is {.cls {class(sd)}}"
+      "x" = "Both {.var x} and {.var sd} need to be numeric",
+      "i" = "{.var x} is {.cls {class(x)}}",
+      "i" = "{.var sd} is {.cls {class(sd)}}"
     ))
   }
   # Check if x and sd are of the same length
   if (length(x) != 1 && length(sd) != 1 && length(x) != length(sd)) {
     cli::cli_abort(c(
-      x = "Length of {.var x} and {.var sd} must be the same",
-      i = "{.var x} has length {length(x)}",
-      i = "{.var sd} has length {length(sd)}"
+      "x" = "Length of {.var x} and {.var sd} must be the same",
+      "i" = "{.var x} has length {length(x)}",
+      "i" = "{.var sd} has length {length(sd)}"
     ))
   }
   # Check that all sd values are positive
   if (any(sd < 0)) {
     cli::cli_abort(c(
-      x = "All values of {.var sd} must be positive",
-      i = "{.var sd} has values {sd[sd < 0]}"
+      "x" = "All values of {.var sd} must be positive",
+      "i" = "{.var sd} has values {sd[sd < 0]}"
     ))
   }
 

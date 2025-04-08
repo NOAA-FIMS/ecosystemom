@@ -1,2 +1,5 @@
+^\.devcontainer$
 ^ecosystemom\.Rproj$
+^LICENSE\.md$
 ^\.Rproj\.user$
+.vscode
