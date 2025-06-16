@@ -16,6 +16,9 @@ recycled to the length of \code{sd}. Otherwise, it must be the same length as
 single value is provided, it will be recycled to the length of \code{x}.
 Otherwise, it must be the same length as \code{x}.}
 }
+\value{
+A numeric vector of the same length as \code{x} is returned.
+}
 \description{
 Sample from a standard normal in log space and apply this
 exponentiated observation error to the observations, i.e, \code{x}, after the
@@ -61,4 +64,5 @@ sample_lognormal(2, sd = 1)
 # You can also use the function with a vector of standard deviations
 set.seed(123)
 sample_lognormal(1:10, sd = 1:10)
+
 }

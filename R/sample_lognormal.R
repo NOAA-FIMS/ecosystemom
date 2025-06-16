@@ -48,8 +48,12 @@
 #' # You can also use the function with a vector of standard deviations
 #' set.seed(123)
 #' sample_lognormal(1:10, sd = 1:10)
+#'
+#' @return
+#' A numeric vector of the same length as `x` is returned.
 #' @export
 sample_lognormal <- function(x, sd = 1) {
+  # Input Validation ----
   # Check if x and sd are numeric
   if (any(!is.numeric(x)) || any(!is.numeric(sd))) {
     cli::cli_abort(c(
@@ -80,7 +84,7 @@ sample_lognormal <- function(x, sd = 1) {
     x <- rep(x, length(sd))
   }
 
-  # Generate lognormal samples
+  # Sampling Process ----
   sampled_error <- stats::rnorm(n = length(x), mean = 0, sd = sd)
   bias_correction <- sd^2 / 2
   x * exp(sampled_error - bias_correction)
