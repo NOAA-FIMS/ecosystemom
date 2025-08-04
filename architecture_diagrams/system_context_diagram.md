@@ -23,7 +23,7 @@ subgraph Legend
 end
 
 %% Define users
-subgraph **Users**
+subgraph "" 
     direction LR
     U1[<b>User 1</b><br/><br/>-<i>Person</i>-<br/><br/>Ecosystem Modeler]:::lightblue
     U2[<b>User 2</b><br/><br/>-<i>Person</i>-<br/><br/>General Data User]:::lightblue
@@ -31,14 +31,14 @@ subgraph **Users**
 end
 
 %% Define ecosystem simulation toolkit
-subgraph **Ecosystem Simulation Toolkit**
+subgraph "" 
     direction LR
     EcosystemData[<b>ecosystemdata</b><br/><br/> -<i>R package</i>-<br/><br/> -Standardizes model output<br/>-Provides functions to connect with external tools to perform time series analysis]:::lightgreen
     EcosystemOM[<b>ecosystemom</b><br/><br/> -<i>R package</i>-<br/><br/> Samples observations from ecosystemdata for stock assessment testing]:::lightgreen
 end
 
 %% Define external systems
-subgraph **External Systems**
+subgraph "" 
     direction TB
     EM[<b>Ecosystem Models</b><br/><br/> -<i>External System</i>-<br/><br/> Simulate ecosystem dynamics and produce raw outputs]:::lightpurple
     DSEM[<b>Dynamic Structural Equation Models</b><br/><br/> -<i>External System</i>-<br/><br/> Fit dynamic structural equation models]:::lightpurple
