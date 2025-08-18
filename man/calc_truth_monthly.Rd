@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_truth.R
 \name{calc_truth_monthly}
 \alias{calc_truth_monthly}
-\title{Caculate monthly "truth" for a species}
+\title{Calculate monthly "truth" for a species}
 \usage{
 calc_truth_monthly(data, species_name, truth_type)
 }
