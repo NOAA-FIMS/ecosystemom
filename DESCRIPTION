@@ -25,3 +25,4 @@ Suggests:
 Config/testthat/edition: 3
 Remotes: 
     github::NOAA-FIMS/ecosystemdata@main
+Language: en-US

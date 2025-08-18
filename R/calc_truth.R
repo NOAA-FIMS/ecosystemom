@@ -220,7 +220,7 @@ calc_truth <- function(data, species_name) {
     dplyr::arrange(truth_label)
 }
 
-#' Caculate monthly "truth" for a species
+#' Calculate monthly "truth" for a species
 #'
 #' @description This function calculates the monthly "truth" for a species by
 #' filtering the data for the specified species and type
