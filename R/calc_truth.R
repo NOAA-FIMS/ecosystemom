@@ -78,10 +78,18 @@ calc_truth <- function(data, species_name) {
       "i" = "Please check the species name and try again."
     ))
   }
-
+  
+  # Check model type
+  is_ecospace <- data |>
+    dplyr::filter(grepl("ecospace", file_name, ignore.case = TRUE)) |>
+    nrow() > 0
   # Create a tibble with the labels (e.g., biomass) and types (e.g., index)
   # Define available labels from data
-  labels <- c("biomass", "catch", "weight")
+  if (is_ecospace) {
+    labels <- c("biomass", "catch")
+  } else {
+    labels <- c("biomass", "catch", "weight")
+  }
   unique_data_type <- unique(data[["type"]])
   missing_data <- setdiff(labels, unique_data_type)
   if (length(missing_data) > 0) {
