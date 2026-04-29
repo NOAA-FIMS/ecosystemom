@@ -156,7 +156,8 @@ calc_truth <- function(data, species_name) {
 
   # Extract biomass-at-age and weight-at-age
   truth_baa_monthly <- truth_agecomp_monthly[["biomass"]]
-  truth_waa_monthly <- truth_agecomp_monthly[["weight"]]
+  if ("weight" %in% labels) {
+    truth_waa_monthly <- truth_agecomp_monthly[["weight"]]
   # Calculate numbers-at-age by dividing biomass-at-age by weight-at-age,
   # rounded to integers
   truth_agecomp_monthly[["numbers"]] <- truth_baa_monthly |>
@@ -186,7 +187,8 @@ calc_truth <- function(data, species_name) {
     truth_index_monthly[["numbers"]]
   ) |>
     dplyr::mutate(value = round(value))
-
+  }
+  
   truth_values <- c(
     truth_index_monthly,
     truth_index_yearly,
