@@ -1,8 +1,12 @@
-#' Calculate "truth" for a species using {ecosystemdata} outputs
+utils::globalVariables(c(
+  "file_name", "label", "truth_label", "unit"
+))
+
+#' Calculate "truth" for a species using ecosystem model outputs
 #'
 #' @description The truth from an ecosystem model is often in different units
-#' than what is needed to sample from. This function takes an {ecosystemdata}
-#' data set and calculates additional true information such as converting
+#' than what is needed to sample from. This function takes output data from 
+#' `load_model()` and calculates additional true information such as converting
 #' monthly age-composition information into annual data. No sampling is
 #' performed just mathematical operations.
 #'
@@ -13,7 +17,7 @@
 #'   * weight
 #'
 #' @param data A tibble containing ecosystem model (e.g., Ecopath with Ecosim)
-#' outputs from [ecosystemdata::load_model()].
+#' outputs from [ecosystemom::load_model()].
 #' @param species_name A string specifying the desired species you want to
 #' summarize information for. This string must match an entry in
 #' `data[["species"]]` and it currently cannot be a vector, just a single
@@ -50,8 +54,8 @@
 #'
 #'
 #' @examples
-#' data(ewe_nwatlantic_base, package = "ecosystemdata")
-#' data <- ewe_nwatlantic_base
+#' data(ewe_ecosim_base_nwatlantic)
+#' data <- ewe_ecosim_base_nwatlantic
 #' truth <- calc_truth(
 #'   data,
 #'   species_name = "menhaden"
@@ -235,15 +239,15 @@ calc_truth <- function(data, species_name) {
 #' @description This function calculates the monthly "truth" for a species by
 #' filtering the data for the specified species and type
 #'
-#' @param data A tibble containing ecosystem model outputs from {ecosystemdata}.
+#' @param data A tibble containing ecosystem model outputs from `load_model()`.
 #' @param species_name A string specifying the species name to subset.
 #' @param truth_type A string specifying the type of "truth" to calculate.
 #'
 #' @return A tibble containing the monthly "truth" data for the specified species.
 #'
 #' @examples
-#' data(ewe_nwatlantic_base, package = "ecosystemdata")
-#' data <- ewe_nwatlantic_base
+#' data(ewe_ecosim_base_nwatlantic)
+#' data <- ewe_ecosim_base_nwatlantic
 #' truth_monthly <- ecosystemom:::calc_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
@@ -251,7 +255,7 @@ calc_truth <- function(data, species_name) {
 #' )
 #' @keywords calc_truth
 calc_truth_monthly <- function(data, species_name, truth_type) {
-  # Calculate the yearly "truth" using data from {ecosystemdata}
+  # Calculate the yearly "truth" using data from load_model()
   data |>
     # Filter the data to include only the specified types
     dplyr::filter(type %in% truth_type) |>
@@ -271,8 +275,8 @@ calc_truth_monthly <- function(data, species_name, truth_type) {
 #' the specified species
 #'
 #' @examples
-#' data(ewe_nwatlantic_base, package = "ecosystemdata")
-#' data <- ewe_nwatlantic_base
+#' data(ewe_ecosim_base_nwatlantic)
+#' data <- ewe_ecosim_base_nwatlantic
 #' truth_index_monthly <- ecosystemom:::calc_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
@@ -302,8 +306,8 @@ calc_truth_index_monthly <- function(truth_monthly) {
 #' the specified species.
 #'
 #' @examples
-#' data(ewe_nwatlantic_base, package = "ecosystemdata")
-#' data <- ewe_nwatlantic_base
+#' data(ewe_ecosim_base_nwatlantic)
+#' data <- ewe_ecosim_base_nwatlantic
 #' truth_index_yearly <- ecosystemom:::calc_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
@@ -335,8 +339,8 @@ calc_truth_index_yearly <- function(truth_index_monthly) {
 #' and weight) for the specified species.
 #'
 #' @examples
-#' data(ewe_nwatlantic_base, package = "ecosystemdata")
-#' data <- ewe_nwatlantic_base
+#' data(ewe_ecosim_base_nwatlantic)
+#' data <- ewe_ecosim_base_nwatlantic
 #' truth_agecomp_monthly <- ecosystemom:::calc_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
@@ -361,8 +365,8 @@ calc_truth_agecomp_monthly <- function(truth_monthly) {
 #' and weight) for the specified species.
 #'
 #' @examples
-#' data(ewe_nwatlantic_base, package = "ecosystemdata")
-#' data <- ewe_nwatlantic_base
+#' data(ewe_ecosim_base_nwatlantic)
+#' data <- ewe_ecosim_base_nwatlantic
 #' truth_agecomp_yearly <- ecosystemom:::calc_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",

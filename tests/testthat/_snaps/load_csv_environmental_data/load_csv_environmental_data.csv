@@ -1,0 +1,793 @@
+"index","year","month","value","unit","lag_months","impacted_group","impacted_group_snake_case","species","group"
+"amo",1984,1,0.679446219,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,2,0.717784878,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,3,0.638977636,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,4,0.570820021,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,5,0.551650692,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,6,0.212992545,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,7,0.338658147,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,8,0.423855165,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,9,0.460063898,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,10,0.172523962,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,11,0,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1984,12,0.227902023,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,1,0.149094782,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,2,0.202342918,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,3,0.144834931,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,4,0.051118211,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,5,0.185303514,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,6,0.632587859,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,7,0.579339723,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,8,0.30457934,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,9,0.376996805,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,10,0.381256656,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,11,0.274760383,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1985,12,0.18743344,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,1,0.172523962,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,2,0.317358892,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,3,0.28115016,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,4,0.212992545,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,5,0.417465389,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,6,0.347177849,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,7,0.37486688,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,8,0.323748669,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,9,0.436634718,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,10,0.225772098,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,11,0.057507987,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1986,12,0.112886049,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,1,0.310969116,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,2,0.440894569,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,3,0.832800852,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,4,0.96485623,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,5,1.047923323,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,6,1.335463259,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,7,1.497337593,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,8,1.499467519,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,9,1.31629393,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,10,1.001064963,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,11,0.75399361,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1987,12,0.994675186,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,1,0.813631523,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,2,0.653887114,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,3,0.879659212,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,4,1.009584665,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,5,1.190628328,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,6,1.250266241,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,7,1.130990415,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,8,0.879659212,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,9,0.694355698,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,10,0.532481363,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,11,0.581469649,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1988,12,0.547390841,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,1,0.423855165,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,2,0.562300319,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,3,0.355697551,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,4,0.279020234,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,5,0.583599574,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,6,1.088391906,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,7,1.271565495,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,8,1.135250266,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,9,0.694355698,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,10,0.632587859,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,11,0.575079872,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1989,12,0.568690096,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,1,0.25772098,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,2,0.549520767,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,3,0.513312034,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,4,0.645367412,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,5,0.768903088,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,6,0.775292865,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,7,0.84771033,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,8,1.005324814,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,9,1.207667732,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,10,1.135250266,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,11,0.779552716,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1990,12,0.817891374,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,1,0.479233227,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,2,0.645367412,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,3,0.745473908,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,4,0.611288605,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,5,0.56656017,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,6,0.617678381,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,7,0.664536741,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,8,0.66027689,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,9,0.813631523,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,10,0.334398296,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,11,0.336528222,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1991,12,0.436634718,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,1,0.485623003,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,2,0.690095847,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,3,0.694355698,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,4,0.498402556,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,5,0.417465389,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,6,0.568690096,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,7,0.423855165,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,8,0.078807242,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,9,0.102236422,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,10,0.251331203,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,11,0.176783813,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1992,12,0.283280085,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,1,0.379126731,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,2,0.49201278,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,3,0.368477103,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,4,0.51970181,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,5,0.541001065,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,6,0.502662407,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,7,0.298189563,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,8,0.402555911,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,9,0.53887114,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,10,0.370607029,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,11,0.21086262,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1993,12,0.264110756,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,1,0.25772098,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,2,0.230031949,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,3,0.293929712,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,4,0.462193823,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,5,0.447284345,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,6,0.415335463,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,7,0.394036209,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,8,0.385516507,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,9,0.562300319,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,10,0.760383387,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,11,0.845580405,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1994,12,0.694355698,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,1,0.75399361,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,2,0.80085197,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,3,0.920127796,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,4,1.047923323,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,5,1.465388711,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,6,1.661341853,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,7,1.55484558,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,8,1.275825346,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,9,1.001064963,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,10,1.103301384,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,11,1.156549521,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1995,12,0.975505857,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,1,0.864749734,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,2,0.817891374,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,3,0.762513312,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,4,0.905218317,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,5,0.747603834,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,6,0.621938232,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,7,0.662406816,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,8,0.866879659,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,9,0.881789137,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,10,0.577209798,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,11,0.51544196,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1996,12,0.553780618,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,1,0.690095847,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,2,0.809371672,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,3,0.89456869,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,4,0.900958466,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,5,0.969116081,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,6,0.903088392,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,7,1.013844515,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,8,0.915867945,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,9,1.118210863,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,10,1.205537806,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,11,0.992545261,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1997,12,1.165069223,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,1,1.160809372,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,2,1.505857295,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,3,1.569755059,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,4,1.505857295,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,5,1.701810437,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,6,1.927582535,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,7,1.923322684,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,8,1.97657082,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,9,1.761448349,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,10,1.697550586,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,11,1.559105431,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1998,12,1.478168264,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,1,0.992545261,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,2,1.005324814,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,3,1.030883919,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,4,0.994675186,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,5,1.228966986,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,6,1.267305644,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,7,1.305644302,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,8,1.537806177,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,9,1.277955272,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,10,0.920127796,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,11,0.779552716,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",1999,12,0.915867945,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,1,0.705005325,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,2,0.802981896,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,3,1.103301384,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,4,0.973375932,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,5,1.107561235,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,6,0.845580405,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,7,1.037273695,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,8,1.103301384,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,9,1.101171459,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,10,0.798722045,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,11,0.771033014,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2000,12,0.61341853,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,1,0.611288605,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,2,0.826411076,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,3,0.913738019,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,4,0.858359957,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,5,0.864749734,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,6,1.305644302,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,7,1.171458999,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,8,1.260915868,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,9,1.493077742,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,10,1.418530351,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,11,1.216187433,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2001,12,1.337593184,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,1,1.26943557,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,2,1.235356763,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,3,1.190628328,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,4,0.94142705,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,5,0.779552716,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,6,0.634717785,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,7,0.743343983,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,8,1.109691161,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,9,1.052183174,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,10,1.120340788,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,11,0.924387646,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2002,12,0.892438765,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,1,0.990415335,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,2,0.856230032,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,3,1.122470714,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,4,1.052183174,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,5,1.205537806,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,6,1.320553781,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,7,1.471778488,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,8,1.767838126,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,9,1.844515442,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,10,1.791267306,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,11,1.358892439,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2003,12,1.361022364,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,1,1.331203408,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,2,1.329073482,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,3,1.218317359,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,4,1.113951012,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,5,0.89456869,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,6,1.260915868,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,7,1.367412141,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,8,1.556975506,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,9,1.395101171,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,10,1.399361022,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,11,1.352502662,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2004,12,1.282215122,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,1,1.118210863,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,2,1.150159744,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,3,1.488817891,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,4,1.50372737,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,5,1.505857295,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,6,1.57827476,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,7,1.833865815,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,8,1.818956337,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,9,1.774227902,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,10,1.388711395,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,11,1.179978701,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2005,12,1.341853035,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,1,1.145899894,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,2,1.041533546,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,3,1.009584665,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,4,1.303514377,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,5,1.537806177,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,6,1.591054313,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,7,1.680511182,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,8,1.735889244,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,9,1.657082002,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,10,1.593184239,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,11,1.497337593,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2006,12,1.24600639,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,1,1.24600639,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,2,1.343982961,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,3,1.15228967,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,4,1.220447284,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,5,1.120340788,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,6,1.069222577,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,7,1.156549521,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,8,0.998935037,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,9,1.090521832,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,10,1.218317359,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,11,1.256656017,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2007,12,1.118210863,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,1,0.945686901,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,2,1.154419595,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,3,1.220447284,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,4,0.973375932,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,5,1.248136315,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,6,1.427050053,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,7,1.320553781,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,8,1.254526092,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,9,1.303514377,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,10,1.099041534,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,11,0.883919063,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2008,12,0.922257721,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,1,0.756123536,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,2,0.532481363,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,3,0.541001065,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,4,0.602768903,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,5,0.751863685,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,6,1.139510117,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,7,1.367412141,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,8,1.205537806,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,9,1.003194888,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,10,1.231096912,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,11,1.028753994,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2009,12,1.056443024,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,1,0.966986155,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,2,1.258785942,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,3,1.493077742,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,4,1.787007455,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,5,1.85942492,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,6,1.833865815,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,7,1.840255591,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,8,2,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,9,1.838125666,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,10,1.571884984,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,11,1.382321619,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2010,12,1.322683706,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,1,1.186368477,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,2,1.111821086,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,3,0.998935037,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,4,1.075612354,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,5,1.203407881,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,6,1.260915868,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,7,1.075612354,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,8,1.192758253,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,9,1.188498403,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,10,1.013844515,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,11,0.73056443,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2011,12,0.785942492,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,1,0.741214058,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,2,0.890308839,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,3,0.935037274,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,4,1.050053248,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,5,1.231096912,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,6,1.518636848,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,7,1.678381257,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,8,1.797657082,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,9,1.83599574,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,10,1.582534611,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,11,1.231096912,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2012,12,1.179978701,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,1,1.15228967,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,2,1.126730564,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,3,1.216187433,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,4,1.171458999,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,5,1.094781683,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,6,0.977635783,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,7,1.284345048,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,8,1.29286475,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,9,1.422790202,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,10,1.618743344,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,11,1.15228967,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2013,12,0.956336528,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,1,0.747603834,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,2,0.788072417,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,3,0.70713525,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,4,0.679446219,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,5,0.875399361,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,6,1.01171459,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,7,1.350372737,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,8,1.593184239,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,9,1.539936102,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,10,1.501597444,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,11,1.018104366,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2014,12,1.003194888,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,1,0.862619808,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,2,0.87113951,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,3,0.604898829,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,4,0.726304579,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,5,0.973375932,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,6,0.94142705,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,7,1.160809372,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,8,1.258785942,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,9,1.518636848,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,10,1.569755059,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,11,1.275825346,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2015,12,1.367412141,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,1,1.369542066,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,2,1.209797657,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,3,1.280085197,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,4,1.254526092,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,5,1.612353568,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,6,1.750798722,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,7,1.797657082,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,8,1.850905218,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,9,1.853035144,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,10,1.689030884,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,11,1.710330138,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"amo",2016,12,1.591054313,NA,12,"menhaden 0","menhaden_0","menhaden","0"
+"pdsi",1985,1,0.385029354,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,2,0.390410959,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,3,0.285225049,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,4,0.083170254,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,5,0.681017613,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,6,0.732387476,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,7,1.028375734,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,8,1.248043053,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,9,1.239726027,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,10,1.174168297,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,11,1.427103718,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1985,12,0.743639922,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,1,0.798434442,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,2,0.82778865,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,3,0.702544031,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,4,0.529843444,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,5,0.386007828,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,6,0.68444227,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,7,0.772015656,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,8,0.861545988,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,9,0.64481409,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,10,0.582191781,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,11,0.781800391,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1986,12,1.160469667,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,1,1.306262231,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,2,0.982387476,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,3,0.982876712,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,4,1.31409002,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,5,0.710861057,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,6,0.635518591,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,7,0.455479452,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,8,0.351761252,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,9,0.654109589,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,10,0.677592955,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,11,0.63111546,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1987,12,0.591976517,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,1,0.574363992,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,2,0.677592955,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,3,0.594911937,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,4,0.544520548,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,5,0.607142857,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,6,0.452544031,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,7,0.915851272,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,8,0.64334638,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,9,0.571428571,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,10,0.547455969,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,11,0.909491194,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1988,12,0.570939335,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,1,0.454990215,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,2,0.70890411,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,3,0.747064579,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,4,1.036692759,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,5,1.283268102,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,6,1.455479452,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,7,1.594422701,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,8,1.663894325,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,9,1.723581213,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,10,1.914872798,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,11,1.873776908,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1989,12,1.481409002,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,1,1.484833659,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,2,1.410958904,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,3,1.223581213,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,4,1.292074364,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,5,1.537181996,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,6,1.207436399,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,7,1.179549902,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,8,1.312133072,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,9,1.158023483,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,10,1.411448141,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,11,0.972113503,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1990,12,1.090019569,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,1,0.951076321,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,2,0.723581213,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,3,0.870841487,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,4,0.737279843,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,5,0.628669276,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,6,0.50146771,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,7,0.451565558,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,8,0.818493151,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,9,0.928082192,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,10,0.707436399,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,11,0.667318982,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1991,12,0.717221135,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,1,0.651174168,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,2,0.592465753,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,3,0.651174168,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,4,0.597847358,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,5,0.570939335,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,6,0.921722114,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,7,1.107632094,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,8,1.255381605,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,9,1.288649706,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,10,1.204990215,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,11,1.295009785,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1992,12,1.42074364,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,1,1.308708415,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,2,1.282289628,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,3,1.549902153,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,4,1.590019569,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,5,0.740215264,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,6,0.630626223,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,7,0.481409002,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,8,0.321428571,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,9,0.736790607,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,10,0.743150685,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,11,0.859099804,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1993,12,1.104207436,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,1,1.220156556,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,2,1.226516634,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,3,1.500489237,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,4,0.772015656,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,5,0.774951076,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,6,0.687377691,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,7,0.78962818,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,8,0.967710372,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,9,0.953033268,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,10,0.689823875,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,11,0.665362035,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1994,12,0.662426614,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,1,0.73630137,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,2,0.69667319,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,3,0.550880626,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,4,0.45890411,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,5,0.598825832,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,6,0.64481409,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,7,0.474559687,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,8,0.300391389,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,9,0.300880626,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,10,1.181017613,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,11,1.289138943,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1995,12,1.162915851,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,1,1.387475538,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,2,1.309686888,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,3,1.240704501,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,4,1.343444227,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,5,1.362035225,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,6,1.311154599,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,7,1.53816047,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,8,1.466731898,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,9,1.694227006,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,10,1.8962818,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,11,1.827299413,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1996,12,1.983855186,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,1,1.207436399,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,2,0.790606654,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,3,0.907534247,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,4,0.952544031,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,5,0.867906067,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,6,0.730919765,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,7,0.67221135,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,8,0.709393346,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,9,0.589041096,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,10,0.493639922,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,11,1.0518591,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1997,12,0.993150685,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,1,1.204990215,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,2,1.375244618,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,3,1.459882583,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,4,1.447651663,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,5,1.478962818,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,6,1.748043053,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,7,0.828277886,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,8,0.706947162,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,9,0.556262231,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,10,0.546966732,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,11,0.360078278,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1998,12,0.207436399,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,1,0.725048924,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,2,0.767612524,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,3,0.840019569,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,4,0.468688845,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,5,0.442270059,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,6,0.255381605,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,7,0.126712329,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,8,0.06702544,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,9,1.329745597,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,10,1.399706458,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,11,1.081213307,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",1999,12,0.97407045,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,1,0.967221135,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,2,0.936888454,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,3,0.925146771,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,4,1.119373777,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,5,1.06555773,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,6,1.219667319,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,7,1.3962818,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,8,1.385518591,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,9,1.436888454,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,10,0.755870841,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,11,0.715753425,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2000,12,0.747064579,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,1,0.676125245,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,2,0.613992172,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,3,1.066536204,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,4,0.707436399,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,5,0.887475538,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,6,1.094911937,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,7,1.118395303,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,8,1.004892368,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,9,0.839041096,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,10,0.636007828,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,11,0.339041096,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2001,12,0.183953033,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,1,0.121819961,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,2,0,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,3,0.109589041,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,4,0.136007828,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,5,0.447162427,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,6,0.5,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,7,0.405577299,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,8,0.303816047,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,9,0.455479452,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,10,1.048923679,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,11,1.187377691,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2002,12,1.276908023,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,1,1.103228963,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,2,1.28962818,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,3,1.291585127,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,4,1.292563601,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,5,1.404109589,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,6,1.630626223,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,7,1.614481409,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,8,1.637475538,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,9,1.823385519,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,10,1.924657534,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,11,1.543542074,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2003,12,1.634050881,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,1,1.280332681,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,2,1.143835616,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,3,0.976516634,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,4,1.397260274,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,5,1.134050881,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,6,1.085127202,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,7,1.212328767,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,8,1.369863014,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,9,1.60518591,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,10,1.39481409,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,11,1.406555773,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2004,12,1.207925636,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,1,1.248043053,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,2,1.000489237,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,3,1.086594912,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,4,1.108610568,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,5,1.093444227,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,6,0.756360078,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,7,0.746086106,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,8,0.60665362,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,9,0.427103718,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,10,1.445205479,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,11,1.449119374,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2005,12,1.429549902,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,1,1.398727984,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,2,1.244618395,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,3,0.896771037,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,4,0.829745597,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,5,0.980919765,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,6,1.692270059,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,7,1.481898239,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,8,1.382093933,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,9,1.473091977,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,10,1.684931507,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,11,1.77739726,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2006,12,1.260273973,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,1,1.204990215,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,2,1.083659491,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,3,1.116438356,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,4,1.361056751,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,5,0.712328767,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,6,0.671722114,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,7,0.658023483,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,8,0.504403131,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,9,0.337084149,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,10,0.321428571,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,11,0.21183953,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2007,12,0.396771037,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,1,0.322896282,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,2,0.886007828,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,3,0.931506849,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,4,0.966242661,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,5,0.970156556,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,6,0.955479452,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,7,1.058219178,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,8,1.010763209,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,9,1.252446184,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,10,1.140410959,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,11,1.094911937,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2008,12,1.271526419,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,1,1.068982387,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,2,0.852250489,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,3,0.878669276,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,4,1.001956947,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,5,1.062133072,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,6,1.298923679,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,7,1.595890411,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,8,1.569960861,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,9,1.462818004,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,10,1.614970646,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,11,1.587084149,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2009,12,1.761741683,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,1,1.665362035,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,2,1.691780822,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,3,2,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,4,0.942270059,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,5,0.82778865,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,6,0.716242661,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,7,0.599315068,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,8,0.546966732,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,9,0.52446184,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,10,0.87964775,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,11,0.791585127,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2010,12,0.828277886,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,1,0.787181996,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,2,0.810665362,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,3,0.982876712,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,4,1.070939335,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,5,1.027886497,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,6,1.058219178,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,7,0.927103718,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,8,1.367906067,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,9,1.613013699,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,10,1.76369863,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,11,1.125244618,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2011,12,1.127201566,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,1,0.832681018,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,2,0.650684932,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,3,0.424168297,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,4,0.364970646,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,5,0.51369863,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,6,0.554305284,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,7,0.542563601,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,8,0.584637965,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,9,0.672700587,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,10,0.931506849,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,11,0.61741683,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2012,12,0.712818004,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,1,0.756360078,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,2,0.804794521,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,3,0.746575342,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,4,0.627201566,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,5,0.868395303,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,6,1.442270059,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,7,1.122309198,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,8,1.113502935,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,9,1.014187867,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,10,0.895792564,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,11,0.859589041,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2013,12,1.014187867,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,1,0.959882583,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,2,1.106164384,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,3,1.148727984,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,4,1.191291585,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,5,1.13258317,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,6,0.835127202,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,7,0.921232877,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,8,0.839530333,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,9,0.689823875,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,10,0.867906067,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,11,0.895792564,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2014,12,0.976027397,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,1,0.942270059,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,2,0.810665362,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,3,0.816046967,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,4,0.766634051,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,5,0.504892368,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,6,0.886497065,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,7,0.785225049,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,8,0.663894325,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,9,0.682485323,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,10,0.733365949,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,11,0.631604697,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2015,12,0.723091977,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,1,0.681017613,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,2,0.874266145,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,3,0.64481409,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,4,0.578277886,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,5,0.744129159,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,6,0.690802348,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,7,0.641878669,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,8,0.432485323,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,9,0.427592955,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,10,0.571428571,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,11,0.409491194,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2016,12,0.424657534,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,1,0.500489237,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,2,0.365459883,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,3,0.386007828,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,4,0.711350294,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,5,1.042563601,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,6,0.89481409,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,7,0.993150685,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,8,0.887964775,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,9,0.707925636,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,10,0.92221135,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,11,0.723091977,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA
+"pdsi",2017,12,0.600782779,NA,0,"phytoplankton","phytoplankton","phytoplankton",NA

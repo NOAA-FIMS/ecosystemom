@@ -7,7 +7,7 @@
 #' returned and no changes are made.
 #'
 #' @details
-#' There are three minimum testing criteria for ecosystemdata, which should be
+#' There are three minimum testing criteria for ecosystemom, which should be
 #' validated for every R function within the package. The template file sets up
 #' a section for each of the three following test criteria:
 #'
@@ -33,14 +33,14 @@
 #' returned.
 #'
 #' Two messages are also returned from the usethis package, which is used by
-#' this function. The first states where the ecosystemdata project is on your
+#' this function. The first states where the ecosystemom project is on your
 #' computer. The second states the file path of the newly created file. The
 #' file will not be automatically opened.
 #'
 #' @examples
 #' # Create a new test file named "test-new_function" for `new_function()`
 #' \dontrun{
-#' ecosystemdata:::use_testthat_template("new_function")
+#' ecosystemom:::use_testthat_template("new_function")
 #' }
 use_testthat_template <- function(name) {
   path <- file.path("tests", "testthat", paste0("test-", name, ".R"))

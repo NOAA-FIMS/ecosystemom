@@ -19,8 +19,8 @@ This function calculates the monthly index for a species by
 summing the values across all ages by month.
 }
 \examples{
-data(ewe_nwatlantic_base, package = "ecosystemdata")
-data <- ewe_nwatlantic_base
+data(ewe_ecosim_base_nwatlantic)
+data <- ewe_ecosim_base_nwatlantic
 truth_index_monthly <- ecosystemom:::calc_truth_monthly(
   data,
   species_name = "menhaden",
