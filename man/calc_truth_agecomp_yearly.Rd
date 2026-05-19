@@ -19,8 +19,8 @@ This function calculates the yearly age composition for a species
 by averaging the monthly age composition values.
 }
 \examples{
-data(ewe_nwatlantic_base, package = "ecosystemdata")
-data <- ewe_nwatlantic_base
+data(ewe_ecosim_base_nwatlantic)
+data <- ewe_ecosim_base_nwatlantic
 truth_agecomp_yearly <- ecosystemom:::calc_truth_monthly(
   data,
   species_name = "menhaden",

@@ -18,7 +18,7 @@ chaining of commands. If the function is unsuccessful, an error message is
 returned.
 
 Two messages are also returned from the usethis package, which is used by
-this function. The first states where the ecosystemdata project is on your
+this function. The first states where the ecosystemom project is on your
 computer. The second states the file path of the newly created file. The
 file will not be automatically opened.
 }
@@ -30,7 +30,7 @@ argument \code{name}. If the test file already exists, an error message is
 returned and no changes are made.
 }
 \details{
-There are three minimum testing criteria for ecosystemdata, which should be
+There are three minimum testing criteria for ecosystemom, which should be
 validated for every R function within the package. The template file sets up
 a section for each of the three following test criteria:
 \enumerate{
@@ -49,6 +49,6 @@ will be used in the bookdown report of the testing results.
 \examples{
 # Create a new test file named "test-new_function" for `new_function()`
 \dontrun{
-ecosystemdata:::use_testthat_template("new_function")
+ecosystemom:::use_testthat_template("new_function")
 }
 }

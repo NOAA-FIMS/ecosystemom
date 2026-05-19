@@ -19,8 +19,8 @@ This function calculates the yearly index for a species by
 averaging monthly index values.
 }
 \examples{
-data(ewe_nwatlantic_base, package = "ecosystemdata")
-data <- ewe_nwatlantic_base
+data(ewe_ecosim_base_nwatlantic)
+data <- ewe_ecosim_base_nwatlantic
 truth_index_yearly <- ecosystemom:::calc_truth_monthly(
   data,
   species_name = "menhaden",

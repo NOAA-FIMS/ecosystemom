@@ -7,7 +7,7 @@
 calc_truth_monthly(data, species_name, truth_type)
 }
 \arguments{
-\item{data}{A tibble containing ecosystem model outputs from {ecosystemdata}.}
+\item{data}{A tibble containing ecosystem model outputs from \code{load_model()}.}
 
 \item{species_name}{A string specifying the species name to subset.}
 
@@ -21,8 +21,8 @@ This function calculates the monthly "truth" for a species by
 filtering the data for the specified species and type
 }
 \examples{
-data(ewe_nwatlantic_base, package = "ecosystemdata")
-data <- ewe_nwatlantic_base
+data(ewe_ecosim_base_nwatlantic)
+data <- ewe_ecosim_base_nwatlantic
 truth_monthly <- ecosystemom:::calc_truth_monthly(
   data,
   species_name = "menhaden",

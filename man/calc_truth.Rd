@@ -2,13 +2,13 @@
 % Please edit documentation in R/calc_truth.R
 \name{calc_truth}
 \alias{calc_truth}
-\title{Calculate "truth" for a species using {ecosystemdata} outputs}
+\title{Calculate "truth" for a species using ecosystem model outputs}
 \usage{
 calc_truth(data, species_name)
 }
 \arguments{
 \item{data}{A tibble containing ecosystem model (e.g., Ecopath with Ecosim)
-outputs from \code{\link[ecosystemdata:load_model]{ecosystemdata::load_model()}}.}
+outputs from \code{\link[=load_model]{load_model()}}.}
 
 \item{species_name}{A string specifying the desired species you want to
 summarize information for. This string must match an entry in
@@ -46,8 +46,8 @@ truth_type is "index" instead of "agecomp".}
 }
 \description{
 The truth from an ecosystem model is often in different units
-than what is needed to sample from. This function takes an {ecosystemdata}
-data set and calculates additional true information such as converting
+than what is needed to sample from. This function takes output data from
+\code{load_model()} and calculates additional true information such as converting
 monthly age-composition information into annual data. No sampling is
 performed just mathematical operations.
 }
@@ -61,8 +61,8 @@ The following values are calculated within this function:
 }
 }
 \examples{
-data(ewe_nwatlantic_base, package = "ecosystemdata")
-data <- ewe_nwatlantic_base
+data(ewe_ecosim_base_nwatlantic)
+data <- ewe_ecosim_base_nwatlantic
 truth <- calc_truth(
   data,
   species_name = "menhaden"
