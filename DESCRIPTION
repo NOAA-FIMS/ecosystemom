@@ -9,6 +9,7 @@ Authors@R: c(
   )
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
+URL: https://noaa-fims.github.io/ecosystemom/
 Depends: 
     R (>= 3.5)
 Imports:

@@ -4,6 +4,15 @@
 	"name": "R (rocker/r-ver base)",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "ghcr.io/rocker-org/devcontainer/r-ver:4.5", //commma needed if other sections are used.
+  // Force R to look at a simple, custom mount path
+  "containerEnv": {
+    "R_LIBS_USER": "/r-library"
+  },
+
+  // Mount the persistent volume directly to that custom path
+  "mounts": [
+    "source=r-user-library,target=/r-library,type=volume"
+  ],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
@@ -15,7 +24,7 @@
   },
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "echo 'options(repos = c(CRAN = \"https://cloud.r-project.org\"))' | sudo sh -c 'cat - >>\"${R_HOME}/etc/Rprofile.site\"'",
+	"postCreateCommand": "echo 'options(repos = c(CRAN = \"https://packagemanager.posit.co/cran/__linux__/jammy/latest\"))' | sudo sh -c 'cat - >>\"${R_HOME}/etc/Rprofile.site\"'",
 	
 	// Configure tool-specific properties.
 	 "customizations": {
