@@ -92,7 +92,10 @@ calc_truth <- function(data, species_name) {
   if (is_ecospace) {
     labels <- c("biomass", "catch")
   } else {
-    labels <- c("biomass", "catch", "weight")
+    labels <- c(
+      "biomass", "catch", "fishing_mortality", "natural_mortality", 
+      "total_mortality", "weight"
+    )
   }
   unique_data_type <- unique(data[["type"]])
   missing_data <- setdiff(labels, unique_data_type)
@@ -113,7 +116,15 @@ calc_truth <- function(data, species_name) {
     type = c("agecomp", "index")
   ) |>
     # Remove the weight/index combo b/c it doesn't exist
-    dplyr::filter(!(label == "weight" & type == "index"))
+    dplyr::filter(!(label == "weight" & type == "index")) |>
+    # TODO: Remove the natual_mortality/index combo for now.
+    # Need to think about how to get a single value per year
+    dplyr::filter(!(label == "natural_mortality" & type == "index")) |>
+    # TODO: Remove the total_mortality/index combo for now.
+    # Need to think about how to get a single total mortality index by year
+    # from an age-by-year matrix (e.g., abundance-weighted Z, unweighted arithmetic
+    # mean across fully recruited ages).
+    dplyr::filter(!(label == "total_mortality" & type == "index"))
 
   # Extract monthly data by labels
   truth_monthly <- purrr::map(
@@ -170,17 +181,22 @@ calc_truth <- function(data, species_name) {
       value = unlist(purrr::map2(
         truth_baa_monthly[["value"]],
         truth_waa_monthly[["value"]],
-        function(x, y) round(x / y)
+        function(x, y) x / y
       )),
-      unit = "numbers"
+      unit = NA_character_
     )
+  cli::cli_alert_info(
+    "The unit for {.field numbers} is currently set to {.val NA}. Numbers need 
+    to be rescaled and filled in using {.fn dplyr::mutate} based on the underlying 
+    units of {.var biomass-at-age} and {.var weight-at-age}."
+  )
 
   # Aggregate numbers-at-age into yearly averages, rounded to integers
   truth_agecomp_yearly[["numbers"]] <- calc_truth_agecomp_yearly(
     truth_agecomp_monthly[["numbers"]]
   ) |>
     # Yearly numbers are rounded as they are mean values from truth_agecomp_monthly
-    dplyr::mutate(value = round(value))
+    dplyr::mutate(value = value)
 
   # Calculate index for numbers from monthly numbers-at-age
   truth_index_monthly[["numbers"]] <- calc_truth_index_monthly(
@@ -190,7 +206,7 @@ calc_truth <- function(data, species_name) {
   truth_index_yearly[["numbers"]] <- calc_truth_index_yearly(
     truth_index_monthly[["numbers"]]
   ) |>
-    dplyr::mutate(value = round(value))
+    dplyr::mutate(value = value)
   }
   
   truth_values <- c(
@@ -288,8 +304,13 @@ calc_truth_index_monthly <- function(truth_monthly) {
   # Sum the data type (e.g., biomass) across all ages by month
   truth_monthly |>
     dplyr::group_by(species, type, year, month, unit) |>
+    # If type matches "fishing_mortality", then use max() to get apical F.
     dplyr::summarise(
-      value = sum(value, na.rm = TRUE),
+      value = dplyr::if_else(
+        unique(type) == "fishing_mortality", 
+        max(value, na.rm = TRUE), 
+        sum(value, na.rm = TRUE)
+      ),
       .groups = "drop"
     )
 }

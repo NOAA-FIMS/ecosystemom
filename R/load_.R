@@ -1,5 +1,5 @@
 utils::globalVariables(c(
-  "timestep", "group", "fleet", "month", "type", "year", "value",
+  "biomass", "catch", "timestep", "group", "fleet", "month", "mortality", "type", "year", "value",
   "Year", "biomass_consumed", "predator", "prey", "proportion",
   "prey_snake_case", "predator_snake_case"
 ))
@@ -234,7 +234,7 @@ load_model_ewe_ecosim <- function(
     "biomass" = "mt",
     "catch" = "mt",
     "landings" = "mt",
-    "mortality" = "year^-1",
+    "total_mortality" = "year^-1",
     "weight" = "mt"
   )
 ) {
@@ -268,11 +268,61 @@ load_model_ewe_ecosim <- function(
     verbose = verbose
   )
 
+  # Isolate catch and biomass, reshape them to calculate fishing mortality
+  fishing_mortality <- data_monthly |> 
+    dplyr::filter(type %in% c("catch", "biomass")) |>
+    # Pivot wider so catch and biomass are side-by-side for each group/time combo
+    tidyr::pivot_wider(
+      id_cols = c(year, month, functional_group, species, group, functional_group_snake_case),
+      names_from = type,
+      values_from = value
+    ) |>
+    # Calculate fishing mortality: catch divided by biomass
+    # Using coalesce or checking for division by zero protects against NaNs
+    dplyr::mutate(
+      value = catch / biomass,
+      file_name = NA_character_,
+      type = "fishing_mortality"
+    ) |>
+    # Drop the temporary catch and biomass columns
+    dplyr::select(-catch, -biomass)
+  
+  # Extract total mortality from the original data
+  total_mortality <- data_monthly |>
+    dplyr::filter(type == "mortality")
+  
+  # Get natual mortality
+  natural_mortality <- dplyr::bind_rows(total_mortality, fishing_mortality) |>
+    tidyr::pivot_wider(
+      id_cols = c(year, month, functional_group, species, group, functional_group_snake_case),
+      names_from = type,
+      values_from = value
+    ) |>
+    # Calculate M = Z - F
+    dplyr::mutate(
+      value = mortality - fishing_mortality,
+      type = "natural_mortality",
+      file_name = NA_character_
+    ) |> 
+    # Clean up columns to match your original structure
+    dplyr::select(-mortality, -fishing_mortality)
+
   # TODO: build up this data set
   data_output <- data_monthly |>
+    dplyr::bind_rows(fishing_mortality) |>
+    dplyr::bind_rows(natural_mortality) |>
     tibble::as_tibble() |>
     dplyr::mutate(
+      # Update type "mortality" to "total mortality"
+      type = dplyr::if_else(type == "mortality", "total_mortality", type),
+      # Add "unit"
       unit = unit[type]
+    ) |>
+    dplyr::mutate(
+      unit = dplyr::if_else(type == "fishing_mortality", "year^-1", unit) 
+    ) |>
+    dplyr::mutate(
+      unit = dplyr::if_else(type == "natural_mortality", "year^-1", unit) 
     )
 }
 

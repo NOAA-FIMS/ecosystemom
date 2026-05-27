@@ -9,7 +9,7 @@
 	"features": {
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {},
     "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
-    "packages": "cli,covr,devtools,dplyr,DT,gtmltools,spelling,tibble,tidyr,usethis",
+    "packages": "cli,covr,devtools,dplyr,DT,ggplot2,htmltools,kableExtra,spelling,tibble,tidyr,usethis",
     "installSystemRequirements": true
     },
     // option to run rstudio. you can type rserver into the command line to
@@ -29,6 +29,7 @@
 	 		// Add the IDs of extensions you want installed when the container is created.
 	 		"extensions": [
 	 			"ms-vsliveshare.vsliveshare",
+        "ms-vscode.live-server",
 				"GitHub.codespaces",
 				"reditorsupport.r",
 				"rdebugger.r-debugger",

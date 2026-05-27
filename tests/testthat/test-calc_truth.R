@@ -12,7 +12,10 @@
 data(ewe_ecosim_base_nwatlantic, package = "ecosystemom")
 data <- ecosystemom::ewe_ecosim_base_nwatlantic
 
-expected_truth_label <- c("biomass", "catch", "numbers", "weight")
+expected_truth_label <- c(
+  "biomass", "catch", "fishing_mortality", "natural_mortality", "numbers", 
+  "total_mortality", "weight"
+)
 expected_truth_type <- c("index", "agecomp")
 expected_truth_time_step <- c("monthly", "yearly")
 
@@ -83,12 +86,6 @@ test_that("calc_truth() works with correct inputs", {
       truth_value = mean(truth_value, na.rm = TRUE),
       .groups = "drop"
     ) |>
-    # round the value if truth_label is "numbers"
-    dplyr::mutate(
-      value = ifelse(truth_label == "numbers", round(truth_value), truth_value)
-    ) |>
-    dplyr::select(-truth_value) |>
-    dplyr::rename(truth_value = value) |>
     dplyr::arrange(
       truth_label, truth_type, truth_year, truth_unit, truth_group
     )
@@ -110,7 +107,7 @@ test_that("calc_truth() output can be bound", {
 
   n_species <- length(expected_species_names)
   # All labels with index type
-  n_label_index <- sum(expected_truth_label != "weight")
+  n_label_index <- sum(!(expected_truth_label %in% c("weight", "natural_mortality", "total_mortality")))
   # All labels with agecomp type
   n_label_agecomp <- length(expected_truth_label)
   n_time_step <- length(expected_truth_time_step)

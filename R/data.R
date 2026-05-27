@@ -14,9 +14,16 @@
 #'     relative path. This column is helpful for understanding which EWE model
 #'     and which run the data came from.
 #'   }
-#'   \item{type}{The type refers to what data type this row is, e.g., landings, 
-#'     catch, biomass, weight, and mortality.
+#' \item{type}{The data type represented by the row. Valid types include:
+#'   \itemize{
+#'     \item \code{"catch"}
+#'     \item \code{"biomass"}
+#'     \item \code{"weight"}
+#'     \item \code{"total_mortality"}
+#'     \item \code{"fishing_mortality"} (calculated as catch divided by biomass)
+#'     \item \code{"natural_mortality"} (calculated as total mortality minus fishing mortality)
 #'   }
+#' }
 #'   \item{year}{A four-digit integer specifying the year.}
 #'   \item{month}{A one- or two-digit integer specifying the month.}
 #'   \item{functional_group}{A string specifying the functional group that this

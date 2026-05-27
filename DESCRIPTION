@@ -21,13 +21,24 @@ Imports:
     tidyselect,
     stats
 Suggests: 
+    dsem,
+    FIMS,
+    ggplot2,
+    kableExtra,
+    knitr,
+    rmarkdown,
     testthat (>= 3.3.2),
     tidyr,
     usethis,
     withr
+Remotes:
+    github::James-Thorson-NOAA/dsem,
+    github::NOAA-FIMS/FIMS
 Config/testthat/edition: 3
 Language: en-US
 Config/roxygen2/version: 8.0.0
 Depends: 
     R (>= 3.5)
 LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 8.0.0

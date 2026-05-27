@@ -6,15 +6,22 @@
 \alias{ewe_ecosim_with_environmental_data_nwatlantic}
 \title{Ecopath with Ecosim (EwE) models for the Northwest Atlantic}
 \format{
-Both datasets are tibbles with 34848 rows and
+Both datasets are tibbles with 52272 rows and
 10 columns:
 \describe{
 \item{file_name}{The path to the file name, note that the path could be a
 relative path. This column is helpful for understanding which EWE model
 and which run the data came from.
 }
-\item{type}{The type refers to what data type this row is, e.g., landings,
-catch, biomass, weight, and mortality.
+\item{type}{The data type represented by the row. Valid types include:
+\itemize{
+\item \code{"catch"}
+\item \code{"biomass"}
+\item \code{"weight"}
+\item \code{"total_mortality"}
+\item \code{"fishing_mortality"} (calculated as catch divided by biomass)
+\item \code{"natural_mortality"} (calculated as total mortality minus fishing mortality)
+}
 }
 \item{year}{A four-digit integer specifying the year.}
 \item{month}{A one- or two-digit integer specifying the month.}
@@ -27,7 +34,7 @@ row pertains to.}
 \item{unit}{The unit of the value.}
 }
 
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 34848 rows and 10 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 52272 rows and 10 columns.
 }
 \source{
 The data is prepared from raw model files using the scripts in the

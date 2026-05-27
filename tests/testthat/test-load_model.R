@@ -56,7 +56,10 @@ test_that("load_model() works with correct inputs for ewe_ecosim", {
   )
 
   #' @description Test that load_model() for ewe_ecosim returns correct types.
-  expected_types <- c("biomass", "catch", "mortality", "weight")
+  expected_types <- c(
+    "biomass", "catch", "fishing_mortality", "natural_mortality", 
+    "total_mortality", "weight"
+  )
   expect_equal(
     object = sort(unique(ewe_model[["type"]])),
     expected = sort(expected_types)
@@ -71,7 +74,7 @@ test_that("load_model() works with correct inputs for ewe_ecosim", {
       "biomass" = "mt",
       "catch" = "mt",
       "landings" = "mt",
-      "total mortality" = "year^-1",
+      "total_mortality" = "year^-1",
       "weight" = "kg"
     ),
     verbose = FALSE
