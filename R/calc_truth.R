@@ -56,7 +56,7 @@ utils::globalVariables(c(
 #' @examples
 #' data(ewe_ecosim_base_nwatlantic)
 #' data <- ewe_ecosim_base_nwatlantic
-#' truth <- calc_truth(
+#' truth <- get_truth(
 #'   data,
 #'   species_name = "menhaden"
 #' )
@@ -68,11 +68,11 @@ utils::globalVariables(c(
 #' species_names <- c("menhaden", "striped bass", "bluefish")
 #' truth <- purrr::map_dfr(
 #'   species_names,
-#'   function(x) calc_truth(data, species_name = x)
+#'   function(x) get_truth(data, species_name = x)
 #' )
 #' @export
-#' @keywords calc_truth
-calc_truth <- function(data, species_name) {
+#' @keywords get_truth
+get_truth <- function(data, species_name) {
   # Check if the species_name is in the data
   unique_species <- unique(data[["species"]])
   if (!species_name %in% unique_species) {
@@ -129,7 +129,7 @@ calc_truth <- function(data, species_name) {
   # Extract monthly data by labels
   truth_monthly <- purrr::map(
     labels,
-    function(x) calc_truth_monthly(data, species_name, x)
+    function(x) get_truth_monthly(data, species_name, x)
   ) |>
     # Assign names to the list elements
     purrr::set_names(labels)
@@ -142,13 +142,13 @@ calc_truth <- function(data, species_name) {
   # Calculate monthly index (e.g., biomass and catch)
   truth_index_monthly <- purrr::map(
     truth_monthly[index_labels],
-    function(x) calc_truth_index_monthly(x)
+    function(x) get_truth_index_monthly(x)
   )
 
   # Aggregate monthly index into yearly averages (e.g., biomass and catch)
   truth_index_yearly <- purrr::map(
     truth_index_monthly,
-    function(x) calc_truth_index_yearly(x)
+    function(x) get_truth_index_yearly(x)
   )
 
   # Extract labels for index type from types tibble
@@ -159,14 +159,14 @@ calc_truth <- function(data, species_name) {
   # Calculate monthly age composition (e.g., biomass, catch, and weight)
   truth_agecomp_monthly <- purrr::map(
     truth_monthly[agecomp_labels],
-    function(x) calc_truth_agecomp_monthly(x)
+    function(x) get_truth_agecomp_monthly(x)
   )
 
   # Aggregate monthly age composition data into yearly averages (e.g., biomass,
   # catch, and weight)
   truth_agecomp_yearly <- purrr::map(
     truth_agecomp_monthly,
-    function(x) calc_truth_agecomp_yearly(x)
+    function(x) get_truth_agecomp_yearly(x)
   )
 
   # Extract biomass-at-age and weight-at-age
@@ -192,18 +192,18 @@ calc_truth <- function(data, species_name) {
   )
 
   # Aggregate numbers-at-age into yearly averages, rounded to integers
-  truth_agecomp_yearly[["numbers"]] <- calc_truth_agecomp_yearly(
+  truth_agecomp_yearly[["numbers"]] <- get_truth_agecomp_yearly(
     truth_agecomp_monthly[["numbers"]]
   ) |>
     # Yearly numbers are rounded as they are mean values from truth_agecomp_monthly
     dplyr::mutate(value = value)
 
   # Calculate index for numbers from monthly numbers-at-age
-  truth_index_monthly[["numbers"]] <- calc_truth_index_monthly(
+  truth_index_monthly[["numbers"]] <- get_truth_index_monthly(
     truth_agecomp_monthly[["numbers"]]
   )
   # Aggregate to yearly numbers index, rounded to integers
-  truth_index_yearly[["numbers"]] <- calc_truth_index_yearly(
+  truth_index_yearly[["numbers"]] <- get_truth_index_yearly(
     truth_index_monthly[["numbers"]]
   ) |>
     dplyr::mutate(value = value)
@@ -264,13 +264,13 @@ calc_truth <- function(data, species_name) {
 #' @examples
 #' data(ewe_ecosim_base_nwatlantic)
 #' data <- ewe_ecosim_base_nwatlantic
-#' truth_monthly <- ecosystemom:::calc_truth_monthly(
+#' truth_monthly <- ecosystemom:::get_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
 #'   truth_type = "biomass"
 #' )
-#' @keywords calc_truth
-calc_truth_monthly <- function(data, species_name, truth_type) {
+#' @keywords get_truth
+get_truth_monthly <- function(data, species_name, truth_type) {
   # Calculate the yearly "truth" using data from load_model()
   data |>
     # Filter the data to include only the specified types
@@ -285,7 +285,7 @@ calc_truth_monthly <- function(data, species_name, truth_type) {
 #' summing the values across all ages by month.
 #'
 #' @param truth_monthly A tibble containing the monthly "truth" data for a species.
-#' Returned from [calc_truth_monthly()].
+#' Returned from [get_truth_monthly()].
 #'
 #' @return A tibble containing the monthly index (e.g., biomass and catch) for
 #' the specified species
@@ -293,14 +293,14 @@ calc_truth_monthly <- function(data, species_name, truth_type) {
 #' @examples
 #' data(ewe_ecosim_base_nwatlantic)
 #' data <- ewe_ecosim_base_nwatlantic
-#' truth_index_monthly <- ecosystemom:::calc_truth_monthly(
+#' truth_index_monthly <- ecosystemom:::get_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
 #'   truth_type = "biomass"
 #' ) |>
-#'   ecosystemom:::calc_truth_index_monthly()
-#' @keywords calc_truth
-calc_truth_index_monthly <- function(truth_monthly) {
+#'   ecosystemom:::get_truth_index_monthly()
+#' @keywords get_truth
+get_truth_index_monthly <- function(truth_monthly) {
   # Sum the data type (e.g., biomass) across all ages by month
   truth_monthly |>
     dplyr::group_by(species, type, year, month, unit) |>
@@ -321,7 +321,7 @@ calc_truth_index_monthly <- function(truth_monthly) {
 #' averaging monthly index values.
 #'
 #' @param truth_index_monthly A tibble containing the monthly index data for a species.
-#' Returned from [calc_truth_index_monthly()].
+#' Returned from [get_truth_index_monthly()].
 #'
 #' @return A tibble containing the yearly index (e.g., biomass and catch) for
 #' the specified species.
@@ -329,15 +329,15 @@ calc_truth_index_monthly <- function(truth_monthly) {
 #' @examples
 #' data(ewe_ecosim_base_nwatlantic)
 #' data <- ewe_ecosim_base_nwatlantic
-#' truth_index_yearly <- ecosystemom:::calc_truth_monthly(
+#' truth_index_yearly <- ecosystemom:::get_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
 #'   truth_type = "biomass"
 #' ) |>
-#'   ecosystemom:::calc_truth_index_monthly() |>
-#'   ecosystemom:::calc_truth_index_yearly()
-#' @keywords calc_truth
-calc_truth_index_yearly <- function(truth_index_monthly) {
+#'   ecosystemom:::get_truth_index_monthly() |>
+#'   ecosystemom:::get_truth_index_yearly()
+#' @keywords get_truth
+get_truth_index_yearly <- function(truth_index_monthly) {
   # Calculate the yearly truth
   truth_index_monthly |>
     # Sum the data type (e.g., biomass) across all months by year
@@ -354,7 +354,7 @@ calc_truth_index_yearly <- function(truth_index_monthly) {
 #' by selecting the relevant columns and filtering the data for the specified species.
 #'
 #' @param truth_monthly A tibble containing the monthly "truth" data for a species.
-#' Returned from [calc_truth_monthly()].
+#' Returned from [get_truth_monthly()].
 #'
 #' @return A tibble containing the monthly age composition (e.g., biomass, catch,
 #' and weight) for the specified species.
@@ -362,14 +362,14 @@ calc_truth_index_yearly <- function(truth_index_monthly) {
 #' @examples
 #' data(ewe_ecosim_base_nwatlantic)
 #' data <- ewe_ecosim_base_nwatlantic
-#' truth_agecomp_monthly <- ecosystemom:::calc_truth_monthly(
+#' truth_agecomp_monthly <- ecosystemom:::get_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
 #'   truth_type = "biomass"
 #' ) |>
-#'   ecosystemom:::calc_truth_agecomp_monthly()
-#' @keywords calc_truth
-calc_truth_agecomp_monthly <- function(truth_monthly) {
+#'   ecosystemom:::get_truth_agecomp_monthly()
+#' @keywords get_truth
+get_truth_agecomp_monthly <- function(truth_monthly) {
   truth_monthly |>
     dplyr::select(species, group, type, year, month, value, unit)
 }
@@ -380,7 +380,7 @@ calc_truth_agecomp_monthly <- function(truth_monthly) {
 #' by averaging the monthly age composition values.
 #'
 #' @param truth_agecomp_monthly A tibble containing the monthly age composition
-#' data for a species. Returned from [calc_truth_agecomp_monthly()].
+#' data for a species. Returned from [get_truth_agecomp_monthly()].
 #'
 #' @return A tibble containing the yearly age composition (e.g., biomass, catch,
 #' and weight) for the specified species.
@@ -388,15 +388,15 @@ calc_truth_agecomp_monthly <- function(truth_monthly) {
 #' @examples
 #' data(ewe_ecosim_base_nwatlantic)
 #' data <- ewe_ecosim_base_nwatlantic
-#' truth_agecomp_yearly <- ecosystemom:::calc_truth_monthly(
+#' truth_agecomp_yearly <- ecosystemom:::get_truth_monthly(
 #'   data,
 #'   species_name = "menhaden",
 #'   truth_type = "biomass"
 #' ) |>
-#'   ecosystemom:::calc_truth_agecomp_monthly() |>
-#'   ecosystemom:::calc_truth_agecomp_yearly()
-#' @keywords calc_truth
-calc_truth_agecomp_yearly <- function(truth_agecomp_monthly) {
+#'   ecosystemom:::get_truth_agecomp_monthly() |>
+#'   ecosystemom:::get_truth_agecomp_yearly()
+#' @keywords get_truth
+get_truth_agecomp_yearly <- function(truth_agecomp_monthly) {
   truth_agecomp_monthly |>
     dplyr::group_by(species, group, type, year, unit) |>
     dplyr::summarise(

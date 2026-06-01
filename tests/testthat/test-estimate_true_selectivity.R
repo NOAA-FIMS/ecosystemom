@@ -96,7 +96,7 @@ test_that("estimate_true_selectivity() works with data from the package", {
   data(ewe_ecosim_base_nwatlantic, package = "ecosystemom")
 
   # Generate truth data for a species
-  truth <- calc_truth(ewe_ecosim_base_nwatlantic, species_name = "menhaden")
+  truth <- get_truth(ewe_ecosim_base_nwatlantic, species_name = "menhaden")
 
   # Prepare data for selectivity estimation
   temp_data <- truth |>
