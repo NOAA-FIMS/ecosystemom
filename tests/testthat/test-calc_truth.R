@@ -6,7 +6,7 @@
 #' information. Every test should have a @description tag that takes up just
 #' one line, which will be used in the bookdown report of {testthat} results.
 
-# calc_truth ----
+# get_truth ----
 ## Setup ----
 # Load or prepare any necessary data for testing
 data(ewe_ecosim_base_nwatlantic, package = "ecosystemom")
@@ -20,16 +20,16 @@ expected_truth_type <- c("index", "agecomp")
 expected_truth_time_step <- c("monthly", "yearly")
 
 ## IO correctness ----
-test_that("calc_truth() works with correct inputs", {
+test_that("get_truth() works with correct inputs", {
   expected_species_name <- "menhaden"
 
-  truth <- calc_truth(
+  truth <- get_truth(
     data,
     species_name = expected_species_name
   ) |>
     tidyr::unnest(cols = c(truth_om))
 
-  #' @description Test that calc_truth() returns a nested data with the correct column names.
+  #' @description Test that get_truth() returns a nested data with the correct column names.
   expect_equal(
     object = colnames(truth),
     expected = c(
@@ -45,25 +45,25 @@ test_that("calc_truth() works with correct inputs", {
     )
   )
 
-  #' @description Test that calc_truth() returns correct species_name values.
+  #' @description Test that get_truth() returns correct species_name values.
   expect_equal(
     object = unique(truth[["species_name"]]),
     expected = expected_species_name
   )
 
-  #' @description Test that calc_truth() returns correct truth_label values.
+  #' @description Test that get_truth() returns correct truth_label values.
   expect_equal(
     object = unique(truth[["truth_label"]]),
     expected = expected_truth_label
   )
 
-  #' @description Test that calc_truth() returns correct truth_type values.
+  #' @description Test that get_truth() returns correct truth_type values.
   expect_equal(
     object = unique(truth[["truth_type"]]),
     expected = expected_truth_type
   )
 
-  #' @description Test that calc_truth() returns correct truth_time_step values.
+  #' @description Test that get_truth() returns correct truth_time_step values.
   expect_equal(
     object = unique(truth[["truth_time_step"]]),
     expected = expected_truth_time_step
@@ -90,7 +90,7 @@ test_that("calc_truth() works with correct inputs", {
       truth_label, truth_type, truth_year, truth_unit, truth_group
     )
 
-  #' @description Test that yearly output from calc_truth matches the averaged monthly output.
+  #' @description Test that yearly output from get_truth matches the averaged monthly output.
   expect_equal(
     object = truth_yearly,
     expected = mean_truth_monthly
@@ -98,11 +98,11 @@ test_that("calc_truth() works with correct inputs", {
 })
 
 ## Edge handling ----
-test_that("calc_truth() output can be bound", {
+test_that("get_truth() output can be bound", {
   expected_species_names <- c("striped bass", "bluefish")
   truth <- purrr::map_dfr(
     expected_species_names,
-    function(x) calc_truth(data, species_name = x)
+    function(x) get_truth(data, species_name = x)
   )
 
   n_species <- length(expected_species_names)
@@ -123,9 +123,9 @@ test_that("calc_truth() output can be bound", {
   )
 })
 
-test_that("calc_truth() returns correct outputs for edge cases", {
-  #' @description Test that calc_truth() returns NAs for 'group' when the species does not have multiple groups.
-  truth <- calc_truth(
+test_that("get_truth() returns correct outputs for edge cases", {
+  #' @description Test that get_truth() returns NAs for 'group' when the species does not have multiple groups.
+  truth <- get_truth(
     data,
     species_name = "anchovies"
   ) |>
@@ -137,10 +137,10 @@ test_that("calc_truth() returns correct outputs for edge cases", {
 })
 
 ## Error handling ----
-test_that("calc_truth() returns correct error messages", {
-  #' @description Test that calc_truth() returns error if an unknown species_name is provided.
+test_that("get_truth() returns correct error messages", {
+  #' @description Test that get_truth() returns error if an unknown species_name is provided.
   expect_error(
-    object = calc_truth(data = data, species_name = "nonexistent_species"),
+    object = get_truth(data = data, species_name = "nonexistent_species"),
     regexp = "not found in the unique(*)"
   )
 
@@ -148,15 +148,15 @@ test_that("calc_truth() returns correct error messages", {
     dplyr::filter(species == "menhaden" & type != "biomass")
   data_missing_weight <- data |>
     dplyr::filter(species == "menhaden" & type != "weight")
-  #' @description Test that calc_truth() returns error if biomass is missing.
+  #' @description Test that get_truth() returns error if biomass is missing.
   expect_error(
-    object = calc_truth(data = data_missing_biomass, species_name = "menhaden"),
+    object = get_truth(data = data_missing_biomass, species_name = "menhaden"),
     regexp = "at-age data is missing"
   )
 
-  #' @description Test that calc_truth() returns error if weight is missing.
+  #' @description Test that get_truth() returns error if weight is missing.
   expect_error(
-    object = calc_truth(data = data_missing_weight, species_name = "menhaden"),
+    object = get_truth(data = data_missing_weight, species_name = "menhaden"),
     regexp = "at-age data is missing"
   )
 })
