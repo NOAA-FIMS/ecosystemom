@@ -191,7 +191,7 @@ number_agecomp_om <- truth_om |>
   ) |> 
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
-    truth_value = ceiling(truth_value * 1000000 / 1000),
+    truth_value = ceiling(truth_value * 1000000 * 1000),
     truth_unit = "numbers"
   )
 
@@ -243,7 +243,7 @@ catch_index_sampled <- catch_index_om |>
 catch_index_sampled |>
   scroll_table()
 
-catch_agecomp_sample_size <- 200
+catch_agecomp_sample_size <- 20
 catch_agecomp_sampled <- catch_agecomp_om |> 
   dplyr::group_by(truth_year) |> 
   dplyr::mutate(
@@ -322,7 +322,7 @@ survey_index_sampled <- survey_data |>
   )
 
 # Survey agecomp
-survey_agecomp_sample_size <- 200
+survey_agecomp_sample_size <- 20
 survey_agecomp_sampled <- survey_data |> 
   dplyr::group_by(truth_year) |> 
   dplyr::mutate(
@@ -419,8 +419,6 @@ data_fims <- rbind(landings_data, index_data, age_data, weight_at_age_data) |>
   FIMS::FIMSFrame()
 
 methods::show(data_fims)
-
-plot(data_fims)
 ```
 </details>
 
@@ -547,9 +545,12 @@ updated_parameters <- default_parameters |>
       label = "log_rzero", 
       module_type = "BevertonHolt",
       value = number_agecomp_om |>
-        dplyr::filter(truth_group  == "0", truth_year == model_years[1]) |>
+        dplyr::filter(truth_group == "0") |>
         dplyr::pull(truth_value) |>
-        log()
+        (\(x) mean(log(x)))()
+        # dplyr::filter(truth_group  == "0", truth_year == model_years[1]) |>
+        # dplyr::pull(truth_value) |>
+        # log()
     ),
     by = c("label", "module_type")
   ) |>
