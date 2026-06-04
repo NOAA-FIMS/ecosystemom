@@ -31,6 +31,7 @@ fisheries estimation models. The workflow includes functions to:
 
 library(ecosystemom)
 library(FIMS)
+set.seed(1234)
 ```
 
 ## Load EwE Model Outputs
@@ -374,7 +375,7 @@ number_agecomp_om <- truth_om |>
   ) |> 
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
-    truth_value = ceiling(truth_value * 1000000 / 1000),
+    truth_value = ceiling(truth_value * 1000000 * 1000),
     truth_unit = "numbers"
   )
 
@@ -435,44 +436,44 @@ catch_index_sampled |>
 
 | species_name | truth_label | truth_type | truth_time_step | truth_year | truth_unit | truth_value | sampled_value |
 |:---|:---|:---|:---|---:|:---|---:|---:|
-| menhaden | catch | index | yearly | 1985 | mt | 16436.46 | 15306.08 |
-| menhaden | catch | index | yearly | 1986 | mt | 16565.34 | 16757.21 |
-| menhaden | catch | index | yearly | 1987 | mt | 15939.05 | 14092.72 |
-| menhaden | catch | index | yearly | 1988 | mt | 12596.12 | 12576.88 |
-| menhaden | catch | index | yearly | 1989 | mt | 25993.96 | 26780.97 |
-| menhaden | catch | index | yearly | 1990 | mt | 321014.86 | 339562.49 |
-| menhaden | catch | index | yearly | 1991 | mt | 258893.40 | 236057.52 |
-| menhaden | catch | index | yearly | 1992 | mt | 365211.37 | 360272.26 |
-| menhaden | catch | index | yearly | 1993 | mt | 600358.51 | 592331.83 |
-| menhaden | catch | index | yearly | 1994 | mt | 659307.57 | 649241.57 |
-| menhaden | catch | index | yearly | 1995 | mt | 604887.34 | 587635.74 |
-| menhaden | catch | index | yearly | 1996 | mt | 907276.10 | 935092.93 |
-| menhaden | catch | index | yearly | 1997 | mt | 771183.60 | 853997.03 |
-| menhaden | catch | index | yearly | 1998 | mt | 878034.15 | 808261.80 |
-| menhaden | catch | index | yearly | 1999 | mt | 981962.22 | 1006187.97 |
-| menhaden | catch | index | yearly | 2000 | mt | 961678.94 | 875049.17 |
-| menhaden | catch | index | yearly | 2001 | mt | 926563.53 | 901564.86 |
-| menhaden | catch | index | yearly | 2002 | mt | 933937.94 | 930321.19 |
-| menhaden | catch | index | yearly | 2003 | mt | 435965.57 | 447404.50 |
-| menhaden | catch | index | yearly | 2004 | mt | 292324.12 | 278915.66 |
-| menhaden | catch | index | yearly | 2005 | mt | 66979.80 | 68480.48 |
-| menhaden | catch | index | yearly | 2006 | mt | 58767.23 | 59768.69 |
-| menhaden | catch | index | yearly | 2007 | mt | 36368.17 | 34029.13 |
-| menhaden | catch | index | yearly | 2008 | mt | 41439.10 | 42942.57 |
-| menhaden | catch | index | yearly | 2009 | mt | 42480.31 | 46628.69 |
-| menhaden | catch | index | yearly | 2010 | mt | 42963.63 | 42701.40 |
-| menhaden | catch | index | yearly | 2011 | mt | 47277.22 | 45059.60 |
-| menhaden | catch | index | yearly | 2012 | mt | 91043.37 | 90857.15 |
-| menhaden | catch | index | yearly | 2013 | mt | 87008.47 | 83380.63 |
-| menhaden | catch | index | yearly | 2014 | mt | 120764.99 | 111829.62 |
-| menhaden | catch | index | yearly | 2015 | mt | 119770.21 | 125347.91 |
-| menhaden | catch | index | yearly | 2016 | mt | 110616.90 | 111457.94 |
-| menhaden | catch | index | yearly | 2017 | mt | 175165.13 | 177090.94 |
+| menhaden | catch | index | yearly | 1985 | mt | 16436.46 | 15454.48 |
+| menhaden | catch | index | yearly | 1986 | mt | 16565.34 | 16775.75 |
+| menhaden | catch | index | yearly | 1987 | mt | 15939.05 | 16806.13 |
+| menhaden | catch | index | yearly | 1988 | mt | 12596.12 | 11188.14 |
+| menhaden | catch | index | yearly | 1989 | mt | 25993.96 | 26524.54 |
+| menhaden | catch | index | yearly | 1990 | mt | 321014.86 | 328829.77 |
+| menhaden | catch | index | yearly | 1991 | mt | 258893.40 | 251245.21 |
+| menhaden | catch | index | yearly | 1992 | mt | 365211.37 | 354920.81 |
+| menhaden | catch | index | yearly | 1993 | mt | 600358.51 | 582922.58 |
+| menhaden | catch | index | yearly | 1994 | mt | 659307.57 | 629822.64 |
+| menhaden | catch | index | yearly | 1995 | mt | 604887.34 | 589887.95 |
+| menhaden | catch | index | yearly | 1996 | mt | 907276.10 | 862019.15 |
+| menhaden | catch | index | yearly | 1997 | mt | 771183.60 | 740898.60 |
+| menhaden | catch | index | yearly | 1998 | mt | 878034.15 | 879768.17 |
+| menhaden | catch | index | yearly | 1999 | mt | 981962.22 | 1028932.91 |
+| menhaden | catch | index | yearly | 2000 | mt | 961678.94 | 955195.83 |
+| menhaden | catch | index | yearly | 2001 | mt | 926563.53 | 902060.99 |
+| menhaden | catch | index | yearly | 2002 | mt | 933937.94 | 891227.94 |
+| menhaden | catch | index | yearly | 2003 | mt | 435965.57 | 417571.04 |
+| menhaden | catch | index | yearly | 2004 | mt | 292324.12 | 329443.53 |
+| menhaden | catch | index | yearly | 2005 | mt | 66979.80 | 67346.13 |
+| menhaden | catch | index | yearly | 2006 | mt | 58767.23 | 57271.33 |
+| menhaden | catch | index | yearly | 2007 | mt | 36368.17 | 35531.40 |
+| menhaden | catch | index | yearly | 2008 | mt | 41439.10 | 42349.40 |
+| menhaden | catch | index | yearly | 2009 | mt | 42480.31 | 40980.84 |
+| menhaden | catch | index | yearly | 2010 | mt | 42963.63 | 39912.67 |
+| menhaden | catch | index | yearly | 2011 | mt | 47277.22 | 48594.79 |
+| menhaden | catch | index | yearly | 2012 | mt | 91043.37 | 86392.70 |
+| menhaden | catch | index | yearly | 2013 | mt | 87008.47 | 86834.03 |
+| menhaden | catch | index | yearly | 2014 | mt | 120764.99 | 115099.74 |
+| menhaden | catch | index | yearly | 2015 | mt | 119770.21 | 126398.53 |
+| menhaden | catch | index | yearly | 2016 | mt | 110616.90 | 107882.56 |
+| menhaden | catch | index | yearly | 2017 | mt | 175165.13 | 168849.39 |
 
 ``` r
 
 
-catch_agecomp_sample_size <- 200
+catch_agecomp_sample_size <- 150
 catch_agecomp_sampled <- catch_agecomp_om |> 
   dplyr::group_by(truth_year) |> 
   dplyr::mutate(
@@ -559,7 +560,7 @@ survey_index_sampled <- survey_data |>
   )
 
 # Survey agecomp
-survey_agecomp_sample_size <- 200
+survey_agecomp_sample_size <- 150
 survey_agecomp_sampled <- survey_data |> 
   dplyr::group_by(truth_year) |> 
   dplyr::mutate(
@@ -664,12 +665,12 @@ methods::show(data_fims)
 #> # A tibble: 6 × 8
 #>   type     name            age length timing value unit   uncertainty
 #>   <chr>    <chr>         <int>  <dbl>  <dbl> <dbl> <chr>        <dbl>
-#> 1 age_comp fishing_fleet     0     NA   1985    41 number         200
-#> 2 age_comp fishing_fleet     1     NA   1985    61 number         200
-#> 3 age_comp fishing_fleet     2     NA   1985    84 number         200
-#> 4 age_comp fishing_fleet     3     NA   1985    13 number         200
-#> 5 age_comp fishing_fleet     4     NA   1985     1 number         200
-#> 6 age_comp fishing_fleet     5     NA   1985     0 number         200
+#> 1 age_comp fishing_fleet     0     NA   1985    22 number         150
+#> 2 age_comp fishing_fleet     1     NA   1985    49 number         150
+#> 3 age_comp fishing_fleet     2     NA   1985    67 number         150
+#> 4 age_comp fishing_fleet     3     NA   1985    12 number         150
+#> 5 age_comp fishing_fleet     4     NA   1985     0 number         150
+#> 6 age_comp fishing_fleet     5     NA   1985     0 number         150
 #> additional slots include the following:fleets:
 #> [1] "fishing_fleet" "survey_fleet" 
 #> n_years:
@@ -686,11 +687,7 @@ methods::show(data_fims)
 #> [1] 1985
 #> end_year:
 #> [1] 2017
-
-plot(data_fims)
 ```
-
-![](ewe-ecosim-base-simulation_files/figure-html/prepare-fims-data-1.png)
 
 ## Configure the FIMS estimation model
 
@@ -802,6 +799,15 @@ maturity_parameters <- estimate_true_maturity(
   functional_form = "logistic"
 )
 
+# Estimate recruitment log_sd
+recruitment_ewe <- number_agecomp_om |>
+  dplyr::filter(truth_group == "0") |>
+  dplyr::pull(truth_value)
+
+log_sd_proxy <- (sd(log(recruitment_ewe) - mean(log(recruitment_ewe)))) |>
+  log()
+
+
 # Update parameter values using OM-derived truth information
 updated_parameters <- default_parameters |>
   # dplyr::filter(!(module_name == "Selectivity" & fleet_name == fishing_fleet_name)) |>
@@ -855,9 +861,12 @@ updated_parameters <- default_parameters |>
       label = "log_rzero", 
       module_type = "BevertonHolt",
       value = number_agecomp_om |>
-        dplyr::filter(truth_group  == "0", truth_year == model_years[1]) |>
+        dplyr::filter(truth_group == "0") |>
         dplyr::pull(truth_value) |>
-        log()
+        (\(x) mean(log(x)))()
+        # dplyr::filter(truth_group  == "0", truth_year == model_years[1]) |>
+        # dplyr::pull(truth_value) |>
+        # log()
     ),
     by = c("label", "module_type")
   ) |>
@@ -869,6 +878,15 @@ updated_parameters <- default_parameters |>
       # v = 411.23 + 1.02 + 191.58 + 2 + 1016.36 + 12.18 + 2 + 403.26 = 2039.63
       # h = v / (v + 1) = 0.99
       value = -log(1.0 - 0.99) + log(0.99 - 0.2)
+    ),
+    by = c("label", "module_type")
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      label = "log_sd",
+      module_type = "BevertonHolt",
+      value = log_sd_proxy,
+      estimation_type = "constant"
     ),
     by = c("label", "module_type")
   ) |>
@@ -1049,7 +1067,7 @@ updated_parameters |>
 | catch_at_age | Data | survey_fleet | Index | log_sd | NA | NA | 2016 | -2.3025851 | constant | Data | Dlnorm |
 | catch_at_age | Data | survey_fleet | Index | log_sd | NA | NA | 2017 | -2.3025851 | constant | Data | Dlnorm |
 | catch_at_age | Data | survey_fleet | AgeComp | NA | NA | NA | NA | NA | NA | Data | Dmultinom |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_rzero | NA | NA | NA | 11.5541826 | fixed_effects | NA | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_rzero | NA | NA | NA | 24.1027090 | fixed_effects | NA | NA |
 | catch_at_age | Recruitment | NA | BevertonHolt | logit_steep | NA | NA | NA | 4.3694479 | constant | NA | NA |
 | catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1986 | 0.0000000 | random_effects | process | Dnorm |
 | catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1987 | 0.0000000 | random_effects | process | Dnorm |
@@ -1083,7 +1101,7 @@ updated_parameters |>
 | catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2015 | 0.0000000 | random_effects | process | Dnorm |
 | catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2016 | 0.0000000 | random_effects | process | Dnorm |
 | catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2017 | 0.0000000 | random_effects | process | Dnorm |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_sd | NA | NA | NA | 0.1000000 | fixed_effects | process | Dnorm |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_sd | NA | NA | NA | 0.3322577 | constant | process | Dnorm |
 | catch_at_age | Population | NA | NA | log_M | 0 | NA | 1985 | 0.5510554 | constant | NA | NA |
 | catch_at_age | Population | NA | NA | log_M | 1 | NA | 1985 | 0.2578511 | constant | NA | NA |
 | catch_at_age | Population | NA | NA | log_M | 2 | NA | 1985 | 0.2345560 | constant | NA | NA |
@@ -1315,13 +1333,13 @@ updated_parameters |>
 | catch_at_age | Population | NA | NA | log_M | 4 | NA | 2017 | -0.0521981 | constant | NA | NA |
 | catch_at_age | Population | NA | NA | log_M | 5 | NA | 2017 | -0.1120706 | constant | NA | NA |
 | catch_at_age | Population | NA | NA | log_M | 6 | NA | 2017 | -0.4277903 | constant | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 0 | NA | NA | 11.5541826 | fixed_effects | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 1 | NA | NA | 9.9100162 | fixed_effects | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 2 | NA | NA | 8.5477224 | fixed_effects | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 3 | NA | NA | 7.0596176 | fixed_effects | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 4 | NA | NA | 5.6312118 | fixed_effects | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 5 | NA | NA | 4.3944492 | fixed_effects | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 6 | NA | NA | 3.8501476 | fixed_effects | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 0 | NA | NA | 25.3696876 | fixed_effects | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 1 | NA | NA | 23.7255009 | fixed_effects | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 2 | NA | NA | 22.3631177 | fixed_effects | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 3 | NA | NA | 20.8751140 | fixed_effects | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 4 | NA | NA | 19.4450038 | fixed_effects | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 5 | NA | NA | 18.2081170 | fixed_effects | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 6 | NA | NA | 17.6518987 | fixed_effects | NA | NA |
 | catch_at_age | Growth | NA | EWAA | NA | NA | NA | NA | NA | NA | NA | NA |
 | catch_at_age | Maturity | NA | Logistic | inflection_point | NA | NA | NA | 1.9999914 | constant | NA | NA |
 | catch_at_age | Maturity | NA | Logistic | slope | NA | NA | NA | 2.2306407 | constant | NA | NA |
@@ -1345,30 +1363,18 @@ The workflow below:
 # Initialize and fit the FIMS estimation model
 fit_fims <- updated_parameters |>
   FIMS::initialize_fims((data = data_fims)) |>
-  FIMS::fit_fims(optimize = TRUE)
-#> Warning in nlminb(start = starting_values, objective = fn, gradient = gr, :
-#> NA/NaN function evaluation
-#> Warning in nlminb(start = starting_values, objective = fn, gradient = gr, :
-#> NA/NaN function evaluation
-#> Warning in nlminb(start = starting_values, objective = fn, gradient = gr, :
-#> NA/NaN function evaluation
-#> Warning: ✖ Optimization failed convergence checks.
-#> ℹ Convergence code = 1.
-#> ℹ Message = "false convergence (8)".
-#> ℹ Skipping sdreport. Consider adjusting control parameters (eval.max, iter.max)
-#>   or model structure.
-#> ℹ Model fit returned for diagnostic purposes only. Results are not reliable.
-#> Warning: ✖ Standard error calculations failed convergence checks:
-#> ℹ Hessian is not positive definite, which may indicate convergence issues or
-#>   model misspecification.
-#> ℹ Standard errors cannot be reliably calculated, and MLEs may be unreliable.
-#> ℹ Consider simplifying the model, improving data quality, or fixing poorly
-#>   informed parameters.
-#> ℹ Model fit returned for diagnostic purposes only. Results are not reliable.
+  FIMS::fit_fims(
+    optimize = TRUE,
+    control = list(
+      # eval.max = 20000,
+      eval.max = 20000,
+      iter.max = 10000,
+      trace = 0
+    )
+  )
 
 # Extract estimates
 estimates_fims <- FIMS::get_estimates(fit_fims)
-#> Warning in sqrt(diag(object$cov.fixed)): NaNs produced
 
 FIMS::clear()
 ```

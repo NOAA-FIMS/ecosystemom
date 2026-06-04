@@ -30,6 +30,7 @@ This vignette demonstrates an end-to-end simulation workflow implemented in the 
 ```{r package-setup}
 library(ecosystemom)
 library(FIMS)
+set.seed(1234)
 ```
 
 ```{r helper-setup, include = FALSE}
@@ -243,7 +244,7 @@ catch_index_sampled <- catch_index_om |>
 catch_index_sampled |>
   scroll_table()
 
-catch_agecomp_sample_size <- 20
+catch_agecomp_sample_size <- 150
 catch_agecomp_sampled <- catch_agecomp_om |> 
   dplyr::group_by(truth_year) |> 
   dplyr::mutate(
@@ -322,7 +323,7 @@ survey_index_sampled <- survey_data |>
   )
 
 # Survey agecomp
-survey_agecomp_sample_size <- 20
+survey_agecomp_sample_size <- 150
 survey_agecomp_sampled <- survey_data |> 
   dplyr::group_by(truth_year) |> 
   dplyr::mutate(
@@ -492,6 +493,15 @@ maturity_parameters <- estimate_true_maturity(
   functional_form = "logistic"
 )
 
+# Estimate recruitment log_sd
+recruitment_ewe <- number_agecomp_om |>
+  dplyr::filter(truth_group == "0") |>
+  dplyr::pull(truth_value)
+
+log_sd_proxy <- (sd(log(recruitment_ewe) - mean(log(recruitment_ewe)))) |>
+  log()
+
+
 # Update parameter values using OM-derived truth information
 updated_parameters <- default_parameters |>
   # dplyr::filter(!(module_name == "Selectivity" & fleet_name == fishing_fleet_name)) |>
@@ -565,6 +575,15 @@ updated_parameters <- default_parameters |>
     ),
     by = c("label", "module_type")
   ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      label = "log_sd",
+      module_type = "BevertonHolt",
+      value = log_sd_proxy,
+      estimation_type = "constant"
+    ),
+    by = c("label", "module_type")
+  ) |>
   dplyr::filter(!(module_name == "Maturity")) |>
   dplyr::bind_rows(maturity_parameters) |>
   dplyr::rows_update(
@@ -610,7 +629,15 @@ The workflow below:
 # Initialize and fit the FIMS estimation model
 fit_fims <- updated_parameters |>
   FIMS::initialize_fims((data = data_fims)) |>
-  FIMS::fit_fims(optimize = TRUE)
+  FIMS::fit_fims(
+    optimize = TRUE,
+    control = list(
+      # eval.max = 20000,
+      eval.max = 20000,
+      iter.max = 10000,
+      trace = 0
+    )
+  )
 
 # Extract estimates
 estimates_fims <- FIMS::get_estimates(fit_fims)

@@ -100,7 +100,8 @@ related ecosystem-informed analyses.</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ecosystemom</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/noaa-fims/fims" class="external-link">FIMS</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/noaa-fims/fims" class="external-link">FIMS</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="load-ewe-model-outputs">Load EwE Model Outputs<a class="anchor" aria-label="anchor" href="#load-ewe-model-outputs"></a>
@@ -2609,7 +2610,7 @@ mt
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">truth_om</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    truth_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">truth_value</span> <span class="op">*</span> <span class="fl">1000000</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span>,</span>
+<span>    truth_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">truth_value</span> <span class="op">*</span> <span class="fl">1000000</span> <span class="op">*</span> <span class="fl">1000</span><span class="op">)</span>,</span>
 <span>    truth_unit <span class="op">=</span> <span class="st">"numbers"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -2716,7 +2717,7 @@ mt
 16436.46
 </td>
 <td style="text-align:right;">
-15306.08
+15454.48
 </td>
 </tr>
 <tr>
@@ -2742,7 +2743,7 @@ mt
 16565.34
 </td>
 <td style="text-align:right;">
-16757.21
+16775.75
 </td>
 </tr>
 <tr>
@@ -2768,7 +2769,7 @@ mt
 15939.05
 </td>
 <td style="text-align:right;">
-14092.72
+16806.13
 </td>
 </tr>
 <tr>
@@ -2794,7 +2795,7 @@ mt
 12596.12
 </td>
 <td style="text-align:right;">
-12576.88
+11188.14
 </td>
 </tr>
 <tr>
@@ -2820,7 +2821,7 @@ mt
 25993.96
 </td>
 <td style="text-align:right;">
-26780.97
+26524.54
 </td>
 </tr>
 <tr>
@@ -2846,7 +2847,7 @@ mt
 321014.86
 </td>
 <td style="text-align:right;">
-339562.49
+328829.77
 </td>
 </tr>
 <tr>
@@ -2872,7 +2873,7 @@ mt
 258893.40
 </td>
 <td style="text-align:right;">
-236057.52
+251245.21
 </td>
 </tr>
 <tr>
@@ -2898,7 +2899,7 @@ mt
 365211.37
 </td>
 <td style="text-align:right;">
-360272.26
+354920.81
 </td>
 </tr>
 <tr>
@@ -2924,7 +2925,7 @@ mt
 600358.51
 </td>
 <td style="text-align:right;">
-592331.83
+582922.58
 </td>
 </tr>
 <tr>
@@ -2950,7 +2951,7 @@ mt
 659307.57
 </td>
 <td style="text-align:right;">
-649241.57
+629822.64
 </td>
 </tr>
 <tr>
@@ -2976,7 +2977,7 @@ mt
 604887.34
 </td>
 <td style="text-align:right;">
-587635.74
+589887.95
 </td>
 </tr>
 <tr>
@@ -3002,7 +3003,7 @@ mt
 907276.10
 </td>
 <td style="text-align:right;">
-935092.93
+862019.15
 </td>
 </tr>
 <tr>
@@ -3028,7 +3029,7 @@ mt
 771183.60
 </td>
 <td style="text-align:right;">
-853997.03
+740898.60
 </td>
 </tr>
 <tr>
@@ -3054,7 +3055,7 @@ mt
 878034.15
 </td>
 <td style="text-align:right;">
-808261.80
+879768.17
 </td>
 </tr>
 <tr>
@@ -3080,7 +3081,7 @@ mt
 981962.22
 </td>
 <td style="text-align:right;">
-1006187.97
+1028932.91
 </td>
 </tr>
 <tr>
@@ -3106,7 +3107,7 @@ mt
 961678.94
 </td>
 <td style="text-align:right;">
-875049.17
+955195.83
 </td>
 </tr>
 <tr>
@@ -3132,7 +3133,7 @@ mt
 926563.53
 </td>
 <td style="text-align:right;">
-901564.86
+902060.99
 </td>
 </tr>
 <tr>
@@ -3158,7 +3159,7 @@ mt
 933937.94
 </td>
 <td style="text-align:right;">
-930321.19
+891227.94
 </td>
 </tr>
 <tr>
@@ -3184,7 +3185,7 @@ mt
 435965.57
 </td>
 <td style="text-align:right;">
-447404.50
+417571.04
 </td>
 </tr>
 <tr>
@@ -3210,7 +3211,7 @@ mt
 292324.12
 </td>
 <td style="text-align:right;">
-278915.66
+329443.53
 </td>
 </tr>
 <tr>
@@ -3236,7 +3237,7 @@ mt
 66979.80
 </td>
 <td style="text-align:right;">
-68480.48
+67346.13
 </td>
 </tr>
 <tr>
@@ -3262,7 +3263,7 @@ mt
 58767.23
 </td>
 <td style="text-align:right;">
-59768.69
+57271.33
 </td>
 </tr>
 <tr>
@@ -3288,7 +3289,7 @@ mt
 36368.17
 </td>
 <td style="text-align:right;">
-34029.13
+35531.40
 </td>
 </tr>
 <tr>
@@ -3314,7 +3315,7 @@ mt
 41439.10
 </td>
 <td style="text-align:right;">
-42942.57
+42349.40
 </td>
 </tr>
 <tr>
@@ -3340,7 +3341,7 @@ mt
 42480.31
 </td>
 <td style="text-align:right;">
-46628.69
+40980.84
 </td>
 </tr>
 <tr>
@@ -3366,7 +3367,7 @@ mt
 42963.63
 </td>
 <td style="text-align:right;">
-42701.40
+39912.67
 </td>
 </tr>
 <tr>
@@ -3392,7 +3393,7 @@ mt
 47277.22
 </td>
 <td style="text-align:right;">
-45059.60
+48594.79
 </td>
 </tr>
 <tr>
@@ -3418,7 +3419,7 @@ mt
 91043.37
 </td>
 <td style="text-align:right;">
-90857.15
+86392.70
 </td>
 </tr>
 <tr>
@@ -3444,7 +3445,7 @@ mt
 87008.47
 </td>
 <td style="text-align:right;">
-83380.63
+86834.03
 </td>
 </tr>
 <tr>
@@ -3470,7 +3471,7 @@ mt
 120764.99
 </td>
 <td style="text-align:right;">
-111829.62
+115099.74
 </td>
 </tr>
 <tr>
@@ -3496,7 +3497,7 @@ mt
 119770.21
 </td>
 <td style="text-align:right;">
-125347.91
+126398.53
 </td>
 </tr>
 <tr>
@@ -3522,7 +3523,7 @@ mt
 110616.90
 </td>
 <td style="text-align:right;">
-111457.94
+107882.56
 </td>
 </tr>
 <tr>
@@ -3548,7 +3549,7 @@ mt
 175165.13
 </td>
 <td style="text-align:right;">
-177090.94
+168849.39
 </td>
 </tr>
 </tbody>
@@ -3556,7 +3557,7 @@ mt
 </div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">catch_agecomp_sample_size</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
+<span><span class="va">catch_agecomp_sample_size</span> <span class="op">&lt;-</span> <span class="fl">150</span></span>
 <span><span class="va">catch_agecomp_sampled</span> <span class="op">&lt;-</span> <span class="va">catch_agecomp_om</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">truth_year</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -3641,7 +3642,7 @@ of N=200.</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Survey agecomp</span></span>
-<span><span class="va">survey_agecomp_sample_size</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
+<span><span class="va">survey_agecomp_sample_size</span> <span class="op">&lt;-</span> <span class="fl">150</span></span>
 <span><span class="va">survey_agecomp_sampled</span> <span class="op">&lt;-</span> <span class="va">survey_data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">truth_year</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -3745,12 +3746,12 @@ Click to expand/collapse code
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 8</span></span></span>
 <span><span class="co">#&gt;   type     name            age length timing value unit   uncertainty</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> age_comp fishing_fleet     0     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985    41 number         200</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> age_comp fishing_fleet     1     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985    61 number         200</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> age_comp fishing_fleet     2     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985    84 number         200</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> age_comp fishing_fleet     3     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985    13 number         200</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> age_comp fishing_fleet     4     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985     1 number         200</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> age_comp fishing_fleet     5     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985     0 number         200</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> age_comp fishing_fleet     0     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985    22 number         150</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> age_comp fishing_fleet     1     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985    49 number         150</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> age_comp fishing_fleet     2     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985    67 number         150</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> age_comp fishing_fleet     3     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985    12 number         150</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> age_comp fishing_fleet     4     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985     0 number         150</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> age_comp fishing_fleet     5     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985     0 number         150</span></span>
 <span><span class="co">#&gt; additional slots include the following:fleets:</span></span>
 <span><span class="co">#&gt; [1] "fishing_fleet" "survey_fleet" </span></span>
 <span><span class="co">#&gt; n_years:</span></span>
@@ -3766,10 +3767,8 @@ Click to expand/collapse code
 <span><span class="co">#&gt; start_year:</span></span>
 <span><span class="co">#&gt; [1] 1985</span></span>
 <span><span class="co">#&gt; end_year:</span></span>
-<span><span class="co">#&gt; [1] 2017</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_fims</span><span class="op">)</span></span></code></pre></div>
-<img src="ewe-ecosim-base-simulation_files/figure-html/prepare-fims-data-1.png" class="r-plt" alt="" width="672"></details>
+<span><span class="co">#&gt; [1] 2017</span></span></code></pre></div>
+</details>
 </div>
 <div class="section level2">
 <h2 id="configure-the-fims-estimation-model">Configure the FIMS estimation model<a class="anchor" aria-label="anchor" href="#configure-the-fims-estimation-model"></a>
@@ -4262,6 +4261,15 @@ Dnorm
 <span>  functional_form <span class="op">=</span> <span class="st">"logistic"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Estimate recruitment log_sd</span></span>
+<span><span class="va">recruitment_ewe</span> <span class="op">&lt;-</span> <span class="va">number_agecomp_om</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">truth_group</span> <span class="op">==</span> <span class="st">"0"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">truth_value</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">log_sd_proxy</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">recruitment_ewe</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">recruitment_ewe</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span></span>
 <span><span class="co"># Update parameter values using OM-derived truth information</span></span>
 <span><span class="va">updated_parameters</span> <span class="op">&lt;-</span> <span class="va">default_parameters</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># dplyr::filter(!(module_name == "Selectivity" &amp; fleet_name == fishing_fleet_name)) |&gt;</span></span>
@@ -4315,9 +4323,12 @@ Dnorm
 <span>      label <span class="op">=</span> <span class="st">"log_rzero"</span>, </span>
 <span>      module_type <span class="op">=</span> <span class="st">"BevertonHolt"</span>,</span>
 <span>      value <span class="op">=</span> <span class="va">number_agecomp_om</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">truth_group</span>  <span class="op">==</span> <span class="st">"0"</span>, <span class="va">truth_year</span> <span class="op">==</span> <span class="va">model_years</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">truth_group</span> <span class="op">==</span> <span class="st">"0"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">truth_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>        <span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span>
+<span>        <span class="co"># dplyr::filter(truth_group  == "0", truth_year == model_years[1]) |&gt;</span></span>
+<span>        <span class="co"># dplyr::pull(truth_value) |&gt;</span></span>
+<span>        <span class="co"># log()</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"module_type"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -4329,6 +4340,15 @@ Dnorm
 <span>      <span class="co"># v = 411.23 + 1.02 + 191.58 + 2 + 1016.36 + 12.18 + 2 + 403.26 = 2039.63</span></span>
 <span>      <span class="co"># h = v / (v + 1) = 0.99</span></span>
 <span>      value <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.0</span> <span class="op">-</span> <span class="fl">0.99</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">0.99</span> <span class="op">-</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"module_type"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
+<span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>      label <span class="op">=</span> <span class="st">"log_sd"</span>,</span>
+<span>      module_type <span class="op">=</span> <span class="st">"BevertonHolt"</span>,</span>
+<span>      value <span class="op">=</span> <span class="va">log_sd_proxy</span>,</span>
+<span>      estimation_type <span class="op">=</span> <span class="st">"constant"</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"module_type"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -9900,7 +9920,7 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-11.5541826
+24.1027090
 </td>
 <td style="text-align:left;">
 fixed_effects
@@ -11192,10 +11212,10 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-0.1000000
+0.3322577
 </td>
 <td style="text-align:left;">
-fixed_effects
+constant
 </td>
 <td style="text-align:left;">
 process
@@ -20008,7 +20028,7 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-11.5541826
+25.3696876
 </td>
 <td style="text-align:left;">
 fixed_effects
@@ -20046,7 +20066,7 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-9.9100162
+23.7255009
 </td>
 <td style="text-align:left;">
 fixed_effects
@@ -20084,7 +20104,7 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-8.5477224
+22.3631177
 </td>
 <td style="text-align:left;">
 fixed_effects
@@ -20122,7 +20142,7 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-7.0596176
+20.8751140
 </td>
 <td style="text-align:left;">
 fixed_effects
@@ -20160,7 +20180,7 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-5.6312118
+19.4450038
 </td>
 <td style="text-align:left;">
 fixed_effects
@@ -20198,7 +20218,7 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-4.3944492
+18.2081170
 </td>
 <td style="text-align:left;">
 fixed_effects
@@ -20236,7 +20256,7 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-3.8501476
+17.6518987
 </td>
 <td style="text-align:left;">
 fixed_effects
@@ -20385,30 +20405,18 @@ parameter values.</li>
 <code class="sourceCode R"><span><span class="co"># Initialize and fit the FIMS estimation model</span></span>
 <span><span class="va">fit_fims</span> <span class="op">&lt;-</span> <span class="va">updated_parameters</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">FIMS</span><span class="fu">::</span><span class="fu"><a href="https://noaa-fims.github.io/FIMS/reference/initialize_fims.html" class="external-link">initialize_fims</a></span><span class="op">(</span><span class="op">(</span><span class="va">data</span> <span class="op">=</span> <span class="va">data_fims</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">FIMS</span><span class="fu">::</span><span class="fu"><a href="https://noaa-fims.github.io/FIMS/reference/fit_fims.html" class="external-link">fit_fims</a></span><span class="op">(</span>optimize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in nlminb(start = starting_values, objective = fn, gradient = gr, :</span></span>
-<span><span class="co">#&gt; NA/NaN function evaluation</span></span>
-<span><span class="co">#&gt; Warning in nlminb(start = starting_values, objective = fn, gradient = gr, :</span></span>
-<span><span class="co">#&gt; NA/NaN function evaluation</span></span>
-<span><span class="co">#&gt; Warning in nlminb(start = starting_values, objective = fn, gradient = gr, :</span></span>
-<span><span class="co">#&gt; NA/NaN function evaluation</span></span>
-<span><span class="co">#&gt; Warning: <span style="color: #BB0000;">✖</span> Optimization failed convergence checks.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Convergence code = <span style="color: #0000BB;">1</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Message = <span style="color: #0000BB;">"false convergence (8)"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Skipping sdreport. Consider adjusting control parameters (eval.max, iter.max)</span></span>
-<span><span class="co">#&gt;   or model structure.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Model fit returned for diagnostic purposes only. Results are not reliable.</span></span>
-<span><span class="co">#&gt; Warning: <span style="color: #BB0000;">✖</span> Standard error calculations failed convergence checks:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Hessian is not positive definite, which may indicate convergence issues or</span></span>
-<span><span class="co">#&gt;   model misspecification.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Standard errors cannot be reliably calculated, and MLEs may be unreliable.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider simplifying the model, improving data quality, or fixing poorly</span></span>
-<span><span class="co">#&gt;   informed parameters.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Model fit returned for diagnostic purposes only. Results are not reliable.</span></span>
+<span>  <span class="fu">FIMS</span><span class="fu">::</span><span class="fu"><a href="https://noaa-fims.github.io/FIMS/reference/fit_fims.html" class="external-link">fit_fims</a></span><span class="op">(</span></span>
+<span>    optimize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="co"># eval.max = 20000,</span></span>
+<span>      eval.max <span class="op">=</span> <span class="fl">20000</span>,</span>
+<span>      iter.max <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>      trace <span class="op">=</span> <span class="fl">0</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract estimates</span></span>
 <span><span class="va">estimates_fims</span> <span class="op">&lt;-</span> <span class="fu">FIMS</span><span class="fu">::</span><span class="fu"><a href="https://noaa-fims.github.io/FIMS/reference/get_FIMSFit.html" class="external-link">get_estimates</a></span><span class="op">(</span><span class="va">fit_fims</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in sqrt(diag(object$cov.fixed)): NaNs produced</span></span>
 <span></span>
 <span><span class="fu">FIMS</span><span class="fu">::</span><span class="fu"><a href="https://noaa-fims.github.io/FIMS/reference/Cpp_functions.html" class="external-link">clear</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
