@@ -10,6 +10,7 @@ asymptote
 Asymptote
 atlantis
 atlantisom
+Bai
 benthic
 Benthic
 benthos
@@ -41,6 +42,7 @@ devtools
 df
 dfr
 dgamma
+dir
 dirichlet
 dontrun
 DoubleLogistic
@@ -140,6 +142,8 @@ rdname
 readme
 reframe
 relicensing
+repo
+rescaled
 rgamma
 rlang
 rmultinom
@@ -192,6 +196,7 @@ unnest
 unnested
 usethis
 vapply
+vectorized
 waa
 Winf
 WIPO
