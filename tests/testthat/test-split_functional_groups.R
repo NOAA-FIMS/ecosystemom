@@ -58,13 +58,19 @@ test_that("split_functional_groups() works with correct inputs", {
   expect_equal(
     object = split_functional_groups(c(
       "King mackerel (0-1yr)",
+      "King mackerel_(0-1yr)",
       "King mackerel (1+yr)"
     )),
     expected = tibble::tibble(
-      functional_group = c("King mackerel (0-1yr)", "King mackerel (1+yr)"),
-      species = c("King mackerel", "King mackerel"),
-      group = c("0-1yr", "1+yr"),
+      functional_group = c(
+        "King mackerel (0-1yr)",
+        "King mackerel_(0-1yr)",
+        "King mackerel (1+yr)"
+      ),
+      species = rep("King mackerel", 3),
+      group = c("0-1yr", "0-1yr", "1+yr"),
       functional_group_snake_case = c(
+        "king_mackerel_0_1yr",
         "king_mackerel_0_1yr",
         "king_mackerel_1_plusyr"
       )
