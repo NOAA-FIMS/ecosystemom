@@ -47,6 +47,8 @@ split_functional_groups <- function(x) {
     # split digits separated by an underscore into digits separated by a dash
     # e.g., 1_2 becomes 1-2
     gsub(pattern = "([[:digit:]])_([[:digit:]])", replacement = "\\1-\\2") |>
+    # Treat underscores before parenthesized suffixes as separators
+    gsub(pattern = "_\\(", replacement = " (") |>
     # Parentheses are sometimes used around age/group suffixes in EwE outputs
     # (e.g., "King mackerel (0-1yr)"); strip wrappers before parsing.
     gsub(pattern = "[()]", replacement = "")
