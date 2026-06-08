@@ -93,6 +93,97 @@ test_that("sample_lognormal() returns correct error messages", {
   )
 })
 
+# sample_gamma ----
+## IO correctness ----
+test_that("sample_gamma() works with correct inputs", {
+  #' @description Test that sample_gamma(1, 1) returns a known result when the
+  #' seed is set to a defined value of 123.
+  set.seed(123)
+  expect_equal(
+    object = sample_gamma(1, 1),
+    expected = 0.182217107
+  )
+
+  #' @description Test that sample_gamma(1) returns two different values when
+  #' the seed is not set.
+  expect_false(
+    sample_gamma(1) == sample_gamma(1)
+  )
+
+  x <- 1:5
+  #' @description Test that sample_gamma() returns the input values when the
+  #' standard deviation is set to zero.
+  expect_equal(
+    sample_gamma(x, sd = 0),
+    x
+  )
+
+  set.seed(1)
+  #' @description Test that sample_gamma() returns the correct values when the
+  #' standard deviation is zero and a positive value.
+  expect_equal(
+    sample_gamma(1, sd = c(0, 1)),
+    c(1.0000000, 0.155141357)
+  )
+})
+
+## Edge handling ----
+test_that("sample_gamma() returns correct outputs for edge cases", {
+  #' @description Test that sample_gamma() returns a vector when a vector is
+  #' passed to `x` but a single value is passed to `sd`.
+  expect_equal(
+    object = length(sample_gamma(1:5, 1)),
+    expected = 5
+  )
+
+  #' @description Test that sample_gamma() returns a vector when a single
+  #' value is passed to `x` but a vector is passed to `sd`.
+  expect_equal(
+    object = length(sample_gamma(1, 1:5)),
+    expected = 5
+  )
+
+  #' @description Test that sample_gamma() returns a valid answer when an
+  #' integer is passed to `x`.
+  expect_no_error(
+    object = sample_gamma(1L, 1)
+  )
+
+  #' @description Test that sample_gamma() returns a valid answer when a
+  #' double is passed to `x`.
+  expect_no_error(
+    object = sample_gamma(1.0, 1)
+  )
+})
+
+## Error handling ----
+test_that("sample_gamma() returns correct error messages", {
+  #' @description Test that sample_gamma() returns expected error when two
+  #' different size vectors are passed.
+  expect_error(
+    object = sample_gamma(1:5, 1:10),
+    regexp = "Length of `x` and `sd` must be the same"
+  )
+  #' @description Test that sample_gamma() returns expected error when a
+  #' negative value is passed to `sd`.
+  expect_error(
+    object = sample_gamma(1, -1),
+    regexp = "All values of `sd` must be positive"
+  )
+  #' @description Test that sample_gamma() returns expected error when a
+  #' negative value is passed to `x`.
+  expect_error(
+    object = sample_gamma(-1, 1),
+    regexp = "All values of `x` must be non-negative"
+  )
+  #' @description Test that sample_gamma() returns expected error when a
+  #' zero value is passed to `x` and a positive value is passed to `sd`.
+  expect_error(
+    object = sample_gamma(0, 1),
+    regexp = "Values of `x` must be positive when `sd` is greater than zero"
+  )
+})
+
 # sample_multinomial ----
 ## IO correctness ----
 test_that("sample_multinomial() works with correct inputs", {
