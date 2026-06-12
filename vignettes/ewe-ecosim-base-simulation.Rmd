@@ -31,7 +31,7 @@ This vignette demonstrates an end-to-end simulation workflow implemented in the 
 # TODO: remove the installation of packages later
 pak::pak(
   c(
-    "NOAA-FIMS/FIMS@main-lexical-error-in-json",
+    "NOAA-FIMS/FIMS",
     "NOAA-FIMS/FIMSdiags",
     "nmfs-ost/stockplotr",
     "James-Thorson-NOAA/dsem"
@@ -255,7 +255,7 @@ catch_index_sampled <- catch_index_om |>
 catch_index_sampled |>
   scroll_table()
 
-catch_agecomp_sample_size <- 10
+catch_agecomp_sample_size <- 150
 catch_agecomp_sampled <- catch_agecomp_om |> 
   dplyr::group_by(truth_year) |> 
   dplyr::mutate(
@@ -298,16 +298,17 @@ names(ages) <- functional_groups |>
 
 # Define explicit survey catchability
 catchability_survey <- 0.05
-selectivity_inflection_point <- 1.5   # Fully mature/available by age 3
-selectivity_slope <- 2.0   # A distinct, clean gradient
-selectivity_survey <- 1 / (1 + exp(-selectivity_slope * (ages - selectivity_inflection_point)))
-# selectivity_inflection_point_asc <- 1.2
-# selectivity_slope_asc <- 2.1
-# selectivity_inflection_point_desc <- 3.8
-# selectivity_slope_desc <- 1.2
-# selectivity_ascending  <- 1 / (1 + exp(-selectivity_slope_asc * (ages - selectivity_inflection_point_asc)))
-# selectivity_descending <- 1 / (1 + exp(-selectivity_slope_desc * (ages - selectivity_inflection_point_desc)))
-# selectivity_survey   <- selectivity_ascending * (1 - selectivity_descending)
+# selectivity_inflection_point <- 0.456   # Fully mature/available by age 3
+# selectivity_slope <- 3   # A distinct, clean gradient
+# selectivity_survey <- 1 / (1 + exp(-selectivity_slope * (ages - selectivity_inflection_point)))
+selectivity_inflection_point_asc <- -5
+selectivity_slope_asc <- 5
+selectivity_inflection_point_desc <- 0.55
+selectivity_slope_desc <- 3.30
+
+selectivity_ascending  <- 1 / (1 + exp(-selectivity_slope_asc * (ages - selectivity_inflection_point_asc)))
+selectivity_descending <- 1 / (1 + exp(-selectivity_slope_desc * (ages - selectivity_inflection_point_desc)))
+selectivity_survey <- selectivity_ascending * (1 - selectivity_descending)
 names(selectivity_survey) <- functional_groups |>
   dplyr::filter(species == "menhaden") |>
   dplyr::pull(group)
@@ -357,7 +358,7 @@ survey_index_sampled <- survey_data |>
   )
 
 # Survey agecomp
-survey_agecomp_sample_size <- 10
+survey_agecomp_sample_size <- 150
 survey_agecomp_sampled <- survey_data |> 
   dplyr::group_by(truth_year) |> 
   dplyr::mutate(
@@ -417,7 +418,7 @@ landings_data <- data.frame(
   timing = model_years,
   value = catch_index_sampled[["sampled_value"]],
   unit = "mt",
-  uncertainty = catch_index_sd * 2
+  uncertainty = catch_index_sd
 )
 
 index_data <- data.frame(
@@ -427,7 +428,7 @@ index_data <- data.frame(
   timing = model_years,
   value = survey_index_sampled[["sampled_value"]],
   unit = "mt",
-  uncertainty = survey_index_sd * 2
+  uncertainty = survey_index_sd
 )
 
 age_data <- rbind(
@@ -512,10 +513,9 @@ updated_configurations <- default_configurations |>
   dplyr::rows_update(
     y = tibble::tibble(
       module_name = "Selectivity",
-      fleet_name = fishing_fleet_name,
       module_type = "DoubleLogistic"
     ),
-    by = c("module_name", "fleet_name")
+    by = c("module_name")
   )
 
 updated_configurations |>
@@ -544,6 +544,18 @@ catch_selectivity_inflection_point_asc <- 1.8
 catch_selectivity_slope_asc <- 3.1
 catch_selectivity_inflection_point_desc <- 0.01
 catch_selectivity_slope_desc <- 0.88
+selectivity_ascending  <- 1 / (1 + exp(-catch_selectivity_slope_asc * (ages - catch_selectivity_inflection_point_asc)))
+selectivity_descending <- 1 / (1 + exp(-catch_selectivity_slope_desc * (ages - catch_selectivity_inflection_point_desc)))
+selectivity_catch <- selectivity_ascending * (1 - selectivity_descending)
+selectivity_catch/max(selectivity_catch)
+
+#catch_selectivity_inflection_point_asc <- 1.24
+#catch_selectivity_slope_asc <- 4.80
+#catch_selectivity_inflection_point_desc <- 3.42
+#catch_selectivity_slope_desc <- 2.5
+#selectivity_ascending  <- 1 / (1 + exp(-catch_selectivity_slope_asc * (ages - catch_selectivity_inflection_point_asc)))
+#selectivity_descending <- 1 / (1 + exp(-catch_selectivity_slope_desc * (ages - catch_selectivity_inflection_point_desc)))
+#selectivity_catch <- selectivity_ascending * (1 - selectivity_descending)
 
 # Estimate maturity parameters
 maturity_parameters <- estimate_true_maturity(
@@ -573,6 +585,9 @@ updated_parameters <- default_parameters |>
         "inflection_point_asc", "slope_asc", 
         "inflection_point_desc", "slope_desc"
       ),
+      estimation_type = c(
+        "constant"
+      ),
       value = c(
         catch_selectivity_inflection_point_asc,
         catch_selectivity_slope_asc,
@@ -592,33 +607,37 @@ updated_parameters <- default_parameters |>
     ), 
     by = c("fleet_name", "label", "time")
   ) |> 
+  #dplyr::rows_update(
+  #  y = tibble::tibble(
+  #    fleet_name = survey_fleet_name,
+  #    label = c("inflection_point", "slope", "log_q"),
+  #    value = c(selectivity_inflection_point, selectivity_slope, log(catchability_survey)),
+  #    estimation_type = "constant" 
+  #  ),
+  #  by = c("fleet_name", "label")
+  #) |>
   dplyr::rows_update(
     y = tibble::tibble(
-      fleet_name = survey_fleet_name,
-      label = c("inflection_point", "slope", "log_q"),
-      value = c(selectivity_inflection_point, selectivity_slope, log(catchability_survey)),
-      estimation_type = "constant" 
+     fleet_name = survey_fleet_name,
+     label = c(
+        "inflection_point_asc", "slope_asc", 
+        "inflection_point_desc", "slope_desc", 
+        "log_q"
+      ),
+      estimation_type = c(
+        rep("fixed_effects", 0),
+        rep("constant", 5)
+      ),
+      value = c(
+        selectivity_inflection_point_asc,
+        selectivity_slope_asc,
+        selectivity_inflection_point_desc,
+        selectivity_slope_desc,
+        log(catchability_survey)
+      )
     ),
     by = c("fleet_name", "label")
   ) |>
-  # dplyr::rows_update(
-  #   y = tibble::tibble(
-  #     fleet_name = survey_fleet_name,
-  #     label = c(
-  #       "inflection_point_asc", "slope_asc", 
-  #       "inflection_point_desc", "slope_desc", 
-  #       "log_q"
-  #     ),
-  #     value = c(
-  #       selectivity_inflection_point_asc,
-  #       selectivity_slope_asc,
-  #       selectivity_inflection_point_desc,
-  #       selectivity_slope_desc,
-  #       log(catchability_survey)
-  #     )
-  #   ),
-  #   by = c("fleet_name", "label")
-  # ) |>
   dplyr::rows_update(
     y = tibble::tibble(
       label = "log_rzero", 
@@ -653,14 +672,14 @@ updated_parameters <- default_parameters |>
     ),
     by = c("label", "module_type")
   ) |>
-  # dplyr::rows_update(
-  #   y = tibble::tibble(
-  #     label = "log_devs",
-  #     module_type = "BevertonHolt",
-  #     estimation_type = "fixed_effects"
-  #   ),
-  #   by = c("label", "module_type")
-  # ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+     label = "log_devs",
+     module_type = "BevertonHolt",
+     estimation_type = "fixed_effects"
+    ),
+   by = c("label", "module_type")
+  ) |>
   dplyr::filter(!(module_name == "Maturity")) |>
   dplyr::bind_rows(maturity_parameters) |>
   dplyr::rows_update(
@@ -682,7 +701,12 @@ updated_parameters <- default_parameters |>
       value = number_agecomp_om |>
         dplyr::filter(truth_year == model_years[1]) |>
         dplyr::pull(truth_value) |>
-        log()
+        log(),
+      estimation_type = c(
+        rep("constant", 7),
+        rep("fixed_effects", 0)
+        
+      )
     ),
     by = c("label", "age")
   )
@@ -702,8 +726,8 @@ The workflow below:
 - Runs optimization to estimate model parameters.
 - Extracts estimated quantities for downstream comparison with the OM “truth”.
 - Clears the FIMS interface to reset the modeling environment.
+
 ```{r fit-fims, echo = TRUE, message = FALSE}
-# Initialize and fit the FIMS estimation model
 fit_fims <- updated_parameters |>
   FIMS::initialize_fims((data = data_fims)) |>
   FIMS::fit_fims(
@@ -735,6 +759,11 @@ estimates_fims <- FIMS::get_estimates(fit_fims) |>
   ) 
 
 FIMS::clear()
+
+estimates_fims |>
+  dplyr::filter(estimation_type == "fixed_effects" | estimation_type == "random_effects") |>
+  dplyr::select(module_name, label, fleet, year_i, age_i, input, estimated, uncertainty) |>
+  print(n = Inf)
 ```
 
 # Compare OM and FIMS 
@@ -1004,6 +1033,191 @@ like_fit <- FIMSdiags::run_fims_likelihood(
 FIMSdiags::plot_likelihood(like_fit)
 FIMS::clear()
 ```
+
+```{r fit-fims, echo = TRUE, message = FALSE, eval = FALSE}
+# Initialize and fit the FIMS estimation model
+
+
+inputs <- updated_parameters |>
+  FIMS::initialize_fims((data = data_fims))
+obj <- TMB::MakeADFun(
+  data = list(),
+  parameters = inputs$parameters,
+  map = inputs$map,
+  random = "re",
+  DLL = "FIMS",
+  silent = TRUE
+)
+fit <- SparseNUTS::sample_snuts(
+  obj,
+  num_samples = 300,
+  num_warmup = 10,
+  chains = 3,
+  cores = 1,
+  #num_samples = 8000,
+  #num_warmup = 1000,
+  #chains = 5,
+  print = FALSE,
+  refresh = 0,
+  quiet = TRUE,
+  control = list(adapt_delta = 0.99)
+)
+posterior <- as.data.frame(fit)
+colnames(posterior) <- c(
+  inputs$parameters$p |> get_parameter_names() |> names(),
+  paste0("Recruitment.1.recruitment_deviation.", obj$env$random)
+)
+# dimnames(fit[["samples"]])[[3]] <- c(colnames(posterior), "lp__")
+posteriors_labeled <- tidyr::pivot_longer(
+  posterior[, -NCOL(posterior)],
+  cols = dplyr::everything(),
+  names_to = "name"
+) |>
+  dplyr::left_join(
+    colnames(posterior) |>
+      dplyr::as_tibble() |>
+      tidyr::separate_wider_delim(
+        delim = ".",
+        cols = value,
+        names = c("module_name", "fleet_number", "label", "module_id"),
+        cols_remove = FALSE,
+        too_few = "align_start"
+      ) |>
+      dplyr::group_by(fleet_number, label) |>
+      dplyr::mutate(
+        index = if (dplyr::n() == 1) {
+          NA_integer_
+        } else {
+          dplyr::row_number(label)
+        },
+        fleet_name = dplyr::if_else(fleet_number == 1, "Fishery", "Acoustic_Survey"),
+        words = gsub("_", " ", label)
+      ) |>
+      dplyr::ungroup(),
+    by = c("name" = "value")
+  ) # |>
+  # dplyr::left_join(
+  #   y = year_conversion_matrix,
+  #   by = c("index")
+  # )
+
+
+post <- apply(as.data.frame(posterior), 1, \(x) obj$report(x))
+SB_long <- purrr::map(post, "spawning_biomass") |>
+  purrr::map(
+    \(x) data.frame(value = unlist(x), year_i = 1:length(unlist(x)))
+  ) |>
+  dplyr::bind_rows(.id = "simulation") #|>
+  # dplyr::left_join(
+  #   y = year_conversion_matrix,
+  #   by = c("year_i" = "index")
+  # )
+ggplot2::ggplot(
+  data = SB_long |>
+    dplyr::group_by(year_i) |>
+    dplyr::summarize(
+      median = median(value, na.rm = TRUE),
+      lower = quantile(value, 0.025, na.rm = TRUE),
+      upper = quantile(value, 0.975, na.rm = TRUE)
+    ),
+  ggplot2::aes(x = year_i, y = median)
+) +
+  ggplot2::geom_line() +
+  ggplot2::geom_ribbon(
+    ggplot2::aes(ymin = lower, ymax = upper),
+    alpha = 0.2
+  ) 
+# recruitment devs
+ggplot2::ggplot(
+  posteriors_labeled |>
+    dplyr::filter(
+      words == "recruitment deviation"
+    ),
+  ggplot2::aes(y = value, x = as.factor(index))
+) +
+  tidybayes::stat_pointinterval(
+    # .width = c(0.66, 0.95),
+    color = "darkred"
+  ) +
+  ggplot2::labs(x = "Year", y = "Recruitment Deviation") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+ggplot2::ggplot(
+  posteriors_labeled |>
+    dplyr::filter(
+      words == "recruitment deviation"
+    ),
+  ggplot2::aes(y = value, x = as.factor(index))
+) +
+  tidybayes::stat_pointinterval(
+    # .width = c(0.66, 0.95),
+    color = "darkred"
+  ) +
+  ggplot2::labs(x = "Year", y = "Recruitment Deviation") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+  # +
+  # ggplot2::geom_point(
+  #   data = dplyr::tibble(
+  #     ss3_sb,
+  #     year = as.numeric(names(ss3_sb))
+  #   ),
+  #   mapping = ggplot2::aes(x = year, y = ss3_sb)
+  # )
+ggplot2::ggplot(
+  posteriors_labeled |>
+    dplyr::filter(
+      label == "log_Fmort",
+      fleet_number == 1
+    ),
+  ggplot2::aes(x = value, y = as.factor(index), fill = ggplot2::after_stat(x))
+) +
+  ggridges::geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01)
+
+r_long <- purrr::map(post, "expected_recruitment") |>
+  purrr::map(
+    \(x) data.frame(value = unlist(x), year_i = 1:length(unlist(x)))
+  ) |>
+  dplyr::bind_rows(.id = "simulation") #|>
+  # dplyr::left_join(
+  #   y = year_conversion_matrix,
+  #   by = c("year_i" = "index")
+  # )
+ggplot2::ggplot(
+  data = r_long |>
+    dplyr::group_by(year_i) |>
+    dplyr::summarize(
+      median = median(value, na.rm = TRUE),
+      lower = quantile(value, 0.025, na.rm = TRUE),
+      upper = quantile(value, 0.975, na.rm = TRUE)
+    ),
+  ggplot2::aes(x = year_i, y = median)
+) +
+  ggplot2::geom_line() +
+  ggplot2::geom_ribbon(
+    ggplot2::aes(ymin = lower, ymax = upper),
+    alpha = 0.2
+  ) 
+
+  #Initial numbers at age
+ggplot2::ggplot(
+  posteriors_labeled |>
+    dplyr::filter(
+      label == "log_init_naa"
+    ),
+  ggplot2::aes(
+    x = value,
+    y = factor(module_id, labels = get_ages(data_fims)[1:6]),
+    fill = ggplot2::after_stat(x)
+  )
+) +
+  ggridges::geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  ggplot2::scale_fill_viridis_c(name = "Value", option = "C") +
+  ggplot2::labs(title = "Posterior Shift by Age", y = "Age", x = "Ln(Initial Numbers at Age)") +
+  ggridges::theme_ridges()
+```
+
 # Create DSEM inputs
 In addition to supporting fisheries stock assessment workflows, {ecosystemom} can also be used to generate candidate inputs for Dynamic Structural Equation Models (DSEMs). These models provide a flexible framework for evaluating ecosystem linkages, environmental drivers, and trophic interactions through time.
 
