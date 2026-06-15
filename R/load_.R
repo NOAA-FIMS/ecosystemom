@@ -238,7 +238,7 @@ load_model_ewe_ecosim <- function(
     "weight" = "mt"
   )
 ) {
-  # Validate that the expected files exist before attemping to read them
+  # Validate that the expected files exist before attempting to read them
   expected_files <- c("biomass_monthly.csv", "catch_monthly.csv", "weight_monthly.csv")
   missing <- setdiff(expected_files, list.files(directory))
   if (length(missing) > 0) {
@@ -291,7 +291,7 @@ load_model_ewe_ecosim <- function(
   total_mortality <- data_monthly |>
     dplyr::filter(type == "mortality")
   
-  # Get natual mortality
+  # Get natural mortality
   natural_mortality <- dplyr::bind_rows(total_mortality, fishing_mortality) |>
     tidyr::pivot_wider(
       id_cols = c(year, month, functional_group, species, group, functional_group_snake_case),
