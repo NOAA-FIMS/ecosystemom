@@ -1,0 +1,17 @@
+# Update data files in /data whenever changes are made to files in /data-raw.
+# This workflow automatically commits changes directly to the working branch.
+name: call-update-data-r
+
+on:
+  push:
+    paths:
+      - 'data-raw/**'
+  workflow_dispatch:
+
+jobs:
+  call-workflow:
+    uses: NOAA-FIMS/ecosystemom/.github/workflows/update-data-r.yml
+    secrets:
+      PAT: ${{ secrets.PAT }}
+    with:
+      commit-directly: true
