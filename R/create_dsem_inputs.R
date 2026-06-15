@@ -67,23 +67,24 @@ utils::globalVariables(c(
 #'   predator_snake_case = "menhaden_0yr"
 #' )
 #'
-#' data <- list(data_om = list(data_om), data_environment = list(data_environment),
-#'              data_diet_composition = list(data_diet_composition))
+#' data <- list(
+#'   data_om = list(data_om), data_environment = list(data_environment),
+#'   data_diet_composition = list(data_diet_composition)
+#' )
 #'
 #' # Generate DSEM inputs
 #' dsem_inputs <- create_dsem_inputs(data, "Menhaden (0yr)", 0.1)
 #'
 #' # Extract the SEM equations for use with the dsem package
-#' cat(dsem_inputs$sem_lines)
+#' cat(dsem_inputs[["sem_lines"]])
 #'
 #' # Extract the time series data required for the SEM
-#' print(dsem_inputs$data_time_series_sem[[1]])
+#' print(dsem_inputs[["data_time_series_sem"]][[1]])
 create_dsem_inputs <- function(
-    data,
-    focal_functional_groups,
-    diet_composition_threshold = 0.1
+  data,
+  focal_functional_groups,
+  diet_composition_threshold = 0.1
 ) {
-
   # Validate diet_composition_threshold
   if (length(diet_composition_threshold) > 1 && length(diet_composition_threshold) != length(focal_functional_groups)) {
     cli::cli_abort("If 'diet_composition_threshold' is a vector, its length must match the length of 'focal_functional_groups'.")
@@ -95,7 +96,7 @@ create_dsem_inputs <- function(
 
   # Prepare environmental time series ---
   # Pivot environmental data to a wide format for joining
-  if (!is.null(data[["data_environment"]])){
+  if (!is.null(data[["data_environment"]])) {
     time_series_environment <- data[["data_environment"]][[1]] |>
       dplyr::select(index, year, month, value) |>
       tidyr::pivot_wider(names_from = index, values_from = value)
@@ -106,7 +107,7 @@ create_dsem_inputs <- function(
   }
 
   # Prepare diet composition tibble
-  if(!is.null(data[["data_diet_composition"]])){
+  if (!is.null(data[["data_diet_composition"]])) {
     impacted_group_from_diet <- data[["data_diet_composition"]][[1]] |>
       dplyr::select(prey, predator) |>
       unlist() |>
@@ -123,11 +124,11 @@ create_dsem_inputs <- function(
     tidyr::pivot_wider(names_from = functional_group_snake_case, values_from = value)
 
   # Join environmental data with diet composition
-  if (!is.null(time_series_environment)){
+  if (!is.null(time_series_environment)) {
     time_series_all <- time_series_all |>
       dplyr::full_join(time_series_environment, by = c("year", "month"))
   }
-  
+
   # Convert the final data frame to a time series matrix object
   if (nrow(time_series_all) > 0) {
     time_series_all <- time_series_all |>
@@ -159,7 +160,7 @@ create_dsem_inputs <- function(
 
   # Bottom-up Links (Prey -> Focal Group)
   # Initialize empty tibble
-  sem_prey <- tibble::tibble( 
+  sem_prey <- tibble::tibble(
     driver = character(),
     target = character(),
     lag = numeric(),
@@ -191,7 +192,7 @@ create_dsem_inputs <- function(
 
   # Top-down Links (Predator -> Focal Group)
   # Initialize empty tibble
-  sem_predator <- tibble::tibble( 
+  sem_predator <- tibble::tibble(
     driver = character(),
     target = character(),
     lag = numeric(),

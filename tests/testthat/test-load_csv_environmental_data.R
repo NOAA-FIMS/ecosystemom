@@ -73,7 +73,7 @@ test_that("load_csv_environmental_data() works with correct inputs", {
 test_that("load_csv_environmental_data() returns correct outputs for edge cases", {
   amo_yearly_data <- amo_data |>
     # convert values from month 2 to 12 into NAs
-    dplyr::mutate(value = ifelse(month == 1, value, NA)) 
+    dplyr::mutate(value = ifelse(month == 1, value, NA))
   # write to a temporary file
   file_path <- fs::path(
     ewe_ecosim_with_environmental_data_nwatlantic_path, "amo_yearly_data.csv"
@@ -109,6 +109,6 @@ test_that("load_csv_environmental_data() returns correct error messages", {
       lag_months = 12,
       impacted_group = "menhaden 0"
     ),
-    regexp = 'The CSV file must contain the following columns.*month.*unit'
+    regexp = "The CSV file must contain the following columns.*month.*unit"
   )
 })

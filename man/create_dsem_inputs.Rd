@@ -74,15 +74,17 @@ data_diet_composition <- tibble::tibble(
   predator_snake_case = "menhaden_0yr"
 )
 
-data <- list(data_om = list(data_om), data_environment = list(data_environment),
-             data_diet_composition = list(data_diet_composition))
+data <- list(
+  data_om = list(data_om), data_environment = list(data_environment),
+  data_diet_composition = list(data_diet_composition)
+)
 
 # Generate DSEM inputs
 dsem_inputs <- create_dsem_inputs(data, "Menhaden (0yr)", 0.1)
 
 # Extract the SEM equations for use with the dsem package
-cat(dsem_inputs$sem_lines)
+cat(dsem_inputs[["sem_lines"]])
 
 # Extract the time series data required for the SEM
-print(dsem_inputs$data_time_series_sem[[1]])
+print(dsem_inputs[["data_time_series_sem"]][[1]])
 }

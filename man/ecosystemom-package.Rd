@@ -13,6 +13,7 @@ What the package does (one paragraph).
 
 Authors:
 \itemize{
+  \item Bai Li \email{bai.li@noaa.gov} (\href{https://orcid.org/0000-0002-8249-1442}{ORCID})
   \item Kelli F. Johnson \email{kelli.johnson@noaa.gov} (\href{https://orcid.org/0000-0002-5149-451X}{ORCID})
 }
 

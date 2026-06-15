@@ -9,11 +9,13 @@ load_csv_environmental_data(file_path, lag_months, impacted_group)
 \arguments{
 \item{file_path}{A string. Path to the CSV file containing the environmental data.
 The CSV file must contain the following columns:
-- \code{index}: Name of the environmental index (character).
-- \code{year}: Year corresponding to each value (integer).
-- \code{month}: Month corresponding to each value (integer).
-- \code{value}: Value of the index (numeric).
-- \code{unit}: Unit of the index (character).}
+\itemize{
+\item \code{index}: Name of the environmental index (character).
+\item \code{year}: Year corresponding to each value (integer).
+\item \code{month}: Month corresponding to each value (integer).
+\item \code{value}: Value of the index (numeric).
+\item \code{unit}: Unit of the index (character).
+}}
 
 \item{lag_months}{An integer. The lag between environmental index and functional group, in months.
 For example, if lag_months = 12, the environmental effect is assumed to influence the functional

@@ -269,7 +269,7 @@ load_model_ewe_ecosim <- function(
   )
 
   # Isolate catch and biomass, reshape them to calculate fishing mortality
-  fishing_mortality <- data_monthly |> 
+  fishing_mortality <- data_monthly |>
     dplyr::filter(type %in% c("catch", "biomass")) |>
     # Pivot wider so catch and biomass are side-by-side for each group/time combo
     tidyr::pivot_wider(
@@ -286,11 +286,11 @@ load_model_ewe_ecosim <- function(
     ) |>
     # Drop the temporary catch and biomass columns
     dplyr::select(-catch, -biomass)
-  
+
   # Extract total mortality from the original data
   total_mortality <- data_monthly |>
     dplyr::filter(type == "mortality")
-  
+
   # Get natural mortality
   natural_mortality <- dplyr::bind_rows(total_mortality, fishing_mortality) |>
     tidyr::pivot_wider(
@@ -303,7 +303,7 @@ load_model_ewe_ecosim <- function(
       value = mortality - fishing_mortality,
       type = "natural_mortality",
       file_name = NA_character_
-    ) |> 
+    ) |>
     # Clean up columns to match your original structure
     dplyr::select(-mortality, -fishing_mortality)
 
@@ -319,10 +319,10 @@ load_model_ewe_ecosim <- function(
       unit = unit[type]
     ) |>
     dplyr::mutate(
-      unit = dplyr::if_else(type == "fishing_mortality", "year^-1", unit) 
+      unit = dplyr::if_else(type == "fishing_mortality", "year^-1", unit)
     ) |>
     dplyr::mutate(
-      unit = dplyr::if_else(type == "natural_mortality", "year^-1", unit) 
+      unit = dplyr::if_else(type == "natural_mortality", "year^-1", unit)
     )
 }
 
@@ -335,7 +335,6 @@ load_model_ewe_ecospace <- function(
     "catch" = "mt_per_square_kilometer_per_year"
   )
 ) {
-
   # Determine the number of years in the model
   years <- read_n_skip(
     file_path = fs::path(directory, "Ecospace_Annual_Average_Biomass.csv"),
@@ -467,11 +466,10 @@ load_csv_environmental_data <- function(file_path, lag_months, impacted_group) {
 #'
 #' @export
 load_diet_composition <- function(file_path, verbose = TRUE) {
-
   if (!file.exists(file_path)) {
     stop("File not found: ", file_path)
   }
-  
+
   # Read the raw data
   raw_data <- utils::read.csv(file_path, check.names = FALSE)
 
@@ -483,8 +481,8 @@ load_diet_composition <- function(file_path, verbose = TRUE) {
   } else if ("Prey \\ predator" %in% colnames(raw_data)) {
     "ewe_ecopath"
   } else {
-     # This ensures format_type is length 1 and not NULL
-    "unknown" 
+    # This ensures format_type is length 1 and not NULL
+    "unknown"
   }
 
   # Process the data based on the detected format
@@ -506,11 +504,10 @@ load_diet_composition <- function(file_path, verbose = TRUE) {
         ) |>
         dplyr::select(year, prey, predator, proportion, prey_snake_case, predator_snake_case) |>
         dplyr::ungroup()
-        
+
       if (verbose) cli::cli_alert_success("Converted consumption biomass to proportions!")
       output
     },
-
     "ewe_ecopath" = {
       if (verbose) cli::cli_alert_info("Processing Ecopath format...")
       # Handle empty column names that can occur in EwE output
@@ -526,7 +523,7 @@ load_diet_composition <- function(file_path, verbose = TRUE) {
         dplyr::filter(!prey %in% c("Import", "Sum", "(1 - Sum)"))
 
       # The predator names are in the first column, which will become row names for mapping
-      predator_names <- diet_composition |> 
+      predator_names <- diet_composition |>
         dplyr::pull(prey)
 
       if (anyDuplicated(predator_names)) {
@@ -552,7 +549,6 @@ load_diet_composition <- function(file_path, verbose = TRUE) {
       if (verbose) cli::cli_alert_success("Loaded EwE Ecopath Diet Composition format.")
       output
     },
-
     "ewe_ecospace_monthly" = {
       cli::cli_abort("The 'ewe_ecospace_monthly' format is recognized but not yet supported.")
     },
