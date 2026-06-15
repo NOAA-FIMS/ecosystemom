@@ -127,19 +127,21 @@ represent 10% of the diet.</p></dd>
 <span class="r-in"><span>  predator_snake_case <span class="op">=</span> <span class="st">"menhaden_0yr"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>data_om <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data_om</span><span class="op">)</span>, data_environment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data_environment</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>             data_diet_composition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data_diet_composition</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data_om <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data_om</span><span class="op">)</span>, data_environment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data_environment</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data_diet_composition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data_diet_composition</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate DSEM inputs</span></span></span>
 <span class="r-in"><span><span class="va">dsem_inputs</span> <span class="op">&lt;-</span> <span class="fu">create_dsem_inputs</span><span class="op">(</span><span class="va">data</span>, <span class="st">"Menhaden (0yr)"</span>, <span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract the SEM equations for use with the dsem package</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">dsem_inputs</span><span class="op">$</span><span class="va">sem_lines</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">dsem_inputs</span><span class="op">[[</span><span class="st">"sem_lines"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> amo -&gt; menhaden_0yr, 1, amo_menhaden_0yr</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> phytoplankton -&gt; menhaden_0yr, 0, phytoplankton_menhaden_0yr</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract the time series data required for the SEM</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dsem_inputs</span><span class="op">$</span><span class="va">data_time_series_sem</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dsem_inputs</span><span class="op">[[</span><span class="st">"data_time_series_sem"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Time Series:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Start = 1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> End = 1 </span>

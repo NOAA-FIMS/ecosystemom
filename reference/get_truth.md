@@ -102,8 +102,8 @@ truth <- get_truth(
   data,
   species_name = "menhaden"
 )
-#> ℹ The unit for numbers is currently set to "NA". Numbers need 
-#> to be rescaled and filled in using `dplyr::mutate()` based on the underlying 
+#> ℹ The unit for numbers is currently set to "NA". Numbers need
+#> to be rescaled and filled in using `dplyr::mutate()` based on the underlying
 #> units of `biomass-at-age` and `weight-at-age`.
 
 # To unnest tibble and view the data
@@ -115,13 +115,13 @@ truth <- purrr::map_dfr(
   species_names,
   function(x) get_truth(data, species_name = x)
 )
-#> ℹ The unit for numbers is currently set to "NA". Numbers need 
-#> to be rescaled and filled in using `dplyr::mutate()` based on the underlying 
+#> ℹ The unit for numbers is currently set to "NA". Numbers need
+#> to be rescaled and filled in using `dplyr::mutate()` based on the underlying
 #> units of `biomass-at-age` and `weight-at-age`.
-#> ℹ The unit for numbers is currently set to "NA". Numbers need 
-#> to be rescaled and filled in using `dplyr::mutate()` based on the underlying 
+#> ℹ The unit for numbers is currently set to "NA". Numbers need
+#> to be rescaled and filled in using `dplyr::mutate()` based on the underlying
 #> units of `biomass-at-age` and `weight-at-age`.
-#> ℹ The unit for numbers is currently set to "NA". Numbers need 
-#> to be rescaled and filled in using `dplyr::mutate()` based on the underlying 
+#> ℹ The unit for numbers is currently set to "NA". Numbers need
+#> to be rescaled and filled in using `dplyr::mutate()` based on the underlying
 #> units of `biomass-at-age` and `weight-at-age`.
 ```
