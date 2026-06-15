@@ -15,7 +15,7 @@ create_dsem_inputs(
 and \code{data_diet_composition}.}
 
 \item{focal_functional_groups}{Character vector specifying one or more focal
-groups of interest (e.g., \code{c("menhaden 0", "meanhaden 1")}).}
+groups of interest (e.g., \code{c("menhaden 0", "menhaden 1")}).}
 
 \item{diet_composition_threshold}{Numeric. The minimum proportion of diet
 required to include a predator-prey link in the SEM. Default is \code{0.1}, which

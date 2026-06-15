@@ -117,7 +117,7 @@ get_truth <- function(data, species_name) {
   ) |>
     # Remove the weight/index combo b/c it doesn't exist
     dplyr::filter(!(label == "weight" & type == "index")) |>
-    # TODO: Remove the natual_mortality/index combo for now.
+    # TODO: Remove the natural_mortality/index combo for now.
     # Need to think about how to get a single value per year
     dplyr::filter(!(label == "natural_mortality" & type == "index")) |>
     # TODO: Remove the total_mortality/index combo for now.
