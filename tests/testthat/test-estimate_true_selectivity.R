@@ -15,8 +15,8 @@ groups <- c("age1", "age2", "age3", "age4")
 true_ages <- c("age1" = 1, "age2" = 2, "age3" = 3, "age4" = 4)
 
 # Logistic curve generation tool for realistic synthetic data
-mock_logistic <- function(x) { 
-  1 / (1 + exp(-1.5 * (x - 2.5))) 
+mock_logistic <- function(x) {
+  1 / (1 + exp(-1.5 * (x - 2.5)))
 }
 
 synthetic_data <- expand.grid(
@@ -24,7 +24,7 @@ synthetic_data <- expand.grid(
   truth_group = groups,
   truth_label = "fishing_mortality",
   truth_type = "agecomp",
-  truth_time_step = "yearly", 
+  truth_time_step = "yearly",
   truth_unit = "year^-1",
   truth_year = years,
   stringsAsFactors = FALSE
@@ -122,7 +122,7 @@ test_that("estimate_true_selectivity() works with data from the package", {
 
   #' @description Test that logistic estimation on package data returns correct parameter labels.
   expect_equal(
-    object = sort(unique(res[["label"]])), 
+    object = sort(unique(res[["label"]])),
     expected = c("inflection_point_asc", "inflection_point_desc", "slope_asc", "slope_desc")
   )
 })
@@ -150,7 +150,7 @@ test_that("estimate_true_selectivity() collapses output to time-invariant parame
   expect_true(
     all(is.na(res_collapsed[["time"]]))
   )
-  
+
   res_collapsed_double <- estimate_true_selectivity(
     data = invariant_data,
     ages = true_ages,
@@ -179,12 +179,12 @@ test_that("estimate_true_selectivity() produces valid parameter estimates on sta
 
   res <- estimate_true_selectivity(data = stable_data, ages = stable_ages, functional_form = "logistic")
 
-  inflection <- res |> 
-    dplyr::filter(label == "inflection_point") |> 
+  inflection <- res |>
+    dplyr::filter(label == "inflection_point") |>
     dplyr::pull(value)
 
-  slope <- res |> 
-    dplyr::filter(label == "slope") |> 
+  slope <- res |>
+    dplyr::filter(label == "slope") |>
     dplyr::pull(value)
 
   #' @description Test that inflection_point estimation equals to the expected value.
@@ -197,12 +197,12 @@ test_that("estimate_true_selectivity() produces valid parameter estimates on sta
 test_that("estimate_logistic_parameters() extracts expected curve configurations", {
   test_ages <- 1:10
   logistic_values <- 2.5 / (1 + exp(-1 * (test_ages - 5)))
-  
+
   res <- estimate_logistic_parameters(raw_values = logistic_values, ages = test_ages)
-  
+
   #' @description Test that internal estimate_logistic labels match specific structural outputs.
   expect_equal(object = res[["label"]], expected = c("inflection_point", "slope"))
-  
+
   #' @description Test that internal estimate_logistic values equal to expected values.
   expect_equal(object = res[["value"]], expected = c(5, 1), tolerance = 0.01)
 })
@@ -212,15 +212,15 @@ test_that("estimate_double_logistic_parameters() extracts expected curve configu
   asc_limb <- 1 / (1 + exp(-1.2 * (test_ages - 4)))
   desc_limb <- 1 / (1 + exp(-0.8 * (test_ages - 11)))
   double_logistic_values <- 3.0 * (asc_limb * (1 - desc_limb))
-  
+
   res <- estimate_double_logistic_parameters(raw_values = double_logistic_values, ages = test_ages)
-  
+
   #' @description Test that internal estimate_double_logistic_labels resolves all 4 expected labels.
   expect_equal(
-    object = res[["label"]], 
+    object = res[["label"]],
     expected = c("inflection_point_asc", "slope_asc", "inflection_point_desc", "slope_desc")
   )
-  
+
   #' @description Test that internal estimate_double_logistic values equal to expected values.
   expect_equal(object = res[["value"]], expected = c(4, 1.2, 11, 0.8), tolerance = 0.01)
 })
@@ -245,26 +245,26 @@ test_that("estimate_true_selectivity() manages edge cases and vector parsing gra
 })
 
 test_that("estimate_true_selectivity() handles flat, zero, and single time frame variations", {
-  single_time_data <- synthetic_data |> 
+  single_time_data <- synthetic_data |>
     dplyr::filter(truth_year == 2020)
 
   res_single <- estimate_true_selectivity(data = single_time_data, ages = true_ages, functional_form = "logistic")
   #' @description Test that evaluation works correctly when passing a single time frame slice.
   expect_equal(object = nrow(res_single), expected = 2)
 
-  flat_data <- single_time_data |> 
+  flat_data <- single_time_data |>
     dplyr::mutate(truth_value = 0.5)
   res_flat <- estimate_true_selectivity(data = flat_data, ages = true_ages, functional_form = "logistic")
   #' @description Test that flat selectivity data tracks out finite numeric solutions without crashing.
   expect_true(all(is.finite(res_flat[["value"]])))
 
-  zero_data <- single_time_data |> 
+  zero_data <- single_time_data |>
     dplyr::mutate(truth_value = 0.0)
   res_zero <- estimate_true_selectivity(data = zero_data, ages = true_ages, functional_form = "logistic")
   #' @description Test that data arrays consisting of absolute zeros do not trigger optimization collapses.
   expect_true(all(is.finite(res_zero[["value"]])))
 
-  min_groups_data <- single_time_data |> 
+  min_groups_data <- single_time_data |>
     dplyr::filter(truth_group %in% c("age1", "age2"))
   res_min <- estimate_true_selectivity(data = min_groups_data, ages = true_ages[1:2], functional_form = "logistic")
   #' @description Test that the function completes parameter extractions given minimum required age groups (exactly 2).
@@ -303,7 +303,7 @@ test_that("estimate_true_selectivity() returns predictable structural error catc
   #' @description Test that parsing aborts if the functional groups lack enough variation to fit a continuous curve.
   expect_error(
     object = estimate_true_selectivity(
-      data = dplyr::filter(synthetic_data, truth_group == "age1"), 
+      data = dplyr::filter(synthetic_data, truth_group == "age1"),
       ages = true_ages
     ),
     regexp = "must contain at least 2 unique groups"

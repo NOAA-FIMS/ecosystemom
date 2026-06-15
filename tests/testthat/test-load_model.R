@@ -42,13 +42,13 @@ test_that("load_model() works with correct inputs for ewe_ecosim", {
   expect_equal(
     object = colnames(ewe_model),
     expected = c(
-      "file_name", "type", "year", "month", "functional_group", "value", 
+      "file_name", "type", "year", "month", "functional_group", "value",
       "species", "group", "functional_group_snake_case", "unit"
     )
   )
 
   expect_equal(
-    object = ewe_model |> 
+    object = ewe_model |>
       dplyr::pull(year) |>
       unique() |>
       sort(),
@@ -57,7 +57,7 @@ test_that("load_model() works with correct inputs for ewe_ecosim", {
 
   #' @description Test that load_model() for ewe_ecosim returns correct types.
   expected_types <- c(
-    "biomass", "catch", "fishing_mortality", "natural_mortality", 
+    "biomass", "catch", "fishing_mortality", "natural_mortality",
     "total_mortality", "weight"
   )
   expect_equal(
@@ -79,11 +79,11 @@ test_that("load_model() works with correct inputs for ewe_ecosim", {
     ),
     verbose = FALSE
   )
-  
+
   expect_equal(
-    object = ewe_model_custom_unit |> 
-      dplyr::filter(type == "weight") |> 
-      dplyr::pull(unit) |> 
+    object = ewe_model_custom_unit |>
+      dplyr::filter(type == "weight") |>
+      dplyr::pull(unit) |>
       unique(),
     expected = "kg"
   )

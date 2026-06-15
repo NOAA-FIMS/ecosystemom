@@ -5,7 +5,7 @@ utils::globalVariables(c(
 #' Calculate "truth" for a species using ecosystem model outputs
 #'
 #' @description The truth from an ecosystem model is often in different units
-#' than what is needed to sample from. This function takes output data from 
+#' than what is needed to sample from. This function takes output data from
 #' `load_model()` and calculates additional true information such as converting
 #' monthly age-composition information into annual data. No sampling is
 #' performed just mathematical operations.
@@ -82,7 +82,7 @@ get_truth <- function(data, species_name) {
       "i" = "Please check the species name and try again."
     ))
   }
-  
+
   # Check model type
   is_ecospace <- data |>
     dplyr::filter(grepl("ecospace", file_name, ignore.case = TRUE)) |>
@@ -93,7 +93,7 @@ get_truth <- function(data, species_name) {
     labels <- c("biomass", "catch")
   } else {
     labels <- c(
-      "biomass", "catch", "fishing_mortality", "natural_mortality", 
+      "biomass", "catch", "fishing_mortality", "natural_mortality",
       "total_mortality", "weight"
     )
   }
@@ -173,42 +173,42 @@ get_truth <- function(data, species_name) {
   truth_baa_monthly <- truth_agecomp_monthly[["biomass"]]
   if ("weight" %in% labels) {
     truth_waa_monthly <- truth_agecomp_monthly[["weight"]]
-  # Calculate numbers-at-age by dividing biomass-at-age by weight-at-age,
-  # rounded to integers
-  truth_agecomp_monthly[["numbers"]] <- truth_baa_monthly |>
-    dplyr::mutate(
-      type = "numbers",
-      value = unlist(purrr::map2(
-        truth_baa_monthly[["value"]],
-        truth_waa_monthly[["value"]],
-        function(x, y) x / y
-      )),
-      unit = NA_character_
-    )
-  cli::cli_alert_info(
-    "The unit for {.field numbers} is currently set to {.val NA}. Numbers need 
-    to be rescaled and filled in using {.fn dplyr::mutate} based on the underlying 
+    # Calculate numbers-at-age by dividing biomass-at-age by weight-at-age,
+    # rounded to integers
+    truth_agecomp_monthly[["numbers"]] <- truth_baa_monthly |>
+      dplyr::mutate(
+        type = "numbers",
+        value = unlist(purrr::map2(
+          truth_baa_monthly[["value"]],
+          truth_waa_monthly[["value"]],
+          function(x, y) x / y
+        )),
+        unit = NA_character_
+      )
+    cli::cli_alert_info(
+      "The unit for {.field numbers} is currently set to {.val NA}. Numbers need
+    to be rescaled and filled in using {.fn dplyr::mutate} based on the underlying
     units of {.var biomass-at-age} and {.var weight-at-age}."
-  )
+    )
 
-  # Aggregate numbers-at-age into yearly averages, rounded to integers
-  truth_agecomp_yearly[["numbers"]] <- get_truth_agecomp_yearly(
-    truth_agecomp_monthly[["numbers"]]
-  ) |>
-    # Yearly numbers are rounded as they are mean values from truth_agecomp_monthly
-    dplyr::mutate(value = value)
+    # Aggregate numbers-at-age into yearly averages, rounded to integers
+    truth_agecomp_yearly[["numbers"]] <- get_truth_agecomp_yearly(
+      truth_agecomp_monthly[["numbers"]]
+    ) |>
+      # Yearly numbers are rounded as they are mean values from truth_agecomp_monthly
+      dplyr::mutate(value = value)
 
-  # Calculate index for numbers from monthly numbers-at-age
-  truth_index_monthly[["numbers"]] <- get_truth_index_monthly(
-    truth_agecomp_monthly[["numbers"]]
-  )
-  # Aggregate to yearly numbers index, rounded to integers
-  truth_index_yearly[["numbers"]] <- get_truth_index_yearly(
-    truth_index_monthly[["numbers"]]
-  ) |>
-    dplyr::mutate(value = value)
+    # Calculate index for numbers from monthly numbers-at-age
+    truth_index_monthly[["numbers"]] <- get_truth_index_monthly(
+      truth_agecomp_monthly[["numbers"]]
+    )
+    # Aggregate to yearly numbers index, rounded to integers
+    truth_index_yearly[["numbers"]] <- get_truth_index_yearly(
+      truth_index_monthly[["numbers"]]
+    ) |>
+      dplyr::mutate(value = value)
   }
-  
+
   truth_values <- c(
     truth_index_monthly,
     truth_index_yearly,
@@ -307,8 +307,8 @@ get_truth_index_monthly <- function(truth_monthly) {
     # If type matches "fishing_mortality", then use max() to get apical F.
     dplyr::summarise(
       value = dplyr::if_else(
-        unique(type) == "fishing_mortality", 
-        max(value, na.rm = TRUE), 
+        unique(type) == "fishing_mortality",
+        max(value, na.rm = TRUE),
         sum(value, na.rm = TRUE)
       ),
       .groups = "drop"

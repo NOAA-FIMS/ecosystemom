@@ -41,7 +41,7 @@ test_that("create_dsem_inputs() works with correct inputs", {
       prey_snake_case = "phytoplankton",
       predator_snake_case = "menhaden_0yr"
     )
-    
+
     data <- tibble::tibble(
       data_om = list(data_om),
       data_environment = list(data_environment),
@@ -129,7 +129,6 @@ test_that("create_dsem_inputs works with real data", {
     expect_true(grepl("pdsi -> phytoplankton, 0, pdsi_phytoplankton", result[["sem_lines"]]))
     expect_true(grepl("detritus -> menhaden_0, 0, detritus_menhaden_0", result[["sem_lines"]]))
     expect_true(grepl("striped_bass_2_5 -> menhaden_0, 0, striped_bass_2_5_menhaden_0", result[["sem_lines"]]))
-
   })
 })
 

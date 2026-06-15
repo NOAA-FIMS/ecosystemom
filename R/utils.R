@@ -22,7 +22,7 @@ read_n_skip <- function(file_path, keyword = "timestep") {
 #' @param data A tibble of ecosystem model output.
 #' @param ages A named numeric vector or NULL.
 #'
-#' @return A list containing `functional_groups` (character vector) and 
+#' @return A list containing `functional_groups` (character vector) and
 #'   `sorted_age_mapping` (named numeric vector).
 #' @noRd
 validate_data_and_ages <- function(data, ages) {
@@ -70,7 +70,7 @@ validate_data_and_ages <- function(data, ages) {
     numeric_conversion <- suppressWarnings(
       as.numeric(functional_groups)
     )
-    
+
     if (!any(is.na(numeric_conversion))) {
       ages <- numeric_conversion
       names(ages) <- functional_groups
@@ -91,7 +91,7 @@ validate_data_and_ages <- function(data, ages) {
         "{.arg ages} must be a **named** numeric vector mapping {.var truth_group} values to numeric ages."
       )
     }
-    
+
     missing_mappings <- setdiff(functional_groups, names(ages))
     if (length(missing_mappings) > 0) {
       cli::cli_abort(
