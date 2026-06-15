@@ -95,12 +95,12 @@ get_functional_groups <- function(file_path) {
   out_vector <- utils::read.table(
     text = as.character(temp[-1]),
     sep = ","
-  ) |> 
+  ) |>
     # Extract non-NA rows from the first column
     dplyr::filter(!is.na(V1)) |>
     # Pull the names of the functional groups
     dplyr::pull(V2)
-  
+
   # Return a tibble with the functional groups, species, group names.
   split_functional_groups(out_vector)
 }

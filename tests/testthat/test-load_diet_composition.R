@@ -17,7 +17,6 @@ expected_cols <- c(
 # IO correctness ----
 test_that("load_diet_composition() works with correct inputs", {
   withr::with_tempdir({
-
     # Create a sample CSV for the 'ewe_ecospace_yearly' format
     ecospace_yearly_data <- data.frame(
       Year = c(2000, 2001),
@@ -55,8 +54,8 @@ test_that("load_diet_composition() works with correct inputs", {
     expect_equal(nrow(result_ecopath), 4)
     expect_true(all(is.na(result_ecopath[["year"]])))
     expect_equal(
-      result_ecopath |> 
-        dplyr::filter(predator == "Predator A", prey == "Prey 1") |> 
+      result_ecopath |>
+        dplyr::filter(predator == "Predator A", prey == "Prey 1") |>
         dplyr::pull(proportion),
       0.25
     )
@@ -65,7 +64,7 @@ test_that("load_diet_composition() works with correct inputs", {
   })
 })
 
-test_that("load_diet_composition() works with real data",{
+test_that("load_diet_composition() works with real data", {
   withr::with_tempdir({
     ewe_ecosim_with_environmental_data_nwatlantic_path <- system.file(
       "extdata", "ewe_ecosim_with_environmental_data_nwatlantic",
@@ -87,7 +86,7 @@ test_that("load_diet_composition() works with real data",{
     )
     expect_equal(
       object = diet_composition |>
-        dplyr::pull(prey) |> 
+        dplyr::pull(prey) |>
         unique(),
       expected = functional_groups[["functional_group"]]
     )
@@ -102,7 +101,7 @@ test_that("load_diet_composition() works with real data",{
     expect_equal(
       object = diet_composition |>
         dplyr::pull(year) |>
-        unique(), 
+        unique(),
       expected = NA
     )
   })
@@ -150,7 +149,7 @@ test_that("load_diet_composition() handles edge cases", {
     result_empty_col <- load_diet_composition("ecopath_empty_col.csv", verbose = FALSE)
     expect_true(tibble::is_tibble(result_empty_col))
 
-    pred_a_data <- result_empty_col |> 
+    pred_a_data <- result_empty_col |>
       dplyr::filter(predator == "Predator A")
     expect_equal(nrow(pred_a_data), 2)
     expect_equal(pred_a_data[["prey"]], c("Prey 1", "Prey 2"))

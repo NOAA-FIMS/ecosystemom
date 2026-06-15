@@ -13,7 +13,7 @@ data(ewe_ecosim_base_nwatlantic, package = "ecosystemom")
 data <- ecosystemom::ewe_ecosim_base_nwatlantic
 
 expected_truth_label <- c(
-  "biomass", "catch", "fishing_mortality", "natural_mortality", "numbers", 
+  "biomass", "catch", "fishing_mortality", "natural_mortality", "numbers",
   "total_mortality", "weight"
 )
 expected_truth_type <- c("index", "agecomp")

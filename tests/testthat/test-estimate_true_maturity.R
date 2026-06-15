@@ -74,12 +74,12 @@ test_that("estimate_true_maturity() fits parameters accurately from expected bas
     functional_form = "logistic"
   )
 
-  inflection_val <- res |> 
-    dplyr::filter(label == "inflection_point") |> 
+  inflection_val <- res |>
+    dplyr::filter(label == "inflection_point") |>
     dplyr::pull(value)
 
-  slope_val <- res |> 
-    dplyr::filter(label == "slope") |> 
+  slope_val <- res |>
+    dplyr::filter(label == "slope") |>
     dplyr::pull(value)
 
   #' @description Test that the Sum of Squares optimizer extracts the exact inflection point from stable source data.
@@ -102,13 +102,13 @@ test_that("estimate_true_maturity() resolves knife-edge or sharp transition step
       functional_form = "logistic"
     )
   })
-  
+
   expect_true(all(is.finite(res[["value"]])))
 })
 
 test_that("estimate_true_maturity() safely processes complete absolute boundary arrays", {
   all_zeros <- rep(0.0, length(test_ages_vector))
-  all_ones  <- rep(1.0, length(test_ages_vector))
+  all_ones <- rep(1.0, length(test_ages_vector))
 
   #' @description Test that a vector comprised completely of absolute zeros returns stable numeric solutions.
   expect_true(
