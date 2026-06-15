@@ -1,3 +1,8 @@
+<!-- badges: start -->
+[![R-CMD-check badge](https://github.com/NOAA-FIMS/ecosystemom/actions/workflows/call-r-cmd-check.yml/badge.svg?branch=main)](https://github.com/NOAA-FIMS/ecosystemom/actions/workflows/call-r-cmd-check.yml)
+[![Test coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/NOAA-FIMS/ecosystemom/refs/heads/badges/coverage-badge.json)](https://github.com/NOAA-FIMS/ecosystemom/tree/badges)
+<!-- badges: end -->
+
 # ecosystemom
 Ecosystem operating model. Generates data sets from ecosystem model scenarios for stock assessment models.
 

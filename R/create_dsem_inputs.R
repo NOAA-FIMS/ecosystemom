@@ -15,7 +15,7 @@ utils::globalVariables(c(
 #' @param data A tibble/list containing `data_om`, `data_environment`,
 #'   and `data_diet_composition`.
 #' @param focal_functional_groups Character vector specifying one or more focal
-#'   groups of interest (e.g., `c("menhaden 0", "meanhaden 1")`).
+#'   groups of interest (e.g., `c("menhaden 0", "menhaden 1")`).
 #' @param diet_composition_threshold Numeric. The minimum proportion of diet
 #'   required to include a predator-prey link in the SEM. Default is `0.1`, which
 #'   represent 10% of the diet.
