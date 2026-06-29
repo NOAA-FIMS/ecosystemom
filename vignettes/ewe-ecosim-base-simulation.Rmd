@@ -23,7 +23,7 @@ Ecosystem-based fishery management (EBFM) is crucial for addressing the complex,
 This vignette demonstrates an end-to-end simulation workflow implemented in the {ecosystemom} package for linking ecosystem model outputs with fisheries estimation models. The workflow includes functions to:
 
 - `load_model()` — import and standardize output from ecosystem operating models (OM). For example, this function can be used to read and standardize Ecopath with Ecosim (EwE) Ecosim outputs for downstream analyses within {ecosystemom}.
-- `calc_truth()` — extract “true” population quantities from the OM, including annual or monthly biomass trajectories and biomass-at-age.
+- `get_truth()` — extract “true” population quantities from the OM, including annual or monthly biomass trajectories and biomass-at-age.
 - `sample_*()` — generate sampled observations from OM outputs for use in estimation models such as the Fisheries Integrated Modeling System (FIMS).
 - `create_dsem_inputs()` — prepare environmental covariates or diet composition data from the OM to support candidate model specifications for dynamic structural equation models (DSEMs) and related ecosystem-informed analyses.
 
@@ -115,11 +115,11 @@ data_om |>
 ```
 
 # Extract "Truth" from the OM
-Using `calc_truth()`, we synthesize raw EwE time series into a structured tibble. This "truth" represents the true state of the ecosystem against which our estimation model will be tested. For this demonstration, our focal species is "menhaden".
-To isolate a target stock assessment from the broader ecosystem web, we subset a single focal species from the OM. In this vignette, we track Atlantic Menhaden (Brevoortia tyrannus), a key forage fish species. We extract "true" indices and age compositions using `calc_truth()`.
+Using `get_truth()`, we synthesize raw EwE time series into a structured tibble. This "truth" represents the true state of the ecosystem against which our estimation model will be tested. For this demonstration, our focal species is "menhaden".
+To isolate a target stock assessment from the broader ecosystem web, we subset a single focal species from the OM. In this vignette, we track Atlantic Menhaden (Brevoortia tyrannus), a key forage fish species. We extract "true" indices and age compositions using `get_truth()`.
 ```{r extract-truth, echo = TRUE, message = FALSE}
 # Extract "true" values for menhaden
-truth_om <- calc_truth(
+truth_om <- get_truth(
   data = data_om,
   species_name = "menhaden"
 )
@@ -861,7 +861,7 @@ stockplotr::plot_timeseries(
   recruitment_em,
   x = "year",
   y = "estimate",
-  ylab = "recruitment (metric ton)"
+  ylab = "recruitment (number)"
 ) +
   stockplotr::theme_noaa() +
   ggplot2::geom_line(
