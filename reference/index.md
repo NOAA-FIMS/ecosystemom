@@ -35,6 +35,8 @@
 - [`load_model()`](load_model.md) : Load an ecosystem model
 - [`sample_dirichlet_multinomial()`](sample_dirichlet_multinomial.md) :
   Sample using a Dirichlet-multinomial distribution
+- [`sample_gamma()`](sample_gamma.md) : Sample using a gamma
+  distribution
 - [`sample_lognormal()`](sample_lognormal.md) : Sample using a lognormal
   distribution
 - [`sample_multinomial()`](sample_multinomial.md) : Sample using a
