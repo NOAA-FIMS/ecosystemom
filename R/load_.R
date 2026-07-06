@@ -222,7 +222,7 @@ load_model <- function(..., type = c("ewe_ecosim", "ewe_ecospace", "atlantis"), 
   model <- switch(type,
     "ewe_ecosim"   = load_model_ewe_ecosim(..., verbose = verbose),
     "ewe_ecospace" = load_model_ewe_ecospace(..., verbose = verbose),
-    "atlantis"     = cli::cli_abort("{type} is not yet configured for {.fn load_model}")
+    "atlantis"     = load_model_atlantis(..., verbose = verbose)
   )
 }
 
@@ -556,4 +556,145 @@ load_diet_composition <- function(file_path, verbose = TRUE) {
     # Default case for unknown formats
     cli::cli_abort("Unknown diet file format.")
   )
+}
+
+load_model_atlantis <- function(
+  directory,
+  functional_groups,
+  verbose = TRUE,
+  start_year = 1L,
+  steps_per_year = 12L,
+  unit = c(
+    "biomass" = "mt",
+    "catch" = "mt",
+    "landings" = "mt",
+    "total_mortality" = "year^-1",
+    "fishing_mortality" = "year^-1",
+    "natural_mortality" = "year^-1",
+    "weight" = "mt"
+  )
+) {
+  if (!dir.exists(directory)) {
+    cli::cli_abort("Directory does not exist: {.path {directory}}")
+  }
+
+  group_lookup <- get_atlantis_group_lookup(
+    directory = directory,
+    functional_groups = functional_groups,
+    verbose = verbose
+  )
+
+  nc_file_path <- fs::path(directory, "outputFolder", "outputGOA02360_test.nc")
+  nc_output <- tidync::tidync(nc_file_path)
+  nc_output |>
+    tidync::hyper_dims()
+  print(nc_output)
+  # Note: 
+  # b (D1, length 109): These are the spatial boxes (polygons) dividing up the 
+  # Gulf of Alaska. The model has 109 distinct polygonal regions.
+  # z (D2, length 7): These are the depth layers inside each box (usually layer 
+  # 0 is the sediment/sea floor, and layers 1–6 are water column layers moving 
+  # up to the surface).
+  # t (D0, length 51): This is time (tracking 51 time-steps).
+
+  # Extract the depths for each box
+  depths <- nc_output |> 
+    tidync::activate("nominal_dz") |> 
+    tidync::hyper_tibble()
+  head(depths)
+
+  # Define all hake variables present in this grid
+  hake_vars <- c(
+    "Pacific_hake_N",
+    paste0("Pacific_hake", 1:10, "_Nums"),
+    paste0("Pacific_hake", 1:10, "_StructN"),
+    paste0("Pacific_hake", 1:10, "_ResN")
+  )
+
+  # Extract into a clean, long tidyverse data frame
+  hake_state_data <- nc_output |> 
+    tidync::hyper_tibble(select_var = hake_vars) |> 
+    dplyr::as_tibble()
+
+  # Calculate Weight-at-Age (Structural N + Reserve N) 
+  # TODO: how to extract weight-at-age?
+  # In Atlantis, Weight = StructN + ResN (often multiplied by a mgN to wet-weight conversion factor)?
+  hake_weight_at_age <- hake_state_data |> 
+    dplyr::select(z, b, t, dplyr::matches("StructN|ResN")) |> 
+    tidyr::pivot_longer(
+      cols = -c(z, b, t), 
+      names_to = c("cohort", ".value"), 
+      names_pattern = "Pacific_hake(\\d+)_(StructN|ResN)"
+    ) |> 
+    dplyr::mutate(weight_at_age_N = StructN + ResN)
+
+  # Reading the Catch text file
+  nc_catch_path <- fs::path(directory, "outputFolder", "outputGOA02360_testCATCH.nc")
+  nc_catch <- tidync::tidync(nc_catch_path)
+  print(nc_catch)
+  # Define all hake variables present in this grid
+  hake_catch_names <- c(
+    paste0("Pacific_hake", 1:10, "_Catch")
+  )
+  hake_discard_names  <- paste0("Pacific_hake", 1:10, "_Discards")
+  all_hake_names      <- c(hake_catch_names, hake_discard_names)
+
+  hake_catch <- all_hake_names |> 
+    purrr::map(\(var_name) {
+      nc_catch |> 
+        tidync::activate(var_name) |> 
+        tidync::hyper_tibble(select_var = var_name)
+    }) |> 
+    purrr::reduce(dplyr::full_join, by = c("b", "t")) |> 
+    dplyr::as_tibble()
+
+  nc_prod_path <- fs::path(directory, "outputFolder", "outputGOA02360_testPROD.nc")
+  nc_prod <- tidync::tidync(nc_prod_path)
+  prod_hake_vars <- ncmeta::nc_vars(nc_prod_path) |> 
+    dplyr::filter(stringr::str_detect(name, "Pacific_hake")) |> 
+    dplyr::pull(name)
+  print(nc_prod)
+    # Define all hake variables present in this grid
+    hake_catch_names <- c(
+      paste0("Pacific_hake", 1:10, "_Catch")
+    )
+    hake_discard_names  <- paste0("Pacific_hake", 1:10, "_Discards")
+    all_hake_names      <- c(hake_catch_names, hake_discard_names)
+
+    hake_catch <- all_hake_names |> 
+      purrr::map(\(var_name) {
+        nc_catch |> 
+          tidync::activate(var_name) |> 
+          tidync::hyper_tibble(select_var = var_name)
+      }) |> 
+      purrr::reduce(dplyr::full_join, by = c("b", "t")) |> 
+      dplyr::as_tibble()
+
+  # Reading the Mortality text file
+  hake_mortality <- readr::read_tsv("outputGOA02360_MORT.txt") |> 
+    dplyr::select(Time, dplyr::contains("HAK"))
+  
+  
+
+
+  
+  
+  dplyr::bind_rows(
+    biomass,
+    catch,
+    landings,
+    total_mortality,
+    fishing_mortality,
+    natural_mortality,
+    weight_at_age_proxy
+  ) |>
+    tibble::as_tibble() |>
+    dplyr::left_join(
+      functional_groups,
+      by = "functional_group"
+    ) |>
+    dplyr::mutate(
+      unit = unit[type]
+    ) |>
+    dplyr::select(type, year, month, dplyr::everything())
 }
