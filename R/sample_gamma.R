@@ -46,7 +46,7 @@ sample_gamma <- function(x, sd = 1) {
 
   if (any(sd < 0)) {
     cli::cli_abort(c(
-      "x" = "All values of {.var sd} must be positive",
+      "x" = "All values of {.var sd} must be non-negative",
       "i" = "{.var sd} has values {sd[sd < 0]}"
     ))
   }
@@ -60,6 +60,16 @@ sample_gamma <- function(x, sd = 1) {
 
   if (length(x) == 1 && length(sd) > 1) {
     x <- rep(x, length(sd))
+  }
+  if (length(sd) == 1 && length(x) > 1) {
+    sd <- rep(sd, length(x))
+  }
+  if (length(x) != length(sd)) {
+    cli::cli_abort(c(
+      "x" = "Length of {.var x} and {.var sd} must be compatible",
+      "i" = "{.var x} has length {length(x)}",
+      "i" = "{.var sd} has length {length(sd)}"
+    ))
   }
 
   if (any(x == 0 & sd > 0)) {

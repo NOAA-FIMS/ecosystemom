@@ -96,12 +96,16 @@ test_that("sample_lognormal() returns correct error messages", {
 # sample_gamma ----
 ## IO correctness ----
 test_that("sample_gamma() works with correct inputs", {
-  #' @description Test that sample_gamma(1, 1) returns a known result when the
-  #' seed is set to a defined value of 123.
+  #' @description Test that sample_gamma() returns a known result when the seed
+  #' is set to a defined value of 123.
   set.seed(123)
   expect_equal(
     object = sample_gamma(1, 1),
     expected = 0.182217107
+  )
+  expect_equal(
+    object = sample_gamma(1:5, 1),
+    expected = c(1.6957511, 0.5263902, 2.9603714, 5.7468949, 5.3669060)
   )
 
   #' @description Test that sample_gamma(1) returns two different values when
@@ -168,7 +172,7 @@ test_that("sample_gamma() returns correct error messages", {
   #' negative value is passed to `sd`.
   expect_error(
     object = sample_gamma(1, -1),
-    regexp = "All values of `sd` must be positive"
+    regexp = "All values of `sd` must be non-negative"
   )
   #' @description Test that sample_gamma() returns expected error when a
   #' negative value is passed to `x`.
