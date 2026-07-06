@@ -38,6 +38,8 @@ utils::globalVariables(c("V1", "V2"))
 #' and then replace only the rows that were parsed incorrectly.
 #'
 #' @param file_path The path to the EwE file.
+#' @param om_type The type of ecosystem model. One of `"ewe_ecosim"`, 
+#' `"ewe_ecospace"`, or `"atlantis"`.
 #' @return
 #' A tibble with the following columns:
 #' \itemize{
@@ -88,19 +90,40 @@ utils::globalVariables(c("V1", "V2"))
 #'     "detritus"
 #'   )
 #' )
-get_functional_groups <- function(file_path) {
-  # Load the EwE data file and extract the data
-  temp <- scan(file_path, what = "", sep = "\n", quiet = TRUE)
-  # Extract the data
-  out_vector <- utils::read.table(
-    text = as.character(temp[-1]),
-    sep = ","
-  ) |>
-    # Extract non-NA rows from the first column
-    dplyr::filter(!is.na(V1)) |>
-    # Pull the names of the functional groups
-    dplyr::pull(V2)
+get_functional_groups <- function(
+  file_path, 
+  om_type = c("ewe_ecosim", "ewe_ecospace", "atlantis")
+) {
 
+  om_type <- rlang::arg_match(om_type)
+  
+  if (om_type %in% c("ewe_ecosim", "ewe_ecospace")) {
+    # Load the EwE data file and extract the data
+    temp <- scan(file_path, what = "", sep = "\n", quiet = TRUE)
+    # Extract the data
+    out_vector <- utils::read.table(
+      text = as.character(temp[-1]),
+      sep = ","
+    ) |>
+      # Extract non-NA rows from the first column
+      dplyr::filter(!is.na(V1)) |>
+      # Pull the names of the functional groups
+      dplyr::pull(V2)
+  }
+
+  if (om_type == "atlantis") {
+    out_vector <- read.table(
+      file = file_path, 
+      sep = ",",
+      header = TRUE, 
+      stringsAsFactors = FALSE
+    ) |>
+      # TODO: check whether we should only include turned-on functional 
+      # groups or all functional groups.
+      dplyr::filter(IsTurnedOn == 1) |>
+      dplyr::pull(Name)
+  }
+  
   # Return a tibble with the functional groups, species, group names.
   split_functional_groups(out_vector)
 }
