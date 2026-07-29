@@ -6,11 +6,12 @@ on:
   push:
     paths:
       - 'data-raw/**'
+
   workflow_dispatch:
 
 jobs:
   call-workflow:
-    uses: NOAA-FIMS/ecosystemom/.github/workflows/update-data-r.yml
+    uses: NOAA-FIMS/ecosystemom/.github/workflows/update-data-r.yml@main
     secrets:
       PAT: ${{ secrets.PAT }}
     with:

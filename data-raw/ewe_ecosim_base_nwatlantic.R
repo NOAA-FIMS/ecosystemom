@@ -15,7 +15,7 @@ raw_file_path <- fs::path(
 # Extract the functional groups from the model's basic estimates file.
 # The `get_functional_groups` function reads
 # the specified CSV file to get a list of all functional groups in the model.
-functional_groups <- get_functional_groups(
+functional_groups <- ecosystemom::get_functional_groups(
   file_path = fs::path(
     raw_file_path, "basic_estimates.csv"
   )
@@ -25,7 +25,7 @@ functional_groups <- get_functional_groups(
 # The `load_model` function reads all the necessary
 # files from the specified directory to construct the full model object.
 # It requires the list of functional groups that was extracted in the previous step.
-ewe_ecosim_base_nwatlantic <- load_model(
+ewe_ecosim_base_nwatlantic <- ecosystemom::load_model(
   directory = raw_file_path,
   type = "ewe_ecosim",
   functional_groups = functional_groups
