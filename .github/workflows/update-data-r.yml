@@ -59,12 +59,12 @@ jobs:
 
       - name: Run R code to update files in /data
         run: |
-          devtools::install()
+          devtools::install(quick = TRUE)
           r_scripts <- list.files("data-raw", pattern = "\\.R$", full.names = TRUE)
           if (length(r_scripts) > 0) {
             for (script in r_scripts) {
-              # Capture exit code so failures actually stop the GHA runner
-              status <- system2(paste("Rscript ", shQuote(script)))
+              message("Executing script: ", script)
+              status <- system2("Rscript", args = script)
               if (status != 0) stop(paste("Script failed:", script))
             }
           } else {
