@@ -1,4 +1,4 @@
-# From Ecopath with Ecosim to Fisheries Integrated Modeling System
+# From Ecopath with Ecosim to Fisheries Integrated Modeling System (with YOY survey)
 
 ## Introduction
 
@@ -500,19 +500,64 @@ names(ages) <- functional_groups |>
   dplyr::filter(species == "menhaden") |>
   dplyr::pull(group)
 
+# YOY survey for age-0
+yoy_q <- 0.05
+yoy_index_sd <- 0.1
+yoy_selectivity <- c(1, 0, 0, 0, 0, 0, 0)
+names(yoy_selectivity) <- functional_groups |>
+  dplyr::filter(species == "menhaden") |>
+  dplyr::pull(group)
+yoy_index_sampled <- number_agecomp_om |>
+  dplyr::left_join(
+    weight_agecomp_om |>
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+    by = c("truth_year", "truth_group"),
+    suffix = c("_number", "_weight")
+  ) |>
+  dplyr::filter(truth_group == "0") |>
+  dplyr::mutate(
+    truth_value_selected_number = ceiling(truth_value_number * yoy_q),
+    truth_value_selected_biomass = truth_value_selected_number * truth_value_weight,
+    sampled_value = sample_lognormal(
+      x = truth_value_selected_biomass, 
+      sd = yoy_index_sd
+    )
+  ) |>
+  dplyr::select(
+    -truth_value_number, -truth_value_weight, 
+    -truth_value_selected_number, -truth_value_selected_biomass
+  ) |>
+  dplyr::mutate(
+    species_name = "menhaden",
+    truth_label = "biomass",
+    truth_type = "index",
+    truth_time_step = "yearly",
+    truth_unit = "mt"
+  )
+yoy_inflection_point_asc <- -1.0
+yoy_slope_asc <- 10
+yoy_inflection_point_desc <- 0.5
+yoy_slope_desc <- 10
+yoy_selectivity_ascending  <- 1 / (1 + exp(-yoy_slope_asc * (ages - yoy_inflection_point_asc)))
+yoy_selectivity_descending <- 1 / (1 + exp(-yoy_slope_desc * (ages - yoy_inflection_point_desc)))
+yoy_selectivity <- yoy_selectivity_ascending * (1 - yoy_selectivity_descending)
+
+# Survey for ages 1-6+
 # Define explicit survey catchability
 catchability_survey <- 0.05
-# selectivity_inflection_point <- 3  
-# selectivity_slope <- 3   # A distinct, clean gradient
-# selectivity_survey <- 1 / (1 + exp(-selectivity_slope * (ages - selectivity_inflection_point)))
-selectivity_inflection_point_asc <- -5
-selectivity_slope_asc <- 5
-selectivity_inflection_point_desc <- 0.55
-selectivity_slope_desc <- 3.30
+# Define logistic selectivity parameters using values from BAM NAD survey
+selectivity_inflection_point <- 3.03
+selectivity_slope <- 2.2
+selectivity_survey <- 1 / (1 + exp(-selectivity_slope * (ages - selectivity_inflection_point)))
 
-selectivity_ascending  <- 1 / (1 + exp(-selectivity_slope_asc * (ages - selectivity_inflection_point_asc)))
-selectivity_descending <- 1 / (1 + exp(-selectivity_slope_desc * (ages - selectivity_inflection_point_desc)))
-selectivity_survey <- selectivity_ascending * (1 - selectivity_descending)
+# selectivity_inflection_point_asc <- -5
+# selectivity_slope_asc <- 5
+# selectivity_inflection_point_desc <- 0.55
+# selectivity_slope_desc <- 3.30
+# selectivity_ascending  <- 1 / (1 + exp(-selectivity_slope_asc * (ages - selectivity_inflection_point_asc)))
+# selectivity_descending <- 1 / (1 + exp(-selectivity_slope_desc * (ages - selectivity_inflection_point_desc)))
+# selectivity_survey <- selectivity_ascending * (1 - selectivity_descending)
+
 names(selectivity_survey) <- functional_groups |>
   dplyr::filter(species == "menhaden") |>
   dplyr::pull(group)
@@ -595,6 +640,7 @@ Click to expand/collapse code
 
 fishing_fleet_name <- "fishing_fleet"
 survey_fleet_name <- "survey_fleet"
+yoy_fleet_name <- "yoy_fleet"
 
 landings_data <- data.frame(
   type = "landings",
@@ -606,14 +652,25 @@ landings_data <- data.frame(
   uncertainty = catch_index_sd
 )
 
-index_data <- data.frame(
-  type = "index",
-  fleet = survey_fleet_name,
-  age = NA,
-  timing = model_years,
-  value = survey_index_sampled[["sampled_value"]],
-  unit = "mt",
-  uncertainty = survey_index_sd
+index_data <- rbind(
+  data.frame(
+    type = "index",
+    fleet = yoy_fleet_name,
+    age = NA,
+    timing = model_years,
+    value = yoy_index_sampled[["sampled_value"]],
+    unit = "mt",
+    uncertainty = yoy_index_sd
+  ),
+  data.frame(
+    type = "index",
+    fleet = survey_fleet_name,
+    age = NA,
+    timing = model_years,
+    value = survey_index_sampled[["sampled_value"]],
+    unit = "mt",
+    uncertainty = survey_index_sd
+  )
 )
 
 age_data <- rbind(
@@ -674,7 +731,7 @@ methods::show(data_fims)
 #> 5 age_comp fishing_fleet     4     NA   1985     0 number         120
 #> 6 age_comp fishing_fleet     5     NA   1985     0 number         120
 #> additional slots include the following:fleets:
-#> [1] "fishing_fleet" "survey_fleet" 
+#> [1] "fishing_fleet" "yoy_fleet"     "survey_fleet" 
 #> n_years:
 #> [1] 33
 #> ages:
@@ -733,6 +790,8 @@ default_configurations |>
 | catch_at_age | Data | survey_fleet | AgeComp | Data | Dmultinom |
 | catch_at_age | Data | survey_fleet | Index | Data | Dlnorm |
 | catch_at_age | Selectivity | survey_fleet | Logistic | NA | NA |
+| catch_at_age | Data | yoy_fleet | Index | Data | Dlnorm |
+| catch_at_age | Selectivity | yoy_fleet | Logistic | NA | NA |
 | catch_at_age | Growth | NA | EWAA | NA | NA |
 | catch_at_age | Maturity | NA | Logistic | NA | NA |
 | catch_at_age | Recruitment | NA | BevertonHolt | process | Dnorm |
@@ -745,11 +804,19 @@ updated_configurations <- default_configurations |>
   tidyr::unnest(cols = data) |>
   dplyr::rows_update(
     y = tibble::tibble(
-      # fleet = fishing_fleet_name,
+      fleet = fishing_fleet_name,
       module_name = "Selectivity",
       module_type = "DoubleLogistic"
     ),
-    by = c("module_name")
+    by = c("fleet", "module_name")
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      fleet = yoy_fleet_name,
+      module_name = "Selectivity",
+      module_type = "DoubleLogistic"
+    ),
+    by = c("fleet", "module_name")
   )
 
 updated_configurations |>
@@ -763,7 +830,9 @@ updated_configurations |>
 | catch_at_age | Selectivity | fishing_fleet | DoubleLogistic | NA | NA |
 | catch_at_age | Data | survey_fleet | AgeComp | Data | Dmultinom |
 | catch_at_age | Data | survey_fleet | Index | Data | Dlnorm |
-| catch_at_age | Selectivity | survey_fleet | DoubleLogistic | NA | NA |
+| catch_at_age | Selectivity | survey_fleet | Logistic | NA | NA |
+| catch_at_age | Data | yoy_fleet | Index | Data | Dlnorm |
+| catch_at_age | Selectivity | yoy_fleet | DoubleLogistic | NA | NA |
 | catch_at_age | Growth | NA | EWAA | NA | NA |
 | catch_at_age | Maturity | NA | Logistic | NA | NA |
 | catch_at_age | Recruitment | NA | BevertonHolt | process | Dnorm |
@@ -828,10 +897,10 @@ updated_parameters <- default_parameters |>
         "inflection_point_asc", "slope_asc",
         "inflection_point_desc", "slope_desc"
       ),
-      estimation_type = "constant",
-      # estimation_type = c(
-      #   c("fixed_effects", "fixed_effects", "constant", "constant")
-      # ),
+      # estimation_type = "constant",
+      estimation_type = c(
+        "fixed_effects", "fixed_effects", "constant", "constant"
+      ),
       value = c(
         catch_selectivity_inflection_point_asc,
         catch_selectivity_slope_asc,
@@ -851,33 +920,53 @@ updated_parameters <- default_parameters |>
     ), 
     by = c("fleet", "label", "time")
   ) |> 
+  dplyr::rows_update(
+    y = tibble::tibble(
+      fleet = survey_fleet_name,
+      label = c("inflection_point", "slope", "log_q"),
+      # estimation_type = "constant",
+      value = c(selectivity_inflection_point, selectivity_slope, log(catchability_survey))
+    ),
+    by = c("fleet", "label")
+  ) |>
   # dplyr::rows_update(
   #   y = tibble::tibble(
   #     fleet = survey_fleet_name,
-  #     label = c("inflection_point", "slope", "log_q"),
-  #     # estimation_type = "constant",
-  #     value = c(selectivity_inflection_point, selectivity_slope, log(catchability_survey))
+  #     label = c(
+  #       "inflection_point_asc", "slope_asc", 
+  #       "inflection_point_desc", "slope_desc", 
+  #       "log_q"
+  #     ),
+  #     estimation_type = c(
+  #       rep("fixed_effects", 0),
+  #       rep("constant", 5)
+  #     ),
+  #     value = c(
+  #       selectivity_inflection_point_asc,
+  #       selectivity_slope_asc,
+  #       selectivity_inflection_point_desc,
+  #       selectivity_slope_desc,
+  #       log(catchability_survey)
+  #     )
   #   ),
   #   by = c("fleet", "label")
   # ) |>
   dplyr::rows_update(
     y = tibble::tibble(
-      fleet = survey_fleet_name,
-      label = c(
-        "inflection_point_asc", "slope_asc", 
-        "inflection_point_desc", "slope_desc", 
-        "log_q"
-      ),
+      fleet = yoy_fleet_name,
+      label = c("inflection_point_asc", "slope_asc", 
+                "inflection_point_desc", "slope_desc", 
+                "log_q"),
       estimation_type = c(
-        rep("fixed_effects", 0),
-        rep("constant", 5)
+        rep("constant", 4),
+        rep("fixed_effects", 1)
       ),
       value = c(
-        selectivity_inflection_point_asc,
-        selectivity_slope_asc,
-        selectivity_inflection_point_desc,
-        selectivity_slope_desc,
-        log(catchability_survey)
+        yoy_inflection_point_asc,
+        yoy_slope_asc,
+        yoy_inflection_point_desc,
+        yoy_slope_desc,
+        log(yoy_q)
       )
     ),
     by = c("fleet", "label")
@@ -909,19 +998,19 @@ updated_parameters <- default_parameters |>
     y = tibble::tibble(
       label = "log_sd",
       module_type = "BevertonHolt",
-      estimation_type = "constant",
+      # estimation_type = "constant",
       value = log_sd_proxy
     ),
     by = c("label", "module_type")
   ) |>
-  dplyr::rows_update(
-    y = tibble::tibble(
-       label = "log_devs",
-       estimation_type = "fixed_effects",
-       module_type = "BevertonHolt"
-    ),
-    by = c("label", "module_type")
-  ) |>
+  # dplyr::rows_update(
+  #   y = tibble::tibble(
+  #      label = "log_devs",
+  #      estimation_type = "fixed_effects",
+  #      module_type = "BevertonHolt"
+  #   ),
+  #   by = c("label", "module_type")
+  # ) |>
   dplyr::filter(!(module_name == "Maturity")) |>
   dplyr::bind_rows(maturity_parameters) |>
   dplyr::rows_update(
@@ -945,8 +1034,8 @@ updated_parameters <- default_parameters |>
         dplyr::pull(truth_value) |>
         log(),
       estimation_type = c(
-        rep("fixed_effects", 0),
-        rep("constant", 7)
+        rep("constant", 1),
+        rep("fixed_effects", 6)
       )
     ),
     by = c("label", "age")
@@ -959,8 +1048,8 @@ updated_parameters |>
 
 | model_family | module_name | fleet | module_type | label | age | length | time | value | estimation_type | distribution_type | distribution | fleet_name |
 |:---|:---|:---|:---|:---|---:|---:|---:|---:|:---|:---|:---|:---|
-| catch_at_age | Selectivity | fishing_fleet | DoubleLogistic | inflection_point_asc | NA | NA | NA | 1.8000000 | constant | NA | NA | NA |
-| catch_at_age | Selectivity | fishing_fleet | DoubleLogistic | slope_asc | NA | NA | NA | 3.1000000 | constant | NA | NA | NA |
+| catch_at_age | Selectivity | fishing_fleet | DoubleLogistic | inflection_point_asc | NA | NA | NA | 1.8000000 | fixed_effects | NA | NA | NA |
+| catch_at_age | Selectivity | fishing_fleet | DoubleLogistic | slope_asc | NA | NA | NA | 3.1000000 | fixed_effects | NA | NA | NA |
 | catch_at_age | Selectivity | fishing_fleet | DoubleLogistic | inflection_point_desc | NA | NA | NA | 0.0100000 | constant | NA | NA | NA |
 | catch_at_age | Selectivity | fishing_fleet | DoubleLogistic | slope_desc | NA | NA | NA | 0.8800000 | constant | NA | NA | NA |
 | catch_at_age | Fleet | fishing_fleet | NA | log_q | NA | NA | NA | 0.0000000 | constant | NA | NA | NA |
@@ -1031,11 +1120,9 @@ updated_parameters |>
 | catch_at_age | Data | fishing_fleet | Landings | log_sd | NA | NA | 2016 | -2.3025851 | constant | Data | Dlnorm | NA |
 | catch_at_age | Data | fishing_fleet | Landings | log_sd | NA | NA | 2017 | -2.3025851 | constant | Data | Dlnorm | NA |
 | catch_at_age | Data | fishing_fleet | AgeComp | NA | NA | NA | NA | NA | NA | Data | Dmultinom | NA |
-| catch_at_age | Selectivity | survey_fleet | DoubleLogistic | inflection_point_asc | NA | NA | NA | -5.0000000 | constant | NA | NA | NA |
-| catch_at_age | Selectivity | survey_fleet | DoubleLogistic | slope_asc | NA | NA | NA | 5.0000000 | constant | NA | NA | NA |
-| catch_at_age | Selectivity | survey_fleet | DoubleLogistic | inflection_point_desc | NA | NA | NA | 0.5500000 | constant | NA | NA | NA |
-| catch_at_age | Selectivity | survey_fleet | DoubleLogistic | slope_desc | NA | NA | NA | 3.3000000 | constant | NA | NA | NA |
-| catch_at_age | Fleet | survey_fleet | NA | log_q | NA | NA | NA | -2.9957323 | constant | NA | NA | NA |
+| catch_at_age | Selectivity | survey_fleet | Logistic | inflection_point | NA | NA | NA | 3.0300000 | fixed_effects | NA | NA | NA |
+| catch_at_age | Selectivity | survey_fleet | Logistic | slope | NA | NA | NA | 2.2000000 | fixed_effects | NA | NA | NA |
+| catch_at_age | Fleet | survey_fleet | NA | log_q | NA | NA | NA | -2.9957323 | fixed_effects | NA | NA | NA |
 | catch_at_age | Fleet | survey_fleet | NA | log_Fmort | NA | NA | 1985 | -200.0000000 | constant | NA | NA | NA |
 | catch_at_age | Fleet | survey_fleet | NA | log_Fmort | NA | NA | 1986 | -200.0000000 | constant | NA | NA | NA |
 | catch_at_age | Fleet | survey_fleet | NA | log_Fmort | NA | NA | 1987 | -200.0000000 | constant | NA | NA | NA |
@@ -1103,41 +1190,112 @@ updated_parameters |>
 | catch_at_age | Data | survey_fleet | Index | log_sd | NA | NA | 2016 | -2.3025851 | constant | Data | Dlnorm | NA |
 | catch_at_age | Data | survey_fleet | Index | log_sd | NA | NA | 2017 | -2.3025851 | constant | Data | Dlnorm | NA |
 | catch_at_age | Data | survey_fleet | AgeComp | NA | NA | NA | NA | NA | NA | Data | Dmultinom | NA |
+| catch_at_age | Selectivity | yoy_fleet | DoubleLogistic | inflection_point_asc | NA | NA | NA | -1.0000000 | constant | NA | NA | NA |
+| catch_at_age | Selectivity | yoy_fleet | DoubleLogistic | slope_asc | NA | NA | NA | 10.0000000 | constant | NA | NA | NA |
+| catch_at_age | Selectivity | yoy_fleet | DoubleLogistic | inflection_point_desc | NA | NA | NA | 0.5000000 | constant | NA | NA | NA |
+| catch_at_age | Selectivity | yoy_fleet | DoubleLogistic | slope_desc | NA | NA | NA | 10.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_q | NA | NA | NA | -2.9957323 | fixed_effects | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1985 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1986 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1987 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1988 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1989 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1990 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1991 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1992 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1993 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1994 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1995 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1996 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1997 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1998 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 1999 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2000 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2001 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2002 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2003 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2004 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2005 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2006 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2007 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2008 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2009 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2010 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2011 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2012 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2013 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2014 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2015 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2016 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Fleet | yoy_fleet | NA | log_Fmort | NA | NA | 2017 | -200.0000000 | constant | NA | NA | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1985 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1986 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1987 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1988 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1989 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1990 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1991 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1992 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1993 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1994 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1995 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1996 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1997 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1998 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 1999 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2000 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2001 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2002 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2003 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2004 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2005 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2006 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2007 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2008 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2009 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2010 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2011 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2012 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2013 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2014 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2015 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2016 | -2.3025851 | constant | Data | Dlnorm | NA |
+| catch_at_age | Data | yoy_fleet | Index | log_sd | NA | NA | 2017 | -2.3025851 | constant | Data | Dlnorm | NA |
 | catch_at_age | Recruitment | NA | BevertonHolt | log_rzero | NA | NA | NA | 25.0198225 | fixed_effects | NA | NA | NA |
 | catch_at_age | Recruitment | NA | BevertonHolt | logit_steep | NA | NA | NA | 4.3694479 | constant | NA | NA | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1986 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1987 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1988 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1989 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1990 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1991 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1992 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1993 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1994 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1995 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1996 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1997 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1998 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1999 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2000 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2001 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2002 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2003 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2004 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2005 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2006 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2007 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2008 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2009 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2010 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2011 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2012 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2013 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2014 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2015 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2016 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2017 | 0.0000000 | fixed_effects | process | Dnorm | NA |
-| catch_at_age | Recruitment | NA | BevertonHolt | log_sd | NA | NA | NA | -0.7066572 | constant | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1986 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1987 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1988 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1989 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1990 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1991 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1992 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1993 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1994 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1995 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1996 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1997 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1998 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 1999 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2000 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2001 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2002 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2003 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2004 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2005 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2006 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2007 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2008 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2009 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2010 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2011 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2012 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2013 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2014 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2015 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2016 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_devs | NA | NA | 2017 | 0.0000000 | random_effects | process | Dnorm | NA |
+| catch_at_age | Recruitment | NA | BevertonHolt | log_sd | NA | NA | NA | -0.7066572 | fixed_effects | process | Dnorm | NA |
 | catch_at_age | Population | NA | NA | log_M | 0 | NA | 1985 | 0.5510554 | constant | NA | NA | NA |
 | catch_at_age | Population | NA | NA | log_M | 1 | NA | 1985 | 0.2578511 | constant | NA | NA | NA |
 | catch_at_age | Population | NA | NA | log_M | 2 | NA | 1985 | 0.2345560 | constant | NA | NA | NA |
@@ -1370,12 +1528,12 @@ updated_parameters |>
 | catch_at_age | Population | NA | NA | log_M | 5 | NA | 2017 | -0.1120706 | constant | NA | NA | NA |
 | catch_at_age | Population | NA | NA | log_M | 6 | NA | 2017 | -0.4277903 | constant | NA | NA | NA |
 | catch_at_age | Population | NA | NA | log_init_naa | 0 | NA | NA | 25.6734991 | constant | NA | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 1 | NA | NA | 24.0293124 | constant | NA | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 2 | NA | NA | 22.6669292 | constant | NA | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 3 | NA | NA | 21.1789255 | constant | NA | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 4 | NA | NA | 19.7488152 | constant | NA | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 5 | NA | NA | 18.5119285 | constant | NA | NA | NA |
-| catch_at_age | Population | NA | NA | log_init_naa | 6 | NA | NA | 17.9557101 | constant | NA | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 1 | NA | NA | 24.0293124 | fixed_effects | NA | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 2 | NA | NA | 22.6669292 | fixed_effects | NA | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 3 | NA | NA | 21.1789255 | fixed_effects | NA | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 4 | NA | NA | 19.7488152 | fixed_effects | NA | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 5 | NA | NA | 18.5119285 | fixed_effects | NA | NA | NA |
+| catch_at_age | Population | NA | NA | log_init_naa | 6 | NA | NA | 17.9557101 | fixed_effects | NA | NA | NA |
 | catch_at_age | Population | NA | NA | proportion_female | NA | NA | NA | 0.5000000 | constant | NA | NA | NA |
 | catch_at_age | Growth | NA | EWAA | NA | NA | NA | NA | NA | NA | NA | NA | NA |
 | catch_at_age | Maturity | NA | Logistic | inflection_point | NA | NA | NA | 1.9999914 | constant | NA | NA | NA |
@@ -1411,17 +1569,17 @@ fit_fims <- updated_parameters |>
   )
 #> ✔ Starting optimization ...
 #> ℹ Restarting optimizer 3 times to improve gradient.
-#> ℹ Maximum gradient went from 0.00895 to 0.00072 after 3 steps.
+#> ℹ Maximum gradient went from 0.14284 to 0.00298 after 3 steps.
 #> ✔ Finished optimization
 #> ✔ Finished sdreport
 #> ℹ FIMS model version: 0.9.4.9000
-#> ℹ Total run time was 0.71924 seconds
-#> ℹ Number of parameters: fixed_effects=66, random_effects=0, and total=66
-#> ℹ Maximum gradient= 0.00072
+#> ℹ Total run time was 5.73933 seconds
+#> ℹ Number of parameters: fixed_effects=47, random_effects=32, and total=79
+#> ℹ Maximum gradient= 0.00298
 #> ℹ Negative log likelihood (NLL):
-#> • Marginal NLL= 11738.4999
-#> • Total NLL= 11738.4999
-#> ℹ Terminal SB= 455832.96815
+#> • Marginal NLL= 20855.62548
+#> • Total NLL= 20732.90953
+#> ℹ Terminal SB= 415932.96118
 ```
 
 Click to expand/collapse code
@@ -1461,75 +1619,87 @@ estimates_fims |>
   dplyr::filter(estimation_type == "fixed_effects" | estimation_type == "random_effects") |>
   dplyr::select(module_name, label, fleet, year_i, age_i, input, estimated, uncertainty) |>
   print(n = Inf)
-#> # A tibble: 66 × 8
-#>    module_name label     fleet year_i age_i   input estimated uncertainty
-#>    <chr>       <chr>     <chr>  <int> <int>   <dbl>     <dbl>       <dbl>
-#>  1 Fleet       log_Fmort NA         1    NA -4.39     -3.92        0.101 
-#>  2 Fleet       log_Fmort NA         2    NA -4.44     -3.91        0.0960
-#>  3 Fleet       log_Fmort NA         3    NA -4.51     -3.77        0.0987
-#>  4 Fleet       log_Fmort NA         4    NA -4.76     -4.36        0.101 
-#>  5 Fleet       log_Fmort NA         5    NA -4.02     -3.38        0.0997
-#>  6 Fleet       log_Fmort NA         6    NA -1.43     -1.39        0.0749
-#>  7 Fleet       log_Fmort NA         7    NA -1.58     -1.01        0.0810
-#>  8 Fleet       log_Fmort NA         8    NA -1.20     -1.71        0.0683
-#>  9 Fleet       log_Fmort NA         9    NA -0.656    -0.277       0.0541
-#> 10 Fleet       log_Fmort NA        10    NA -0.520    -0.162       0.0502
-#> 11 Fleet       log_Fmort NA        11    NA -0.584    -1.06        0.0631
-#> 12 Fleet       log_Fmort NA        12    NA -0.0562   -0.395       0.0573
-#> 13 Fleet       log_Fmort NA        13    NA -0.131     0.515       0.0397
-#> 14 Fleet       log_Fmort NA        14    NA  0.0899   -0.135       0.0502
-#> 15 Fleet       log_Fmort NA        15    NA  0.376    -0.265       0.0505
-#> 16 Fleet       log_Fmort NA        16    NA  0.562     0.243       0.0463
-#> 17 Fleet       log_Fmort NA        17    NA  0.809     1.44        0.0282
-#> 18 Fleet       log_Fmort NA        18    NA  1.53      1.29        0.0327
-#> 19 Fleet       log_Fmort NA        19    NA  1.23      1.66        0.0271
-#> 20 Fleet       log_Fmort NA        20    NA  1.86      1.35        0.0325
-#> 21 Fleet       log_Fmort NA        21    NA  0.686     0.939       0.0340
-#> 22 Fleet       log_Fmort NA        22    NA  0.607    -0.0201      0.0470
-#> 23 Fleet       log_Fmort NA        23    NA  0.294    -0.315       0.0608
-#> 24 Fleet       log_Fmort NA        24    NA  0.0769    0.582       0.0372
-#> 25 Fleet       log_Fmort NA        25    NA -0.0688   -0.168       0.0619
-#> 26 Fleet       log_Fmort NA        26    NA -0.321     0.183       0.0573
-#> 27 Fleet       log_Fmort NA        27    NA -0.675    -0.495       0.0678
-#> 28 Fleet       log_Fmort NA        28    NA -0.328    -1.11        0.0714
-#> 29 Fleet       log_Fmort NA        29    NA -0.758    -0.625       0.0763
-#> 30 Fleet       log_Fmort NA        30    NA -0.835    -1.51        0.0787
-#> 31 Fleet       log_Fmort NA        31    NA -1.18     -0.232       0.0676
-#> 32 Fleet       log_Fmort NA        32    NA -1.62     -1.68        0.0900
-#> 33 Fleet       log_Fmort NA        33    NA -1.44     -1.63        0.0914
-#> 34 Recruitment log_rzero NA        NA    NA 25.0      24.6         0.0903
-#> 35 Recruitment log_devs  NA         2    NA  0         1.21        0.0906
-#> 36 Recruitment log_devs  NA         3    NA  0         1.09        0.0908
-#> 37 Recruitment log_devs  NA         4    NA  0         1.22        0.0910
-#> 38 Recruitment log_devs  NA         5    NA  0         1.13        0.0911
-#> 39 Recruitment log_devs  NA         6    NA  0         0.952       0.0913
-#> 40 Recruitment log_devs  NA         7    NA  0         1.16        0.0917
-#> 41 Recruitment log_devs  NA         8    NA  0         1.22        0.0917
-#> 42 Recruitment log_devs  NA         9    NA  0         1.17        0.0916
-#> 43 Recruitment log_devs  NA        10    NA  0         1.02        0.0919
-#> 44 Recruitment log_devs  NA        11    NA  0         1.26        0.0920
-#> 45 Recruitment log_devs  NA        12    NA  0         1.10        0.0919
-#> 46 Recruitment log_devs  NA        13    NA  0         1.07        0.0919
-#> 47 Recruitment log_devs  NA        14    NA  0         0.954       0.0922
-#> 48 Recruitment log_devs  NA        15    NA  0         0.875       0.0922
-#> 49 Recruitment log_devs  NA        16    NA  0         0.606       0.0924
-#> 50 Recruitment log_devs  NA        17    NA  0         0.252       0.0924
-#> 51 Recruitment log_devs  NA        18    NA  0        -0.700       0.0924
-#> 52 Recruitment log_devs  NA        19    NA  0        -1.47        0.0917
-#> 53 Recruitment log_devs  NA        20    NA  0        -2.12        0.0911
-#> 54 Recruitment log_devs  NA        21    NA  0        -2.80        0.0886
-#> 55 Recruitment log_devs  NA        22    NA  0        -2.34        0.0865
-#> 56 Recruitment log_devs  NA        23    NA  0        -2.10        0.0859
-#> 57 Recruitment log_devs  NA        24    NA  0        -2.14        0.0864
-#> 58 Recruitment log_devs  NA        25    NA  0        -1.78        0.0885
-#> 59 Recruitment log_devs  NA        26    NA  0        -1.33        0.0880
-#> 60 Recruitment log_devs  NA        27    NA  0        -1.10        0.0893
-#> 61 Recruitment log_devs  NA        28    NA  0        -0.488       0.0900
-#> 62 Recruitment log_devs  NA        29    NA  0        -0.147       0.0914
-#> 63 Recruitment log_devs  NA        30    NA  0         0.122       0.0922
-#> 64 Recruitment log_devs  NA        31    NA  0         0.364       0.0937
-#> 65 Recruitment log_devs  NA        32    NA  0         0.665       0.0951
-#> 66 Recruitment log_devs  NA        33    NA  0         0.364       0.0969
+#> # A tibble: 78 × 8
+#>    module_name label            fleet year_i age_i   input estimated uncertainty
+#>    <chr>       <chr>            <chr>  <int> <int>   <dbl>     <dbl>       <dbl>
+#>  1 Fleet       log_Fmort        NA         1    NA -4.39    -3.67        0.109  
+#>  2 Fleet       log_Fmort        NA         2    NA -4.44    -3.88        0.0955 
+#>  3 Fleet       log_Fmort        NA         3    NA -4.51    -3.87        0.0937 
+#>  4 Fleet       log_Fmort        NA         4    NA -4.76    -4.30        0.103  
+#>  5 Fleet       log_Fmort        NA         5    NA -4.02    -2.97        0.123  
+#>  6 Fleet       log_Fmort        NA         6    NA -1.43    -1.14        0.0560 
+#>  7 Fleet       log_Fmort        NA         7    NA -1.58    -1.57        0.0659 
+#>  8 Fleet       log_Fmort        NA         8    NA -1.20    -2.08        0.0630 
+#>  9 Fleet       log_Fmort        NA         9    NA -0.656   -0.117       0.0256 
+#> 10 Fleet       log_Fmort        NA        10    NA -0.520    0.00361     0.0226 
+#> 11 Fleet       log_Fmort        NA        11    NA -0.584   -0.371       0.0310 
+#> 12 Fleet       log_Fmort        NA        12    NA -0.0562  -0.0266      0.0242 
+#> 13 Fleet       log_Fmort        NA        13    NA -0.131   -0.187       0.0269 
+#> 14 Fleet       log_Fmort        NA        14    NA  0.0899   0.170       0.0202 
+#> 15 Fleet       log_Fmort        NA        15    NA  0.376   -0.0873      0.0251 
+#> 16 Fleet       log_Fmort        NA        16    NA  0.562    0.574       0.0161 
+#> 17 Fleet       log_Fmort        NA        17    NA  0.809    0.997       0.0146 
+#> 18 Fleet       log_Fmort        NA        18    NA  1.53     1.16        0.0163 
+#> 19 Fleet       log_Fmort        NA        19    NA  1.23     2.03        0.0155 
+#> 20 Fleet       log_Fmort        NA        20    NA  1.86     1.30        0.0206 
+#> 21 Fleet       log_Fmort        NA        21    NA  0.686    0.869       0.0139 
+#> 22 Fleet       log_Fmort        NA        22    NA  0.607    0.334       0.0192 
+#> 23 Fleet       log_Fmort        NA        23    NA  0.294    0.0758      0.0257 
+#> 24 Fleet       log_Fmort        NA        24    NA  0.0769   0.433       0.0174 
+#> 25 Fleet       log_Fmort        NA        25    NA -0.0688   0.146       0.0230 
+#> 26 Fleet       log_Fmort        NA        26    NA -0.321    0.102       0.0238 
+#> 27 Fleet       log_Fmort        NA        27    NA -0.675   -0.711       0.0425 
+#> 28 Fleet       log_Fmort        NA        28    NA -0.328   -0.262       0.0308 
+#> 29 Fleet       log_Fmort        NA        29    NA -0.758   -0.615       0.0411 
+#> 30 Fleet       log_Fmort        NA        30    NA -0.835   -1.24        0.0580 
+#> 31 Fleet       log_Fmort        NA        31    NA -1.18    -0.169       0.0299 
+#> 32 Fleet       log_Fmort        NA        32    NA -1.62    -1.09        0.0652 
+#> 33 Fleet       log_Fmort        NA        33    NA -1.44    -1.73        0.0821 
+#> 34 Fleet       log_q            NA        NA    NA -3.00    -2.84        0.0229 
+#> 35 Fleet       log_q            NA        NA    NA -3.00    -3.24        0.0223 
+#> 36 Recruitment log_rzero        NA        NA    NA 25.0     24.6         0.225  
+#> 37 Recruitment log_devs         NA         2    NA  0        1.20       NA      
+#> 38 Recruitment log_devs         NA         3    NA  0        1.11       NA      
+#> 39 Recruitment log_devs         NA         4    NA  0        1.17       NA      
+#> 40 Recruitment log_devs         NA         5    NA  0        1.13       NA      
+#> 41 Recruitment log_devs         NA         6    NA  0        1.16       NA      
+#> 42 Recruitment log_devs         NA         7    NA  0        1.32       NA      
+#> 43 Recruitment log_devs         NA         8    NA  0        1.42       NA      
+#> 44 Recruitment log_devs         NA         9    NA  0        1.21       NA      
+#> 45 Recruitment log_devs         NA        10    NA  0        0.927      NA      
+#> 46 Recruitment log_devs         NA        11    NA  0        0.942      NA      
+#> 47 Recruitment log_devs         NA        12    NA  0        0.870      NA      
+#> 48 Recruitment log_devs         NA        13    NA  0        0.837      NA      
+#> 49 Recruitment log_devs         NA        14    NA  0        0.826      NA      
+#> 50 Recruitment log_devs         NA        15    NA  0        0.571      NA      
+#> 51 Recruitment log_devs         NA        16    NA  0        0.486      NA      
+#> 52 Recruitment log_devs         NA        17    NA  0        0.266      NA      
+#> 53 Recruitment log_devs         NA        18    NA  0       -0.349      NA      
+#> 54 Recruitment log_devs         NA        19    NA  0       -1.38       NA      
+#> 55 Recruitment log_devs         NA        20    NA  0       -1.95       NA      
+#> 56 Recruitment log_devs         NA        21    NA  0       -2.56       NA      
+#> 57 Recruitment log_devs         NA        22    NA  0       -2.20       NA      
+#> 58 Recruitment log_devs         NA        23    NA  0       -2.02       NA      
+#> 59 Recruitment log_devs         NA        24    NA  0       -1.98       NA      
+#> 60 Recruitment log_devs         NA        25    NA  0       -1.76       NA      
+#> 61 Recruitment log_devs         NA        26    NA  0       -1.35       NA      
+#> 62 Recruitment log_devs         NA        27    NA  0       -1.16       NA      
+#> 63 Recruitment log_devs         NA        28    NA  0       -0.607      NA      
+#> 64 Recruitment log_devs         NA        29    NA  0       -0.305      NA      
+#> 65 Recruitment log_devs         NA        30    NA  0        0.0883     NA      
+#> 66 Recruitment log_devs         NA        31    NA  0        0.247      NA      
+#> 67 Recruitment log_devs         NA        32    NA  0        0.563      NA      
+#> 68 Recruitment log_devs         NA        33    NA  0        0.652      NA      
+#> 69 Selectivity inflection_poin… NA        NA    NA  1.8      1.81        0.00299
+#> 70 Selectivity slope_asc        NA        NA    NA  3.1      3.11        0.00419
+#> 71 Selectivity inflection_point NA        NA    NA  3.03     3.37        0.00645
+#> 72 Selectivity slope            NA        NA    NA  2.2      2.05        0.00230
+#> 73 Population  log_init_naa     NA        NA     2 24.0     24.0         0.00931
+#> 74 Population  log_init_naa     NA        NA     3 22.7     22.6         0.0118 
+#> 75 Population  log_init_naa     NA        NA     4 21.2     21.1         0.0160 
+#> 76 Population  log_init_naa     NA        NA     5 19.7     19.4         0.0235 
+#> 77 Population  log_init_naa     NA        NA     6 18.5     17.9         0.0423 
+#> 78 Population  log_init_naa     NA        NA     7 18.0     17.6         0.0461
 ```
 
 ## Compare OM and FIMS
@@ -1541,33 +1711,32 @@ While the fitted FIMS model captures temporal trends similar to those of
 the OM “truth”, several key caveats need to be considered when
 interpreting the comparisons:
 
-- Most parameters, including fleet selectivity parameters, initial
-  numbers-at-age (`log_init_naa`), time-varying natural mortality
-  (`log_M`), and maturity parameters, were fixed at their initial values
-  derived from the OM.
-- Stock-recruit steepness (`logit_steep`) and recruitment variance
-  (`log_sd`) were fixed at the values from the Beaufort Assessment Model
-  rather than estimated.
 - Model convergence is highly sensitive to the specified standard
   deviation of the lognormal observation error applied to “true” OM
   landings.
 - Model convergence is highly sensitive to the specified effective
   sample size used to generate age composition data from the OM “truth”.
+- Model convergence is highly sensitive to the fishing fleet’s
+  selectivity parameters. The descending slope and descending inflection
+  point must be fixed to ensure convergence.
 - FIMS fishing mortality estimates are scaled by the peak value of the
   fleet selectivity curve. This adjustment is for direct comparison
   because FIMS double-logistic selectivity is not normalized to a
   maximum of 1.0, whereas the OM’s “true” fleet selectivity peaks
   strictly at 1.0.
+- Estimating initial numbers-at-age requires fixing at least the first
+  age bin. Estimating all age bins causes overestimation of recruitment
+  and total biomass in the early years of the time series.
 
-![](ewe-ecosim-base-simulation_files/figure-html/biomass-comparison-1.png)
+![](ewe-ecosim-base-simulation-yoy_files/figure-html/biomass-comparison-1.png)
 
-![](ewe-ecosim-base-simulation_files/figure-html/recruitment-comparison-1.png)
+![](ewe-ecosim-base-simulation-yoy_files/figure-html/recruitment-comparison-1.png)
 
-![](ewe-ecosim-base-simulation_files/figure-html/fishing-mortality-comparison-1.png)
+![](ewe-ecosim-base-simulation-yoy_files/figure-html/fishing-mortality-comparison-1.png)
 
-![](ewe-ecosim-base-simulation_files/figure-html/index-comparison-1.png)![](ewe-ecosim-base-simulation_files/figure-html/index-comparison-2.png)
+![](ewe-ecosim-base-simulation-yoy_files/figure-html/index-comparison-1.png)![](ewe-ecosim-base-simulation-yoy_files/figure-html/index-comparison-2.png)
 
-![](ewe-ecosim-base-simulation_files/figure-html/agecomp-comparison-1.png)![](ewe-ecosim-base-simulation_files/figure-html/agecomp-comparison-2.png)![](ewe-ecosim-base-simulation_files/figure-html/agecomp-comparison-3.png)![](ewe-ecosim-base-simulation_files/figure-html/agecomp-comparison-4.png)
+![](ewe-ecosim-base-simulation-yoy_files/figure-html/agecomp-comparison-1.png)![](ewe-ecosim-base-simulation-yoy_files/figure-html/agecomp-comparison-2.png)![](ewe-ecosim-base-simulation-yoy_files/figure-html/agecomp-comparison-3.png)![](ewe-ecosim-base-simulation-yoy_files/figure-html/agecomp-comparison-4.png)
 
 ## Create DSEM inputs
 

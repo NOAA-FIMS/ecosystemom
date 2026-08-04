@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>From Ecopath with Ecosim to Fisheries Integrated Modeling System • ecosystemom</title>
+<title>From Ecopath with Ecosim to Fisheries Integrated Modeling System (with YOY survey) • ecosystemom</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="From Ecopath with Ecosim to Fisheries Integrated Modeling System">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="From Ecopath with Ecosim to Fisheries Integrated Modeling System (with YOY survey)">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -51,18 +51,18 @@
 
 
 
-<script src="ewe-ecosim-base-simulation_files/kePrint-0.0.1/kePrint.js"></script><link href="ewe-ecosim-base-simulation_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="ewe-ecosim-base-simulation-yoy_files/kePrint-0.0.1/kePrint.js"></script><link href="ewe-ecosim-base-simulation-yoy_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>From Ecopath with Ecosim to Fisheries Integrated Modeling System</h1>
+      <h1>From Ecopath with Ecosim to Fisheries Integrated Modeling System (with YOY survey)</h1>
             <h3 data-toc-skip class="subtitle">An
 Ecosystem-to-Stock-Assessment Simulation Workflow using
 {ecosystemom}</h3>
             
       
 
-      <div class="d-none name"><code>ewe-ecosim-base-simulation.Rmd</code></div>
+      <div class="d-none name"><code>ewe-ecosim-base-simulation-yoy.Rmd</code></div>
     </div>
 
     
@@ -3584,19 +3584,64 @@ of N=120.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">"menhaden"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># YOY survey for age-0</span></span>
+<span><span class="va">yoy_q</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
+<span><span class="va">yoy_index_sd</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
+<span><span class="va">yoy_selectivity</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">yoy_selectivity</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">functional_groups</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">"menhaden"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span></span>
+<span><span class="va">yoy_index_sampled</span> <span class="op">&lt;-</span> <span class="va">number_agecomp_om</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
+<span>    <span class="va">weight_agecomp_om</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">species_name</span>, <span class="op">-</span><span class="va">truth_label</span>, <span class="op">-</span><span class="va">truth_type</span>, <span class="op">-</span><span class="va">truth_time_step</span>, <span class="op">-</span><span class="va">truth_unit</span><span class="op">)</span>, </span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth_year"</span>, <span class="st">"truth_group"</span><span class="op">)</span>,</span>
+<span>    suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_number"</span>, <span class="st">"_weight"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">truth_group</span> <span class="op">==</span> <span class="st">"0"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    truth_value_selected_number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">truth_value_number</span> <span class="op">*</span> <span class="va">yoy_q</span><span class="op">)</span>,</span>
+<span>    truth_value_selected_biomass <span class="op">=</span> <span class="va">truth_value_selected_number</span> <span class="op">*</span> <span class="va">truth_value_weight</span>,</span>
+<span>    sampled_value <span class="op">=</span> <span class="fu"><a href="../reference/sample_lognormal.html">sample_lognormal</a></span><span class="op">(</span></span>
+<span>      x <span class="op">=</span> <span class="va">truth_value_selected_biomass</span>, </span>
+<span>      sd <span class="op">=</span> <span class="va">yoy_index_sd</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    <span class="op">-</span><span class="va">truth_value_number</span>, <span class="op">-</span><span class="va">truth_value_weight</span>, </span>
+<span>    <span class="op">-</span><span class="va">truth_value_selected_number</span>, <span class="op">-</span><span class="va">truth_value_selected_biomass</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    species_name <span class="op">=</span> <span class="st">"menhaden"</span>,</span>
+<span>    truth_label <span class="op">=</span> <span class="st">"biomass"</span>,</span>
+<span>    truth_type <span class="op">=</span> <span class="st">"index"</span>,</span>
+<span>    truth_time_step <span class="op">=</span> <span class="st">"yearly"</span>,</span>
+<span>    truth_unit <span class="op">=</span> <span class="st">"mt"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">yoy_inflection_point_asc</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1.0</span></span>
+<span><span class="va">yoy_slope_asc</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">yoy_inflection_point_desc</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
+<span><span class="va">yoy_slope_desc</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">yoy_selectivity_ascending</span>  <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">yoy_slope_asc</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">yoy_inflection_point_asc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">yoy_selectivity_descending</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">yoy_slope_desc</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">yoy_inflection_point_desc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">yoy_selectivity</span> <span class="op">&lt;-</span> <span class="va">yoy_selectivity_ascending</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">yoy_selectivity_descending</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Survey for ages 1-6+</span></span>
 <span><span class="co"># Define explicit survey catchability</span></span>
 <span><span class="va">catchability_survey</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
-<span><span class="co"># selectivity_inflection_point &lt;- 3  </span></span>
-<span><span class="co"># selectivity_slope &lt;- 3   # A distinct, clean gradient</span></span>
-<span><span class="co"># selectivity_survey &lt;- 1 / (1 + exp(-selectivity_slope * (ages - selectivity_inflection_point)))</span></span>
-<span><span class="va">selectivity_inflection_point_asc</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">5</span></span>
-<span><span class="va">selectivity_slope_asc</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
-<span><span class="va">selectivity_inflection_point_desc</span> <span class="op">&lt;-</span> <span class="fl">0.55</span></span>
-<span><span class="va">selectivity_slope_desc</span> <span class="op">&lt;-</span> <span class="fl">3.30</span></span>
+<span><span class="co"># Define logistic selectivity parameters using values from BAM NAD survey</span></span>
+<span><span class="va">selectivity_inflection_point</span> <span class="op">&lt;-</span> <span class="fl">3.03</span></span>
+<span><span class="va">selectivity_slope</span> <span class="op">&lt;-</span> <span class="fl">2.2</span></span>
+<span><span class="va">selectivity_survey</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">selectivity_slope</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">selectivity_inflection_point</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">selectivity_ascending</span>  <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">selectivity_slope_asc</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">selectivity_inflection_point_asc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">selectivity_descending</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">selectivity_slope_desc</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">selectivity_inflection_point_desc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">selectivity_survey</span> <span class="op">&lt;-</span> <span class="va">selectivity_ascending</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">selectivity_descending</span><span class="op">)</span></span>
+<span><span class="co"># selectivity_inflection_point_asc &lt;- -5</span></span>
+<span><span class="co"># selectivity_slope_asc &lt;- 5</span></span>
+<span><span class="co"># selectivity_inflection_point_desc &lt;- 0.55</span></span>
+<span><span class="co"># selectivity_slope_desc &lt;- 3.30</span></span>
+<span><span class="co"># selectivity_ascending  &lt;- 1 / (1 + exp(-selectivity_slope_asc * (ages - selectivity_inflection_point_asc)))</span></span>
+<span><span class="co"># selectivity_descending &lt;- 1 / (1 + exp(-selectivity_slope_desc * (ages - selectivity_inflection_point_desc)))</span></span>
+<span><span class="co"># selectivity_survey &lt;- selectivity_ascending * (1 - selectivity_descending)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">selectivity_survey</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">functional_groups</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">"menhaden"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span></span>
@@ -3678,6 +3723,7 @@ Click to expand/collapse code
 </summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fishing_fleet_name</span> <span class="op">&lt;-</span> <span class="st">"fishing_fleet"</span></span>
 <span><span class="va">survey_fleet_name</span> <span class="op">&lt;-</span> <span class="st">"survey_fleet"</span></span>
+<span><span class="va">yoy_fleet_name</span> <span class="op">&lt;-</span> <span class="st">"yoy_fleet"</span></span>
 <span></span>
 <span><span class="va">landings_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  type <span class="op">=</span> <span class="st">"landings"</span>,</span>
@@ -3689,14 +3735,25 @@ Click to expand/collapse code
 <span>  uncertainty <span class="op">=</span> <span class="va">catch_index_sd</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  type <span class="op">=</span> <span class="st">"index"</span>,</span>
-<span>  fleet <span class="op">=</span> <span class="va">survey_fleet_name</span>,</span>
-<span>  age <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  timing <span class="op">=</span> <span class="va">model_years</span>,</span>
-<span>  value <span class="op">=</span> <span class="va">survey_index_sampled</span><span class="op">[[</span><span class="st">"sampled_value"</span><span class="op">]</span><span class="op">]</span>,</span>
-<span>  unit <span class="op">=</span> <span class="st">"mt"</span>,</span>
-<span>  uncertainty <span class="op">=</span> <span class="va">survey_index_sd</span></span>
+<span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    type <span class="op">=</span> <span class="st">"index"</span>,</span>
+<span>    fleet <span class="op">=</span> <span class="va">yoy_fleet_name</span>,</span>
+<span>    age <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>    timing <span class="op">=</span> <span class="va">model_years</span>,</span>
+<span>    value <span class="op">=</span> <span class="va">yoy_index_sampled</span><span class="op">[[</span><span class="st">"sampled_value"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>    unit <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>    uncertainty <span class="op">=</span> <span class="va">yoy_index_sd</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    type <span class="op">=</span> <span class="st">"index"</span>,</span>
+<span>    fleet <span class="op">=</span> <span class="va">survey_fleet_name</span>,</span>
+<span>    age <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>    timing <span class="op">=</span> <span class="va">model_years</span>,</span>
+<span>    value <span class="op">=</span> <span class="va">survey_index_sampled</span><span class="op">[[</span><span class="st">"sampled_value"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>    unit <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>    uncertainty <span class="op">=</span> <span class="va">survey_index_sd</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">age_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
@@ -3757,7 +3814,7 @@ Click to expand/collapse code
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> age_comp fishing_fleet     4     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985     0 number         120</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> age_comp fishing_fleet     5     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985     0 number         120</span></span>
 <span><span class="co">#&gt; additional slots include the following:fleets:</span></span>
-<span><span class="co">#&gt; [1] "fishing_fleet" "survey_fleet" </span></span>
+<span><span class="co">#&gt; [1] "fishing_fleet" "yoy_fleet"     "survey_fleet" </span></span>
 <span><span class="co">#&gt; n_years:</span></span>
 <span><span class="co">#&gt; [1] 33</span></span>
 <span><span class="co">#&gt; ages:</span></span>
@@ -3953,6 +4010,46 @@ NA
 catch_at_age
 </td>
 <td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Selectivity
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Logistic
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
 Growth
 </td>
 <td style="text-align:left;">
@@ -4018,11 +4115,19 @@ Dnorm
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="va">data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
 <span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>      <span class="co"># fleet = fishing_fleet_name,</span></span>
+<span>      fleet <span class="op">=</span> <span class="va">fishing_fleet_name</span>,</span>
 <span>      module_name <span class="op">=</span> <span class="st">"Selectivity"</span>,</span>
 <span>      module_type <span class="op">=</span> <span class="st">"DoubleLogistic"</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"module_name"</span><span class="op">)</span></span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fleet"</span>, <span class="st">"module_name"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
+<span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>      fleet <span class="op">=</span> <span class="va">yoy_fleet_name</span>,</span>
+<span>      module_name <span class="op">=</span> <span class="st">"Selectivity"</span>,</span>
+<span>      module_type <span class="op">=</span> <span class="st">"DoubleLogistic"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fleet"</span>, <span class="st">"module_name"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">updated_configurations</span> <span class="op">|&gt;</span></span>
@@ -4161,6 +4266,46 @@ Selectivity
 survey_fleet
 </td>
 <td style="text-align:left;">
+Logistic
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Selectivity
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
 DoubleLogistic
 </td>
 <td style="text-align:left;">
@@ -4292,10 +4437,10 @@ Dnorm
 <span>        <span class="st">"inflection_point_asc"</span>, <span class="st">"slope_asc"</span>,</span>
 <span>        <span class="st">"inflection_point_desc"</span>, <span class="st">"slope_desc"</span></span>
 <span>      <span class="op">)</span>,</span>
-<span>      estimation_type <span class="op">=</span> <span class="st">"constant"</span>,</span>
-<span>      <span class="co"># estimation_type = c(</span></span>
-<span>      <span class="co">#   c("fixed_effects", "fixed_effects", "constant", "constant")</span></span>
-<span>      <span class="co"># ),</span></span>
+<span>      <span class="co"># estimation_type = "constant",</span></span>
+<span>      estimation_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>        <span class="st">"fixed_effects"</span>, <span class="st">"fixed_effects"</span>, <span class="st">"constant"</span>, <span class="st">"constant"</span></span>
+<span>      <span class="op">)</span>,</span>
 <span>      value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>        <span class="va">catch_selectivity_inflection_point_asc</span>,</span>
 <span>        <span class="va">catch_selectivity_slope_asc</span>,</span>
@@ -4315,33 +4460,53 @@ Dnorm
 <span>    <span class="op">)</span>, </span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fleet"</span>, <span class="st">"label"</span>, <span class="st">"time"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
+<span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>      fleet <span class="op">=</span> <span class="va">survey_fleet_name</span>,</span>
+<span>      label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"inflection_point"</span>, <span class="st">"slope"</span>, <span class="st">"log_q"</span><span class="op">)</span>,</span>
+<span>      <span class="co"># estimation_type = "constant",</span></span>
+<span>      value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">selectivity_inflection_point</span>, <span class="va">selectivity_slope</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">catchability_survey</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fleet"</span>, <span class="st">"label"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># dplyr::rows_update(</span></span>
 <span>  <span class="co">#   y = tibble::tibble(</span></span>
 <span>  <span class="co">#     fleet = survey_fleet_name,</span></span>
-<span>  <span class="co">#     label = c("inflection_point", "slope", "log_q"),</span></span>
-<span>  <span class="co">#     # estimation_type = "constant",</span></span>
-<span>  <span class="co">#     value = c(selectivity_inflection_point, selectivity_slope, log(catchability_survey))</span></span>
+<span>  <span class="co">#     label = c(</span></span>
+<span>  <span class="co">#       "inflection_point_asc", "slope_asc", </span></span>
+<span>  <span class="co">#       "inflection_point_desc", "slope_desc", </span></span>
+<span>  <span class="co">#       "log_q"</span></span>
+<span>  <span class="co">#     ),</span></span>
+<span>  <span class="co">#     estimation_type = c(</span></span>
+<span>  <span class="co">#       rep("fixed_effects", 0),</span></span>
+<span>  <span class="co">#       rep("constant", 5)</span></span>
+<span>  <span class="co">#     ),</span></span>
+<span>  <span class="co">#     value = c(</span></span>
+<span>  <span class="co">#       selectivity_inflection_point_asc,</span></span>
+<span>  <span class="co">#       selectivity_slope_asc,</span></span>
+<span>  <span class="co">#       selectivity_inflection_point_desc,</span></span>
+<span>  <span class="co">#       selectivity_slope_desc,</span></span>
+<span>  <span class="co">#       log(catchability_survey)</span></span>
+<span>  <span class="co">#     )</span></span>
 <span>  <span class="co">#   ),</span></span>
 <span>  <span class="co">#   by = c("fleet", "label")</span></span>
 <span>  <span class="co"># ) |&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
 <span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>      fleet <span class="op">=</span> <span class="va">survey_fleet_name</span>,</span>
-<span>      label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>        <span class="st">"inflection_point_asc"</span>, <span class="st">"slope_asc"</span>, </span>
-<span>        <span class="st">"inflection_point_desc"</span>, <span class="st">"slope_desc"</span>, </span>
-<span>        <span class="st">"log_q"</span></span>
-<span>      <span class="op">)</span>,</span>
+<span>      fleet <span class="op">=</span> <span class="va">yoy_fleet_name</span>,</span>
+<span>      label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"inflection_point_asc"</span>, <span class="st">"slope_asc"</span>, </span>
+<span>                <span class="st">"inflection_point_desc"</span>, <span class="st">"slope_desc"</span>, </span>
+<span>                <span class="st">"log_q"</span><span class="op">)</span>,</span>
 <span>      estimation_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"fixed_effects"</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"constant"</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"constant"</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"fixed_effects"</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>      <span class="op">)</span>,</span>
 <span>      value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>        <span class="va">selectivity_inflection_point_asc</span>,</span>
-<span>        <span class="va">selectivity_slope_asc</span>,</span>
-<span>        <span class="va">selectivity_inflection_point_desc</span>,</span>
-<span>        <span class="va">selectivity_slope_desc</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">catchability_survey</span><span class="op">)</span></span>
+<span>        <span class="va">yoy_inflection_point_asc</span>,</span>
+<span>        <span class="va">yoy_slope_asc</span>,</span>
+<span>        <span class="va">yoy_inflection_point_desc</span>,</span>
+<span>        <span class="va">yoy_slope_desc</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">yoy_q</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fleet"</span>, <span class="st">"label"</span><span class="op">)</span></span>
@@ -4373,19 +4538,19 @@ Dnorm
 <span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>      label <span class="op">=</span> <span class="st">"log_sd"</span>,</span>
 <span>      module_type <span class="op">=</span> <span class="st">"BevertonHolt"</span>,</span>
-<span>      estimation_type <span class="op">=</span> <span class="st">"constant"</span>,</span>
+<span>      <span class="co"># estimation_type = "constant",</span></span>
 <span>      value <span class="op">=</span> <span class="va">log_sd_proxy</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"module_type"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
-<span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>       label <span class="op">=</span> <span class="st">"log_devs"</span>,</span>
-<span>       estimation_type <span class="op">=</span> <span class="st">"fixed_effects"</span>,</span>
-<span>       module_type <span class="op">=</span> <span class="st">"BevertonHolt"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"module_type"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co"># dplyr::rows_update(</span></span>
+<span>  <span class="co">#   y = tibble::tibble(</span></span>
+<span>  <span class="co">#      label = "log_devs",</span></span>
+<span>  <span class="co">#      estimation_type = "fixed_effects",</span></span>
+<span>  <span class="co">#      module_type = "BevertonHolt"</span></span>
+<span>  <span class="co">#   ),</span></span>
+<span>  <span class="co">#   by = c("label", "module_type")</span></span>
+<span>  <span class="co"># ) |&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="op">(</span><span class="va">module_name</span> <span class="op">==</span> <span class="st">"Maturity"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">maturity_parameters</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
@@ -4409,8 +4574,8 @@ Dnorm
 <span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">truth_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>      estimation_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"fixed_effects"</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"constant"</span>, <span class="fl">7</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"constant"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"fixed_effects"</span>, <span class="fl">6</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"age"</span><span class="op">)</span></span>
@@ -4492,7 +4657,7 @@ NA
 1.8000000
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -4533,7 +4698,7 @@ NA
 3.1000000
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -7426,10 +7591,10 @@ Selectivity
 survey_fleet
 </td>
 <td style="text-align:left;">
-DoubleLogistic
+Logistic
 </td>
 <td style="text-align:left;">
-inflection_point_asc
+inflection_point
 </td>
 <td style="text-align:right;">
 NA
@@ -7441,10 +7606,10 @@ NA
 NA
 </td>
 <td style="text-align:right;">
--5.0000000
+3.0300000
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -7467,10 +7632,10 @@ Selectivity
 survey_fleet
 </td>
 <td style="text-align:left;">
-DoubleLogistic
+Logistic
 </td>
 <td style="text-align:left;">
-slope_asc
+slope
 </td>
 <td style="text-align:right;">
 NA
@@ -7482,92 +7647,10 @@ NA
 NA
 </td>
 <td style="text-align:right;">
-5.0000000
+2.2000000
 </td>
 <td style="text-align:left;">
-constant
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-catch_at_age
-</td>
-<td style="text-align:left;">
-Selectivity
-</td>
-<td style="text-align:left;">
-survey_fleet
-</td>
-<td style="text-align:left;">
-DoubleLogistic
-</td>
-<td style="text-align:left;">
-inflection_point_desc
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-0.5500000
-</td>
-<td style="text-align:left;">
-constant
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-catch_at_age
-</td>
-<td style="text-align:left;">
-Selectivity
-</td>
-<td style="text-align:left;">
-survey_fleet
-</td>
-<td style="text-align:left;">
-DoubleLogistic
-</td>
-<td style="text-align:left;">
-slope_desc
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-3.3000000
-</td>
-<td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -7608,7 +7691,7 @@ NA
 -2.9957323
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -10372,6 +10455,2917 @@ NA
 catch_at_age
 </td>
 <td style="text-align:left;">
+Selectivity
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+DoubleLogistic
+</td>
+<td style="text-align:left;">
+inflection_point_asc
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+-1.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Selectivity
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+DoubleLogistic
+</td>
+<td style="text-align:left;">
+slope_asc
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Selectivity
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+DoubleLogistic
+</td>
+<td style="text-align:left;">
+inflection_point_desc
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.5000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Selectivity
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+DoubleLogistic
+</td>
+<td style="text-align:left;">
+slope_desc
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_q
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+-2.9957323
+</td>
+<td style="text-align:left;">
+fixed_effects
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1985
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1986
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1987
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1988
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1990
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1992
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1993
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1994
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1995
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1997
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1998
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1999
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2000
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2001
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2002
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2003
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2005
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2006
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2008
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2011
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Fleet
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+log_Fmort
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+-200.0000000
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1985
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1986
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1987
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1988
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1990
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1992
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1993
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1994
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1995
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1997
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1998
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1999
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2000
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2001
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2002
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2003
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2005
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2006
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2008
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2011
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+yoy_fleet
+</td>
+<td style="text-align:left;">
+Index
+</td>
+<td style="text-align:left;">
+log_sd
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+-2.3025851
+</td>
+<td style="text-align:left;">
+constant
+</td>
+<td style="text-align:left;">
+Data
+</td>
+<td style="text-align:left;">
+Dlnorm
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+catch_at_age
+</td>
+<td style="text-align:left;">
 Recruitment
 </td>
 <td style="text-align:left;">
@@ -10478,7 +13472,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10519,7 +13513,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10560,7 +13554,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10601,7 +13595,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10642,7 +13636,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10683,7 +13677,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10724,7 +13718,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10765,7 +13759,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10806,7 +13800,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10847,7 +13841,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10888,7 +13882,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10929,7 +13923,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -10970,7 +13964,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11011,7 +14005,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11052,7 +14046,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11093,7 +14087,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11134,7 +14128,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11175,7 +14169,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11216,7 +14210,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11257,7 +14251,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11298,7 +14292,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11339,7 +14333,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11380,7 +14374,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11421,7 +14415,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11462,7 +14456,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11503,7 +14497,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11544,7 +14538,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11585,7 +14579,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11626,7 +14620,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11667,7 +14661,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11708,7 +14702,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11749,7 +14743,7 @@ NA
 0.0000000
 </td>
 <td style="text-align:left;">
-fixed_effects
+random_effects
 </td>
 <td style="text-align:left;">
 process
@@ -11790,7 +14784,7 @@ NA
 -0.7066572
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 process
@@ -21343,7 +24337,7 @@ NA
 24.0293124
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -21384,7 +24378,7 @@ NA
 22.6669292
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -21425,7 +24419,7 @@ NA
 21.1789255
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -21466,7 +24460,7 @@ NA
 19.7488152
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -21507,7 +24501,7 @@ NA
 18.5119285
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -21548,7 +24542,7 @@ NA
 17.9557101
 </td>
 <td style="text-align:left;">
-constant
+fixed_effects
 </td>
 <td style="text-align:left;">
 NA
@@ -21758,17 +24752,17 @@ Click to expand/collapse code
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Starting optimization ...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Restarting optimizer 3 times to improve gradient.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Maximum gradient went from <span style="color: #0000BB;">0.00895</span> to <span style="color: #0000BB;">0.00072</span> after 3 steps.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Maximum gradient went from <span style="color: #0000BB;">0.14284</span> to <span style="color: #0000BB;">0.00298</span> after 3 steps.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Finished optimization</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Finished sdreport</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> FIMS model version: <span style="color: #0000BB;">0.9.4.9000</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total run time was <span style="color: #0000BB;">0.71924</span> seconds</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Number of parameters: fixed_effects=66, random_effects=0, and total=66</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Maximum gradient= <span style="color: #0000BB;">0.00072</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total run time was <span style="color: #0000BB;">5.73933</span> seconds</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Number of parameters: fixed_effects=47, random_effects=32, and total=79</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Maximum gradient= <span style="color: #0000BB;">0.00298</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Negative log likelihood (NLL):</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Marginal NLL= <span style="color: #0000BB;">11738.4999</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Total NLL= <span style="color: #0000BB;">11738.4999</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Terminal SB= <span style="color: #0000BB;">455832.96815</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Marginal NLL= <span style="color: #0000BB;">20855.62548</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Total NLL= <span style="color: #0000BB;">20732.90953</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Terminal SB= <span style="color: #0000BB;">415932.96118</span></span></span></code></pre></div>
 </details><details><summary>
 Click to expand/collapse code
 </summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -21802,75 +24796,87 @@ Click to expand/collapse code
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">estimation_type</span> <span class="op">==</span> <span class="st">"fixed_effects"</span> <span class="op">|</span> <span class="va">estimation_type</span> <span class="op">==</span> <span class="st">"random_effects"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">module_name</span>, <span class="va">label</span>, <span class="va">fleet</span>, <span class="va">year_i</span>, <span class="va">age_i</span>, <span class="va">input</span>, <span class="va">estimated</span>, <span class="va">uncertainty</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 66 × 8</span></span></span>
-<span><span class="co">#&gt;    module_name label     fleet year_i age_i   input estimated uncertainty</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Fleet       log_Fmort NA         1    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.39</span>     -<span style="color: #BB0000;">3.92</span>        0.101 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Fleet       log_Fmort NA         2    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.44</span>     -<span style="color: #BB0000;">3.91</span>        0.096<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Fleet       log_Fmort NA         3    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.51</span>     -<span style="color: #BB0000;">3.77</span>        0.098<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Fleet       log_Fmort NA         4    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.76</span>     -<span style="color: #BB0000;">4.36</span>        0.101 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Fleet       log_Fmort NA         5    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.02</span>     -<span style="color: #BB0000;">3.38</span>        0.099<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Fleet       log_Fmort NA         6    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.43</span>     -<span style="color: #BB0000;">1.39</span>        0.074<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Fleet       log_Fmort NA         7    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.58</span>     -<span style="color: #BB0000;">1.01</span>        0.081<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Fleet       log_Fmort NA         8    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.20</span>     -<span style="color: #BB0000;">1.71</span>        0.068<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Fleet       log_Fmort NA         9    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.656</span>    -<span style="color: #BB0000;">0.277</span>       0.054<span style="text-decoration: underline;">1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Fleet       log_Fmort NA        10    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.520</span>    -<span style="color: #BB0000;">0.162</span>       0.050<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Fleet       log_Fmort NA        11    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.584</span>    -<span style="color: #BB0000;">1.06</span>        0.063<span style="text-decoration: underline;">1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Fleet       log_Fmort NA        12    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.056</span><span style="color: #BB0000; text-decoration: underline;">2</span>   -<span style="color: #BB0000;">0.395</span>       0.057<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Fleet       log_Fmort NA        13    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.131</span>     0.515       0.039<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Fleet       log_Fmort NA        14    <span style="color: #BB0000;">NA</span>  0.089<span style="text-decoration: underline;">9</span>   -<span style="color: #BB0000;">0.135</span>       0.050<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> Fleet       log_Fmort NA        15    <span style="color: #BB0000;">NA</span>  0.376    -<span style="color: #BB0000;">0.265</span>       0.050<span style="text-decoration: underline;">5</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> Fleet       log_Fmort NA        16    <span style="color: #BB0000;">NA</span>  0.562     0.243       0.046<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> Fleet       log_Fmort NA        17    <span style="color: #BB0000;">NA</span>  0.809     1.44        0.028<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> Fleet       log_Fmort NA        18    <span style="color: #BB0000;">NA</span>  1.53      1.29        0.032<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> Fleet       log_Fmort NA        19    <span style="color: #BB0000;">NA</span>  1.23      1.66        0.027<span style="text-decoration: underline;">1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> Fleet       log_Fmort NA        20    <span style="color: #BB0000;">NA</span>  1.86      1.35        0.032<span style="text-decoration: underline;">5</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> Fleet       log_Fmort NA        21    <span style="color: #BB0000;">NA</span>  0.686     0.939       0.034<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> Fleet       log_Fmort NA        22    <span style="color: #BB0000;">NA</span>  0.607    -<span style="color: #BB0000;">0.020</span><span style="color: #BB0000; text-decoration: underline;">1</span>      0.047<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">23</span> Fleet       log_Fmort NA        23    <span style="color: #BB0000;">NA</span>  0.294    -<span style="color: #BB0000;">0.315</span>       0.060<span style="text-decoration: underline;">8</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">24</span> Fleet       log_Fmort NA        24    <span style="color: #BB0000;">NA</span>  0.076<span style="text-decoration: underline;">9</span>    0.582       0.037<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">25</span> Fleet       log_Fmort NA        25    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.068</span><span style="color: #BB0000; text-decoration: underline;">8</span>   -<span style="color: #BB0000;">0.168</span>       0.061<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">26</span> Fleet       log_Fmort NA        26    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.321</span>     0.183       0.057<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">27</span> Fleet       log_Fmort NA        27    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.675</span>    -<span style="color: #BB0000;">0.495</span>       0.067<span style="text-decoration: underline;">8</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">28</span> Fleet       log_Fmort NA        28    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.328</span>    -<span style="color: #BB0000;">1.11</span>        0.071<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">29</span> Fleet       log_Fmort NA        29    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.758</span>    -<span style="color: #BB0000;">0.625</span>       0.076<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">30</span> Fleet       log_Fmort NA        30    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.835</span>    -<span style="color: #BB0000;">1.51</span>        0.078<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">31</span> Fleet       log_Fmort NA        31    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.18</span>     -<span style="color: #BB0000;">0.232</span>       0.067<span style="text-decoration: underline;">6</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">32</span> Fleet       log_Fmort NA        32    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.62</span>     -<span style="color: #BB0000;">1.68</span>        0.090<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">33</span> Fleet       log_Fmort NA        33    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.44</span>     -<span style="color: #BB0000;">1.63</span>        0.091<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">34</span> Recruitment log_rzero <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> 25.0      24.6         0.090<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">35</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>         2    <span style="color: #BB0000;">NA</span>  0         1.21        0.090<span style="text-decoration: underline;">6</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">36</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>         3    <span style="color: #BB0000;">NA</span>  0         1.09        0.090<span style="text-decoration: underline;">8</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">37</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>         4    <span style="color: #BB0000;">NA</span>  0         1.22        0.091<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">38</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>         5    <span style="color: #BB0000;">NA</span>  0         1.13        0.091<span style="text-decoration: underline;">1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">39</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>         6    <span style="color: #BB0000;">NA</span>  0         0.952       0.091<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">40</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>         7    <span style="color: #BB0000;">NA</span>  0         1.16        0.091<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">41</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>         8    <span style="color: #BB0000;">NA</span>  0         1.22        0.091<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">42</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>         9    <span style="color: #BB0000;">NA</span>  0         1.17        0.091<span style="text-decoration: underline;">6</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">43</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        10    <span style="color: #BB0000;">NA</span>  0         1.02        0.091<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">44</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        11    <span style="color: #BB0000;">NA</span>  0         1.26        0.092<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">45</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        12    <span style="color: #BB0000;">NA</span>  0         1.10        0.091<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">46</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        13    <span style="color: #BB0000;">NA</span>  0         1.07        0.091<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">47</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        14    <span style="color: #BB0000;">NA</span>  0         0.954       0.092<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">48</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        15    <span style="color: #BB0000;">NA</span>  0         0.875       0.092<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">49</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        16    <span style="color: #BB0000;">NA</span>  0         0.606       0.092<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">50</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        17    <span style="color: #BB0000;">NA</span>  0         0.252       0.092<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">51</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        18    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.700</span>       0.092<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">52</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        19    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.47</span>        0.091<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">53</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        20    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.12</span>        0.091<span style="text-decoration: underline;">1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">54</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        21    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.80</span>        0.088<span style="text-decoration: underline;">6</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">55</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        22    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.34</span>        0.086<span style="text-decoration: underline;">5</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">56</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        23    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.10</span>        0.085<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">57</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        24    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.14</span>        0.086<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">58</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        25    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.78</span>        0.088<span style="text-decoration: underline;">5</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">59</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        26    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.33</span>        0.088<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">60</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        27    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.10</span>        0.089<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">61</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        28    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.488</span>       0.090<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">62</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        29    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.147</span>       0.091<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">63</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        30    <span style="color: #BB0000;">NA</span>  0         0.122       0.092<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">64</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        31    <span style="color: #BB0000;">NA</span>  0         0.364       0.093<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">65</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        32    <span style="color: #BB0000;">NA</span>  0         0.665       0.095<span style="text-decoration: underline;">1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">66</span> Recruitment log_devs  <span style="color: #BB0000;">NA</span>        33    <span style="color: #BB0000;">NA</span>  0         0.364       0.096<span style="text-decoration: underline;">9</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 78 × 8</span></span></span>
+<span><span class="co">#&gt;    module_name label            fleet year_i age_i   input estimated uncertainty</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Fleet       log_Fmort        NA         1    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.39</span>    -<span style="color: #BB0000;">3.67</span>        0.109  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Fleet       log_Fmort        NA         2    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.44</span>    -<span style="color: #BB0000;">3.88</span>        0.095<span style="text-decoration: underline;">5</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Fleet       log_Fmort        NA         3    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.51</span>    -<span style="color: #BB0000;">3.87</span>        0.093<span style="text-decoration: underline;">7</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Fleet       log_Fmort        NA         4    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.76</span>    -<span style="color: #BB0000;">4.30</span>        0.103  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Fleet       log_Fmort        NA         5    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.02</span>    -<span style="color: #BB0000;">2.97</span>        0.123  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Fleet       log_Fmort        NA         6    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.43</span>    -<span style="color: #BB0000;">1.14</span>        0.056<span style="text-decoration: underline;">0</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Fleet       log_Fmort        NA         7    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.58</span>    -<span style="color: #BB0000;">1.57</span>        0.065<span style="text-decoration: underline;">9</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Fleet       log_Fmort        NA         8    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.20</span>    -<span style="color: #BB0000;">2.08</span>        0.063<span style="text-decoration: underline;">0</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Fleet       log_Fmort        NA         9    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.656</span>   -<span style="color: #BB0000;">0.117</span>       0.025<span style="text-decoration: underline;">6</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Fleet       log_Fmort        NA        10    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.520</span>    0.003<span style="text-decoration: underline;">61</span>     0.022<span style="text-decoration: underline;">6</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Fleet       log_Fmort        NA        11    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.584</span>   -<span style="color: #BB0000;">0.371</span>       0.031<span style="text-decoration: underline;">0</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Fleet       log_Fmort        NA        12    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.056</span><span style="color: #BB0000; text-decoration: underline;">2</span>  -<span style="color: #BB0000;">0.026</span><span style="color: #BB0000; text-decoration: underline;">6</span>      0.024<span style="text-decoration: underline;">2</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Fleet       log_Fmort        NA        13    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.131</span>   -<span style="color: #BB0000;">0.187</span>       0.026<span style="text-decoration: underline;">9</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Fleet       log_Fmort        NA        14    <span style="color: #BB0000;">NA</span>  0.089<span style="text-decoration: underline;">9</span>   0.170       0.020<span style="text-decoration: underline;">2</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> Fleet       log_Fmort        NA        15    <span style="color: #BB0000;">NA</span>  0.376   -<span style="color: #BB0000;">0.087</span><span style="color: #BB0000; text-decoration: underline;">3</span>      0.025<span style="text-decoration: underline;">1</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> Fleet       log_Fmort        NA        16    <span style="color: #BB0000;">NA</span>  0.562    0.574       0.016<span style="text-decoration: underline;">1</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> Fleet       log_Fmort        NA        17    <span style="color: #BB0000;">NA</span>  0.809    0.997       0.014<span style="text-decoration: underline;">6</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> Fleet       log_Fmort        NA        18    <span style="color: #BB0000;">NA</span>  1.53     1.16        0.016<span style="text-decoration: underline;">3</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> Fleet       log_Fmort        NA        19    <span style="color: #BB0000;">NA</span>  1.23     2.03        0.015<span style="text-decoration: underline;">5</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> Fleet       log_Fmort        NA        20    <span style="color: #BB0000;">NA</span>  1.86     1.30        0.020<span style="text-decoration: underline;">6</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> Fleet       log_Fmort        NA        21    <span style="color: #BB0000;">NA</span>  0.686    0.869       0.013<span style="text-decoration: underline;">9</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> Fleet       log_Fmort        NA        22    <span style="color: #BB0000;">NA</span>  0.607    0.334       0.019<span style="text-decoration: underline;">2</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">23</span> Fleet       log_Fmort        NA        23    <span style="color: #BB0000;">NA</span>  0.294    0.075<span style="text-decoration: underline;">8</span>      0.025<span style="text-decoration: underline;">7</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">24</span> Fleet       log_Fmort        NA        24    <span style="color: #BB0000;">NA</span>  0.076<span style="text-decoration: underline;">9</span>   0.433       0.017<span style="text-decoration: underline;">4</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">25</span> Fleet       log_Fmort        NA        25    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.068</span><span style="color: #BB0000; text-decoration: underline;">8</span>   0.146       0.023<span style="text-decoration: underline;">0</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">26</span> Fleet       log_Fmort        NA        26    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.321</span>    0.102       0.023<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">27</span> Fleet       log_Fmort        NA        27    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.675</span>   -<span style="color: #BB0000;">0.711</span>       0.042<span style="text-decoration: underline;">5</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">28</span> Fleet       log_Fmort        NA        28    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.328</span>   -<span style="color: #BB0000;">0.262</span>       0.030<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">29</span> Fleet       log_Fmort        NA        29    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.758</span>   -<span style="color: #BB0000;">0.615</span>       0.041<span style="text-decoration: underline;">1</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">30</span> Fleet       log_Fmort        NA        30    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.835</span>   -<span style="color: #BB0000;">1.24</span>        0.058<span style="text-decoration: underline;">0</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">31</span> Fleet       log_Fmort        NA        31    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.18</span>    -<span style="color: #BB0000;">0.169</span>       0.029<span style="text-decoration: underline;">9</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">32</span> Fleet       log_Fmort        NA        32    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.62</span>    -<span style="color: #BB0000;">1.09</span>        0.065<span style="text-decoration: underline;">2</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">33</span> Fleet       log_Fmort        NA        33    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">1.44</span>    -<span style="color: #BB0000;">1.73</span>        0.082<span style="text-decoration: underline;">1</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">34</span> Fleet       log_q            NA        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.00</span>    -<span style="color: #BB0000;">2.84</span>        0.022<span style="text-decoration: underline;">9</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">35</span> Fleet       log_q            NA        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.00</span>    -<span style="color: #BB0000;">3.24</span>        0.022<span style="text-decoration: underline;">3</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">36</span> Recruitment log_rzero        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> 25.0     24.6         0.225  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">37</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         2    <span style="color: #BB0000;">NA</span>  0        1.20       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">38</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         3    <span style="color: #BB0000;">NA</span>  0        1.11       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">39</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         4    <span style="color: #BB0000;">NA</span>  0        1.17       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">40</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         5    <span style="color: #BB0000;">NA</span>  0        1.13       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">41</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         6    <span style="color: #BB0000;">NA</span>  0        1.16       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">42</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         7    <span style="color: #BB0000;">NA</span>  0        1.32       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">43</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         8    <span style="color: #BB0000;">NA</span>  0        1.42       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">44</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         9    <span style="color: #BB0000;">NA</span>  0        1.21       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">45</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        10    <span style="color: #BB0000;">NA</span>  0        0.927      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">46</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        11    <span style="color: #BB0000;">NA</span>  0        0.942      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">47</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        12    <span style="color: #BB0000;">NA</span>  0        0.870      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">48</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        13    <span style="color: #BB0000;">NA</span>  0        0.837      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">49</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        14    <span style="color: #BB0000;">NA</span>  0        0.826      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">50</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        15    <span style="color: #BB0000;">NA</span>  0        0.571      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">51</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        16    <span style="color: #BB0000;">NA</span>  0        0.486      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">52</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        17    <span style="color: #BB0000;">NA</span>  0        0.266      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">53</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        18    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">0.349</span>      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">54</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        19    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">1.38</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">55</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        20    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">1.95</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">56</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        21    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">2.56</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">57</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        22    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">2.20</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">58</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        23    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">2.02</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">59</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        24    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">1.98</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">60</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        25    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">1.76</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">61</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        26    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">1.35</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">62</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        27    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">1.16</span>       <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">63</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        28    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">0.607</span>      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">64</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        29    <span style="color: #BB0000;">NA</span>  0       -<span style="color: #BB0000;">0.305</span>      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">65</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        30    <span style="color: #BB0000;">NA</span>  0        0.088<span style="text-decoration: underline;">3</span>     <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">66</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        31    <span style="color: #BB0000;">NA</span>  0        0.247      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">67</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        32    <span style="color: #BB0000;">NA</span>  0        0.563      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">68</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        33    <span style="color: #BB0000;">NA</span>  0        0.652      <span style="color: #BB0000;">NA</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">69</span> Selectivity inflection_poin… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  1.8      1.81        0.002<span style="text-decoration: underline;">99</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">70</span> Selectivity slope_asc        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  3.1      3.11        0.004<span style="text-decoration: underline;">19</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">71</span> Selectivity inflection_point <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  3.03     3.37        0.006<span style="text-decoration: underline;">45</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">72</span> Selectivity slope            <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  2.2      2.05        0.002<span style="text-decoration: underline;">30</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">73</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     2 24.0     24.0         0.009<span style="text-decoration: underline;">31</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">74</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     3 22.7     22.6         0.011<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">75</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     4 21.2     21.1         0.016<span style="text-decoration: underline;">0</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">76</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     5 19.7     19.4         0.023<span style="text-decoration: underline;">5</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">77</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     6 18.5     17.9         0.042<span style="text-decoration: underline;">3</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">78</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     7 18.0     17.6         0.046<span style="text-decoration: underline;">1</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="compare-om-and-fims">Compare OM and FIMS<a class="anchor" aria-label="anchor" href="#compare-om-and-fims"></a>
@@ -21881,30 +24887,29 @@ Click to expand/collapse code
 of the OM “truth”, several key caveats need to be considered when
 interpreting the comparisons:</p>
 <ul>
-<li>Most parameters, including fleet selectivity parameters, initial
-numbers-at-age (<code>log_init_naa</code>), time-varying natural
-mortality (<code>log_M</code>), and maturity parameters, were fixed at
-their initial values derived from the OM.</li>
-<li>Stock-recruit steepness (<code>logit_steep</code>) and recruitment
-variance (<code>log_sd</code>) were fixed at the values from the
-Beaufort Assessment Model rather than estimated.</li>
 <li>Model convergence is highly sensitive to the specified standard
 deviation of the lognormal observation error applied to “true” OM
 landings.</li>
 <li>Model convergence is highly sensitive to the specified effective
 sample size used to generate age composition data from the OM
 “truth”.</li>
+<li>Model convergence is highly sensitive to the fishing fleet’s
+selectivity parameters. The descending slope and descending inflection
+point must be fixed to ensure convergence.</li>
 <li>FIMS fishing mortality estimates are scaled by the peak value of the
 fleet selectivity curve. This adjustment is for direct comparison
 because FIMS double-logistic selectivity is not normalized to a maximum
 of 1.0, whereas the OM’s “true” fleet selectivity peaks strictly at
 1.0.</li>
+<li>Estimating initial numbers-at-age requires fixing at least the first
+age bin. Estimating all age bins causes overestimation of recruitment
+and total biomass in the early years of the time series.</li>
 </ul>
-<p><img src="ewe-ecosim-base-simulation_files/figure-html/biomass-comparison-1.png" class="r-plt" alt="" width="672"></p>
-<p><img src="ewe-ecosim-base-simulation_files/figure-html/recruitment-comparison-1.png" class="r-plt" alt="" width="672"></p>
-<p><img src="ewe-ecosim-base-simulation_files/figure-html/fishing-mortality-comparison-1.png" class="r-plt" alt="" width="672"></p>
-<p><img src="ewe-ecosim-base-simulation_files/figure-html/index-comparison-1.png" class="r-plt" alt="" width="672"><img src="ewe-ecosim-base-simulation_files/figure-html/index-comparison-2.png" class="r-plt" alt="" width="672"></p>
-<p><img src="ewe-ecosim-base-simulation_files/figure-html/agecomp-comparison-1.png" class="r-plt" alt="" width="672"><img src="ewe-ecosim-base-simulation_files/figure-html/agecomp-comparison-2.png" class="r-plt" alt="" width="672"><img src="ewe-ecosim-base-simulation_files/figure-html/agecomp-comparison-3.png" class="r-plt" alt="" width="672"><img src="ewe-ecosim-base-simulation_files/figure-html/agecomp-comparison-4.png" class="r-plt" alt="" width="672"></p>
+<p><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/biomass-comparison-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/recruitment-comparison-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/fishing-mortality-comparison-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/index-comparison-1.png" class="r-plt" alt="" width="672"><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/index-comparison-2.png" class="r-plt" alt="" width="672"></p>
+<p><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/agecomp-comparison-1.png" class="r-plt" alt="" width="672"><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/agecomp-comparison-2.png" class="r-plt" alt="" width="672"><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/agecomp-comparison-3.png" class="r-plt" alt="" width="672"><img src="ewe-ecosim-base-simulation-yoy_files/figure-html/agecomp-comparison-4.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="create-dsem-inputs">Create DSEM inputs<a class="anchor" aria-label="anchor" href="#create-dsem-inputs"></a>
