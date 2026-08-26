@@ -89,6 +89,69 @@ test_that("load_model() works with correct inputs for ewe_ecosim", {
   )
 })
 
+test_that("load_model_ewe_ecosim() converts catch biomass to instantaneous F and constrains M", {
+  #' @description Test that EwE C/B is converted to instantaneous fishing mortality and natural mortality is constrained to be non-negative.
+  ewe_model <- load_model(
+    directory = ewe_ecosim_base_nwatlantic_path,
+    functional_groups = functional_groups,
+    type = "ewe_ecosim",
+    verbose = FALSE
+  )
+
+  current <- ewe_model |>
+    tidyr::pivot_wider(
+      id_cols = c(year, month, functional_group, species, group, functional_group_snake_case),
+      names_from = type,
+      values_from = value
+    )
+
+  expected_f <- current |>
+    dplyr::mutate(
+      z = total_mortality,
+      f = dplyr::if_else(
+        z == 0,
+        0,
+        (catch / biomass) * (z / (1 - exp(-z)))
+      )
+    ) |>
+    dplyr::select(year, month, functional_group, f)
+
+  expected_m <- expected_f |>
+    dplyr::left_join(
+      current |> dplyr::select(year, month, functional_group, total_mortality),
+      by = c("year", "month", "functional_group")
+    ) |>
+    dplyr::mutate(
+      m = pmax(total_mortality - f, 0)
+    ) |>
+    dplyr::select(year, month, functional_group, m)
+
+  actual_f <- ewe_model |>
+    dplyr::filter(type == "fishing_mortality") |>
+    dplyr::select(year, month, functional_group, value)
+
+  actual_m <- ewe_model |>
+    dplyr::filter(type == "natural_mortality") |>
+    dplyr::select(year, month, functional_group, value)
+
+  expect_equal(
+    object = dplyr::arrange(actual_f, year, month, functional_group),
+    expected = dplyr::arrange(expected_f, year, month, functional_group) |>
+      dplyr::select(year, month, functional_group, f) |>
+      dplyr::rename(value = f),
+    tolerance = 1e-8
+  )
+
+  expect_equal(
+    object = dplyr::arrange(actual_m, year, month, functional_group),
+    expected = dplyr::arrange(expected_m, year, month, functional_group) |>
+      dplyr::select(year, month, functional_group, m) |>
+      dplyr::rename(value = m),
+    tolerance = 1e-8
+  )
+
+  expect_true(all(actual_m[["value"]] >= 0))
+})
 
 ## Edge handling ----
 test_that("load_model() returns correct outputs for edge cases", {
@@ -142,3 +205,17 @@ test_that("load_model_ewe_ecosim() returns correct error messages", {
     )
   })
 })
+
+test_that("load_model_ewe_ecosim() warns when negative natural mortality is detected and sets it to 0", {
+  #' @description Test that the warning message for negative natural mortality identifies the year(s) and tells the user that values were set to 0.
+  expect_warning(
+    object = load_model(
+      directory = ewe_ecosim_base_nwatlantic_path,
+      functional_groups = functional_groups,
+      type = "ewe_ecosim",
+      verbose = TRUE
+    ),
+    regexp = r"(Detected negative natural mortality in year\(s\):|We used 0 for those negative natural mortality values for now|Please check the Ecosim fishing mortality input)"
+  )
+})
+

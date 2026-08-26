@@ -44,6 +44,8 @@ dfr
 dgamma
 dir
 dirichlet
+dlnorm
+dmultinom
 dontrun
 DoubleLogistic
 dplyr
@@ -87,14 +89,18 @@ grepl
 gsub
 gtools
 Hab
+Fmort
 https
 idx
 ifelse
+io
+ip
 jennybc
 juv
 licensors
 LoW
 MCMCpack
+meanlog
 meanhaden
 MERCHANTABILITY
 na
@@ -104,6 +110,7 @@ ncol
 NCOL
 nmfs
 NOAA
+noaa
 noncommercially
 noRd
 nrow
@@ -151,6 +158,8 @@ rnorm
 Rscript
 rspm
 sapply
+sdlog
+se
 Schueller
 sd
 sdog
@@ -187,6 +196,8 @@ toString
 trophic
 tyrannus
 ubuntu
+yoy
+YOY
 un
 ungroup
 unlink
