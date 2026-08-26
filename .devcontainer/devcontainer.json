@@ -9,15 +9,13 @@
 	"features": {
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {},
     "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
-    "packages": "cli,covr,devtools,dplyr,DT,ggplot2,htmltools,kableExtra,spelling,tibble,tidyr,usethis",
-    "installSystemRequirements": true
+      "packages": "cli,covr,devtools,dplyr,DT,ggplot2,htmltools,kableExtra,spelling,tibble,tidyr,usethis"
     }
   },
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "echo 'options(repos = c(CRAN = \"https://cloud.r-project.org\"))' | sudo sh -c 'cat - >>\"${R_HOME}/etc/Rprofile.site\"'",
-	
-	// Configure tool-specific properties.
+  
+  // Command to update content in the dev container.
+  "updateContentCommand": "mkdir -p ~/.R && echo \"MAKEFLAGS = -j$(nproc)\" > ~/.R/Makevars && echo 'options(repos = c(noaa = \"https://noaa-fisheries-integrated-toolbox.r-universe.dev\", CRAN = \"https://cloud.r-project.org\"), Ncpus = parallel::detectCores())' | sudo sh -c 'cat - >>\"${R_HOME}/etc/Rprofile.site\"' && Rscript -e 'pak::pak(c(\"github::NOAA-FIMS/FIMS\", \"github::James-Thorson-NOAA/dsem\"))' || (echo '' && echo '>>> WARNING: Package installation failed! <<<' && echo 'Please install manually after opening the container.' && echo '')",
+  // Configure tool-specific properties.
 	 "customizations": {
 	   "vscode": {
 	 		// Set *default* container specific settings.json values on container create.

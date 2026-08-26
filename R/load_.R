@@ -268,44 +268,65 @@ load_model_ewe_ecosim <- function(
     verbose = verbose
   )
 
-  # Isolate catch and biomass, reshape them to calculate fishing mortality
+  # Isolate catch (C), biomass (B), and total mortality, then convert C/B to the
+  # instantaneous annual fishing mortality used in stock assessments.
   fishing_mortality <- data_monthly |>
-    dplyr::filter(type %in% c("catch", "biomass")) |>
-    # Pivot wider so catch and biomass are side-by-side for each group/time combo
+    dplyr::filter(type %in% c("catch", "biomass", "mortality")) |>
     tidyr::pivot_wider(
       id_cols = c(year, month, functional_group, species, group, functional_group_snake_case),
       names_from = type,
       values_from = value
     ) |>
-    # Calculate fishing mortality: catch divided by biomass
-    # Using coalesce or checking for division by zero protects against NaNs
     dplyr::mutate(
-      value = catch / biomass,
+      catch = dplyr::coalesce(catch, 0),
+      biomass = dplyr::coalesce(biomass, 0),
+      mortality = dplyr::coalesce(mortality, 0),
+      value = dplyr::if_else(
+        biomass > 0 & mortality > 0,
+        (catch / biomass) * (mortality / (1 - exp(-mortality))),
+        0
+      ),
       file_name = NA_character_,
       type = "fishing_mortality"
     ) |>
-    # Drop the temporary catch and biomass columns
-    dplyr::select(-catch, -biomass)
+    dplyr::select(-catch, -biomass, -mortality)
 
-  # Extract total mortality from the original data
+  # Extract total mortality from the original data.
   total_mortality <- data_monthly |>
     dplyr::filter(type == "mortality")
 
-  # Get natural mortality
+  # Get natural mortality; warn and set negative values to zero.
   natural_mortality <- dplyr::bind_rows(total_mortality, fishing_mortality) |>
     tidyr::pivot_wider(
       id_cols = c(year, month, functional_group, species, group, functional_group_snake_case),
       names_from = type,
       values_from = value
     ) |>
-    # Calculate M = Z - F
     dplyr::mutate(
       value = mortality - fishing_mortality,
       type = "natural_mortality",
       file_name = NA_character_
     ) |>
-    # Clean up columns to match your original structure
     dplyr::select(-mortality, -fishing_mortality)
+
+  negative_natural_mortality <- natural_mortality |>
+    dplyr::filter(value < 0) |>
+    dplyr::distinct(year) |>
+    dplyr::arrange(year)
+
+  if (nrow(negative_natural_mortality) > 0 && verbose) {
+    years_with_negative_m <- paste(negative_natural_mortality[["year"]], collapse = ", ")
+    cli::cli_warn(
+      c(
+        "Detected negative natural mortality in year(s): {years_with_negative_m}.",
+        "i" = "We used 0 for those negative natural mortality values for now.",
+        "i" = "Please check the Ecosim fishing mortality input. Are the input values reasonable? Is catch greater than biomass?"
+      )
+    )
+  }
+
+  natural_mortality <- natural_mortality |>
+    dplyr::mutate(value = pmax(value, 0))
 
   # TODO: build up this data set
   data_output <- data_monthly |>

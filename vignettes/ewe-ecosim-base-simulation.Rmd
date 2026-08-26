@@ -1,0 +1,1121 @@
+---
+title: "From Ecopath with Ecosim to Fisheries Integrated Modeling System"
+subtitle: "An Ecosystem-to-Stock-Assessment Simulation Workflow using {ecosystemom}"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{From Ecopath with Ecosim to Fisheries Integrated Modeling System}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitr-setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+# Introduction
+Ecosystem-based fishery management (EBFM) is crucial for addressing the complex, dynamic challenges posed by non-stationary climate, ecological, and economic conditions. However, translating outputs from ecosystem models into products suitable for fishery stock assessment models remains a key challenge.
+
+This vignette demonstrates an end-to-end simulation workflow implemented in the {ecosystemom} package for linking ecosystem model outputs with fisheries estimation models. The workflow includes functions to:
+
+- `load_model()` — import and standardize output from ecosystem operating models (OM). For example, this function can be used to read and standardize Ecopath with Ecosim (EwE) Ecosim outputs for downstream analyses within {ecosystemom}.
+- `get_truth()` — extract “true” population quantities from the OM, including annual or monthly biomass trajectories and biomass-at-age.
+- `sample_*()` — generate sampled observations from OM outputs for use in estimation models such as the Fisheries Integrated Modeling System (FIMS).
+- `create_dsem_inputs()` — prepare environmental covariates or diet composition data from the OM to support candidate model specifications for dynamic structural equation models (DSEMs) and related ecosystem-informed analyses.
+
+```{r package-setup, echo = FALSE, message = FALSE}
+library(ecosystemom)
+library(FIMS)
+set.seed(1234)
+```
+
+```{r helper-setup, include = FALSE}
+# Display setup for tables
+scroll_table <- function(data) {
+  data |>
+    knitr::kable() |>
+    kableExtra::kable_styling(
+      bootstrap_options = c("striped", "hover", "condensed")
+    ) |>
+    kableExtra::scroll_box(
+      height = "300px",
+      width = "100%"
+    )
+}
+```
+
+# Load EwE Model Outputs
+We begin by identifying and parsing raw comma-separated output matrices exported from a baseline EwE model run of the Northwest Atlantic. The critical target files extracted by {ecosystemom} include:
+
+- basic_estimates.csv
+- biomass_monthly.csv 
+- catch_monthly.csv
+- diet_composition.csv
+- mortality_monthly.csv
+- weight_monthly.csv
+
+# Get functional groups from the EwE model
+```{r load-functional-groups, echo = TRUE, message = FALSE}
+# Locate package internal files
+ewe_nwatlantic_path <- system.file(
+  "extdata", "ewe_ecosim_base_nwatlantic",
+  package = "ecosystemom"
+)
+
+model_years <- 1985:2017
+
+# Load functional groups
+functional_groups <- get_functional_groups(
+  file_path = fs::path(ewe_nwatlantic_path, "basic_estimates.csv")
+)
+
+functional_groups |>
+  scroll_table()
+```
+
+## Load EwE Ecosim model
+```{r load-ecosim, echo = TRUE, message = FALSE}
+# Load and standardize EwE outputs
+data_om <- load_model(
+  directory = ewe_nwatlantic_path,
+  functional_groups = functional_groups,
+  type = "ewe_ecosim",
+  unit = c(
+    "biomass" = "1e^6 mt",
+    "catch" = "1e^6 mt",
+    "landings" = "1e^6 mt",
+    "total_mortality" = "year^-1",
+    "weight" = "NA"
+  )
+)
+
+data_om |>
+  head(n = 10) |>
+  dplyr::mutate(file_name = "./biomass_monthly.csv") |>
+  scroll_table()
+
+data_om |> 
+  dplyr::distinct(type, species) |>
+  scroll_table()
+```
+
+# Extract "Truth" from the OM
+Using `get_truth()`, we synthesize raw EwE time series into a structured tibble. This "truth" represents the true state of the ecosystem against which our estimation model will be tested. For this demonstration, our focal species is "menhaden".
+To isolate a target stock assessment from the broader ecosystem web, we subset a single focal species from the OM. In this vignette, we track Atlantic Menhaden (Brevoortia tyrannus), a key forage fish species. We extract "true" indices and age compositions using `get_truth()`.
+```{r extract-truth, echo = TRUE, message = FALSE}
+# Extract "true" values for menhaden
+truth_om <- get_truth(
+  data = data_om,
+  species_name = "menhaden"
+)
+
+truth_om |>
+  dplyr::select(-truth_om) |>
+  scroll_table()
+
+
+# Extract and unnest annual catch
+biomass_scalar <- 1000000
+catch_index_om <- truth_om |>
+  dplyr::filter(
+    truth_label == "catch",
+    truth_type == "index",
+    truth_time_step == "yearly"
+  ) |> 
+  tidyr::unnest(cols = c(truth_om)) |>
+  dplyr::mutate(
+    truth_value = truth_value * biomass_scalar, 
+    truth_unit = "mt"
+  ) 
+  
+catch_index_om |>
+  scroll_table()
+
+# Extract and unnest annual weight-at-age
+weight_scalar <- 738 / 1000000
+weight_agecomp_om <- truth_om |>
+  dplyr::filter(
+    truth_label == "weight",
+    truth_type == "agecomp",
+    truth_time_step == "yearly"
+  ) |> 
+  tidyr::unnest(cols = c(truth_om)) |>
+  dplyr::mutate(
+    truth_value = truth_value * weight_scalar,
+    truth_unit = "mt"
+  )
+
+# Extract and unnest annual catch-at-age in numbers
+catch_agecomp_om <- truth_om |> 
+  dplyr::filter(
+    truth_label == "catch",
+    truth_type == "agecomp",
+    truth_time_step == "yearly"
+  ) |>
+  tidyr::unnest(cols = c(truth_om)) |>
+  dplyr::mutate(
+    truth_value = truth_value * biomass_scalar,
+    truth_unit = "mt"
+  ) |>
+  dplyr::left_join(
+    weight_agecomp_om |>
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+    by = c("truth_year", "truth_group"),
+    suffix = c("_catch", "_weight")
+  ) |>
+  dplyr::mutate(
+    truth_value = ceiling(truth_value_catch / truth_value_weight), 
+    truth_unit = "numbers"
+  ) |>
+  dplyr::select(-truth_value_catch, -truth_value_weight)
+
+# Extract and unnest annual biomass
+biomass_index_om <- truth_om |>
+  dplyr::filter(
+    truth_label == "biomass",
+    truth_type == "index",
+    truth_time_step == "yearly"
+  ) |> 
+  tidyr::unnest(cols = c(truth_om)) |>
+  dplyr::mutate(
+    truth_value = truth_value * biomass_scalar, 
+    truth_unit = "mt"
+  )
+
+# Extract and unnest annual number-at-age
+number_agecomp_om <- truth_om |>
+  dplyr::filter(
+    truth_label == "numbers",
+    truth_type == "agecomp",
+    truth_time_step == "yearly"
+  ) |> 
+  tidyr::unnest(cols = c(truth_om)) |>
+  dplyr::mutate(
+    truth_value = ceiling(truth_value * biomass_scalar / weight_scalar),
+    truth_unit = "numbers"
+  )
+
+# Extract and unnest annual natural mortality by age
+natural_mortality_agecomp_om <- truth_om |>
+  dplyr::filter(
+    truth_label == "natural_mortality",
+    truth_type == "agecomp",
+    truth_time_step == "yearly"
+  ) |> 
+  tidyr::unnest(cols = c(truth_om))
+
+# Extract and unnest annual fishing mortality by age
+fishing_mortality_agecomp_om <- truth_om |>
+  dplyr::filter(
+    truth_label == "fishing_mortality",
+    truth_type == "agecomp",
+    truth_time_step == "yearly"
+  ) |> 
+  tidyr::unnest(cols = c(truth_om))
+
+# Extract and unnest annual fishing mortality: apical F
+fishing_mortality_index_om <- truth_om |>
+  dplyr::filter(
+    truth_label == "fishing_mortality",
+    truth_type == "index",
+    truth_time_step == "yearly"
+  ) |>
+  tidyr::unnest(cols = c(truth_om))
+
+```
+
+# Generate Sampled Data
+
+To mimic observed fisheries data, sampled observations are generated from the OM “truth” while incorporating observation error.
+
+### Fishery-Dependent Data
+Observed catch data are simulated by applying lognormal observation error to the “true” catch values with a standard deviation of 0.05. Age composition data are generated using a multinomial sampling distribution with an effective sample size of N=100.
+```{r sample-fishery-dependent-data, echo=TRUE, message=FALSE}
+catch_index_sd <- 0.05
+catch_index_sampled <- catch_index_om |> 
+  dplyr::mutate(
+    sampled_value = sample_lognormal(
+      x = truth_value, 
+      sd = catch_index_sd
+    )
+  )
+
+catch_index_sampled |>
+  scroll_table()
+
+catch_agecomp_sample_size <- 100
+catch_agecomp_sampled <- catch_agecomp_om |>
+  dplyr::group_by(truth_year) |> 
+  dplyr::mutate(
+    sampled_value = sample_multinomial(
+      x = truth_value,
+      sample_size = catch_agecomp_sample_size
+    )
+  ) |> 
+  dplyr::ungroup()
+```
+
+### Fishery-Independent Survey Data
+There are two types of fishery-independent survey data considered: Young-of-Year (YOY, age-0) survey and a survey for ages 0-6+. The survey observations for ages 0-6+ are simulated by applying a logistic selectivity and catchability coefficient (q) to the "true" number-at-age matrix from the OM. Observed survey index is simulated by applying lognormal observation error to the “true” values with a standard deviation of 0.1. Age composition data are generated using a multinomial sampling distribution with an effective sample size of N=100.
+
+```{r sample-fishery-independent-data, echo=TRUE, message=FALSE}
+ages <- 0:6
+names(ages) <- functional_groups |>
+  dplyr::filter(species == "menhaden") |>
+  dplyr::pull(group)
+
+# YOY survey for age-0
+yoy_q <- 0.05
+yoy_index_sd <- 0.1
+yoy_selectivity <- c(1, 0, 0, 0, 0, 0, 0)
+names(yoy_selectivity) <- functional_groups |>
+  dplyr::filter(species == "menhaden") |>
+  dplyr::pull(group)
+yoy_index_sampled <- number_agecomp_om |>
+  dplyr::left_join(
+    weight_agecomp_om |>
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+    by = c("truth_year", "truth_group"),
+    suffix = c("_number", "_weight")
+  ) |>
+  dplyr::filter(truth_group == "0") |>
+  dplyr::mutate(
+    truth_value_selected_number = ceiling(truth_value_number * yoy_q),
+    truth_value_selected_biomass = truth_value_selected_number * truth_value_weight,
+    sampled_value = sample_lognormal(
+      x = truth_value_selected_biomass, 
+      sd = yoy_index_sd
+    )
+  ) |>
+  dplyr::select(
+    -truth_value_number, -truth_value_weight, 
+    -truth_value_selected_number, -truth_value_selected_biomass
+  ) |>
+  dplyr::mutate(
+    species_name = "menhaden",
+    truth_label = "biomass",
+    truth_type = "index",
+    truth_time_step = "yearly",
+    truth_unit = "mt"
+  )
+yoy_inflection_point_asc <- -1.0
+yoy_slope_asc <- 10
+yoy_inflection_point_desc <- 0.5
+yoy_slope_desc <- 10
+yoy_selectivity_ascending  <- 1 / (1 + exp(-yoy_slope_asc * (ages - yoy_inflection_point_asc)))
+yoy_selectivity_descending <- 1 / (1 + exp(-yoy_slope_desc * (ages - yoy_inflection_point_desc)))
+yoy_selectivity <- yoy_selectivity_ascending * (1 - yoy_selectivity_descending)
+
+# Survey for ages 0-6+
+# Define explicit survey catchability
+catchability_survey <- 0.05
+# Define logistic selectivity parameters using values from BAM NAD survey
+selectivity_inflection_point <- 3.03
+selectivity_slope <- 2.2
+selectivity_survey <- 1 / (1 + exp(-selectivity_slope * (ages - selectivity_inflection_point)))
+
+names(selectivity_survey) <- functional_groups |>
+  dplyr::filter(species == "menhaden") |>
+  dplyr::pull(group)
+
+# Survey index
+survey_data <- number_agecomp_om |>
+  dplyr::left_join(
+    weight_agecomp_om |>
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+    by = c("truth_year", "truth_group"),
+    suffix = c("_number", "_weight")
+  ) |>
+  dplyr::mutate(
+    selectivity = selectivity_survey[truth_group],
+    truth_value_selected_number = ceiling(truth_value_number * selectivity * catchability_survey),
+    truth_value_selected_biomass = truth_value_selected_number * truth_value_weight
+  )
+
+# Generate observed survey biomass indices with lognormal error (SD = 0.1)
+survey_index_sd <- 0.1
+survey_index_sampled <- survey_data |>
+  dplyr::select(
+    -truth_value_number, -truth_value_weight, -selectivity, -truth_value_selected_number
+  ) |>
+  dplyr::mutate(
+    truth_label = "biomass",
+    truth_unit = "mt"
+  ) |>
+  # Aggregate all ages/groups into one annual value
+  dplyr::group_by(truth_year) |>
+  dplyr::summarise(
+    truth_value = sum(truth_value_selected_biomass),
+    .groups = "drop"
+  ) |>
+  dplyr::mutate(
+    species_name = "menhaden",
+    truth_label = "biomass",
+    truth_type = "index",
+    truth_time_step = "yearly",
+    truth_unit = "mt"
+  ) |>
+  dplyr::mutate(
+    sampled_value = sample_lognormal(
+      x = truth_value, 
+      sd = survey_index_sd
+    )
+  )
+
+# Survey agecomp
+survey_agecomp_sample_size <- 100
+survey_agecomp_sampled <- survey_data |> 
+  dplyr::group_by(truth_year) |> 
+  dplyr::mutate(
+    sampled_value = sample_multinomial(
+      x = truth_value_selected_number,
+      sample_size = survey_agecomp_sample_size
+    )
+  ) |>
+  dplyr::ungroup() |>
+  dplyr::select(
+    -truth_value_number, -truth_value_weight, -selectivity,
+    -truth_value_selected_biomass
+  ) |>
+  dplyr::rename(truth_value = truth_value_selected_number)
+```
+
+
+# Prepare FIMS-compatible data
+The sampled fishery-dependent and fishery-independent observations are next reformatted into a `FIMSFrame` object for use with the FIMS. This includes annual landings, survey biomass indices, age composition observations, and weight-at-age information.
+
+The resulting `FIMSFrame object` provides the standardized data structure required for model configuration and estimation in FIMS.
+
+<details>
+<summary>Click to expand/collapse code</summary>
+```{r prepare-fims-data, echo = TRUE, message = FALSE}
+fishing_fleet_name <- "fishing_fleet"
+survey_fleet_name <- "survey_fleet"
+yoy_fleet_name <- "yoy_fleet"
+
+catch_data <- data.frame(
+  type = "catch",
+  fleet = fishing_fleet_name,
+  age = NA,
+  timing = model_years,
+  observed = catch_index_sampled[["sampled_value"]],
+  unit = "mt",
+  uncertainty = paste(
+    "~ dlnorm(meanlog = log_catch_expected, sdlog =",
+    catch_index_sd,
+    ")"
+  )
+)
+
+index_data <- rbind(
+  data.frame(
+    type = "index",
+    fleet = yoy_fleet_name,
+    age = NA,
+    timing = model_years,
+    observed = yoy_index_sampled[["sampled_value"]],
+    unit = "mt",
+    uncertainty = paste(
+      "~ dlnorm(meanlog = log_index_expected, sdlog =",
+      yoy_index_sd,
+      ")"
+    )
+  ),
+  data.frame(
+    type = "index",
+    fleet = survey_fleet_name,
+    age = NA,
+    timing = model_years,
+    observed = survey_index_sampled[["sampled_value"]],
+    unit = "mt",
+    uncertainty = paste(
+      "~ dlnorm(meanlog = log_index_expected, sdlog =",
+      survey_index_sd,
+      ")"
+    )
+  )
+)
+
+age_data <- rbind(
+  data.frame(
+    type = "age_comp",
+    fleet = fishing_fleet_name,
+    age = unname(ages[catch_agecomp_sampled[["truth_group"]]]),
+    timing = catch_agecomp_sampled[["truth_year"]],
+    observed = catch_agecomp_sampled[["sampled_value"]],
+    unit = "number",
+    uncertainty = paste(
+      "~ dmultinom(prob = agecomp_proportion, size =",
+      catch_agecomp_sample_size,
+      ")"
+    )
+  ),
+  data.frame(
+    type = "age_comp",
+    fleet = survey_fleet_name,
+    age = unname(ages[survey_agecomp_sampled[["truth_group"]]]),
+    timing = survey_agecomp_sampled[["truth_year"]],
+    observed = survey_agecomp_sampled[["sampled_value"]],
+    unit = "number",
+    uncertainty = paste(
+      "~ dmultinom(prob = agecomp_proportion, size =",
+      survey_agecomp_sample_size,
+      ")"
+    )
+  )
+)
+
+weight_at_age <- data.frame(
+  type = "weight_at_age",
+  fleet = fishing_fleet_name,
+  age = unname(ages[weight_agecomp_om[["truth_group"]]]),
+  timing = weight_agecomp_om[["truth_year"]],
+  observed = weight_agecomp_om[["truth_value"]],
+  unit = "mt",
+  uncertainty = NA
+)
+
+weight_year_plus <- weight_at_age |>
+  dplyr::filter(timing == max(model_years)) |>
+  dplyr::mutate(timing = timing + 1)
+
+weight_at_age_data <- dplyr::bind_rows(
+  weight_at_age, 
+  weight_year_plus
+)
+
+data_fims <- rbind(catch_data, index_data, age_data, weight_at_age_data) |>
+  dplyr::mutate(
+    length = NA, 
+    .after = "age"
+  ) |>
+  FIMS::FIMSFrame()
+
+methods::show(data_fims)
+```
+</details>
+
+# Configure the FIMS estimation model
+
+FIMS models are initialized using a set of default configurations and parameter values derived from the input data. In this section, we customize those defaults to better align the FIMS estimation model with the underlying ecosystem OM.
+
+Key modifications include:
+
+- Replacing the default selectivity formulation with a double-logistic selectivity function for both the fishing fleet and survey fleet.
+- Initializing fishing mortality, survey catchability, recruitment, and natural mortality parameters using values derived from the OM “truth”.
+- Specifying maturity-at-age using a logistic maturity curve.
+- Initializing numbers-at-age in the first model year directly from the OM population state.
+
+These steps provide informed starting values that improve consistency between the OM and the estimation model.
+
+<details>
+<summary>Click to expand/collapse code</summary>
+```{r configure-parameters, echo = TRUE, message = FALSE}
+# Create default parameter values from the updated model configuration
+default_parameters <- FIMS::setup_default_parameters(data = data_fims)
+
+# Fishing fleet selectivity
+# Explicit fishing fleet selectivity parameter values from OM
+catch_selectivity_inflection_point_asc <- 1.5
+catch_selectivity_slope_asc <- 2.0
+catch_selectivity_inflection_point_desc <- 4.0
+catch_selectivity_slope_desc <- 1.5
+
+# Alternative option: Estimate selectivity from OM fishing mortality-at-age
+# Mismatch note: the ecosystem model OM scales fishing selectivity (double 
+# logistic) to a maximum of 1, where FIMS does not.
+catch_selectivity <- estimate_true_selectivity(
+  data = fishing_mortality_agecomp_om,
+  ages = ages,
+  functional_form = "double_logistic"
+) |>
+  dplyr::mutate(fleet_name = fishing_fleet_name)
+
+# Define selectivity updates for each fleet
+selectivity_temp <- FIMS::setup_default_Selectivity(
+  data = data_fims,
+  fleet = fishing_fleet_name,
+  module_type = "DoubleLogistic"
+)
+
+selectivity_fishing_fleet <- selectivity_temp |>
+  dplyr::mutate(fleet = fishing_fleet_name) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      fleet = fishing_fleet_name,
+      label = c(
+        "inflection_point_asc",
+        "slope_asc",
+        "inflection_point_desc",
+        "slope_desc"
+      ),
+      value = c(
+        catch_selectivity_inflection_point_asc,
+        catch_selectivity_slope_asc,
+        catch_selectivity_inflection_point_desc,
+        catch_selectivity_slope_desc
+      )
+    ),
+    by = c("fleet", "label")
+  )
+
+selectivity_yoy_fleet <- selectivity_temp |>
+  dplyr::mutate(fleet = yoy_fleet_name) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      fleet = yoy_fleet_name,
+      label = c(
+        "inflection_point_asc",
+        "slope_asc",
+        "inflection_point_desc",
+        "slope_desc"
+      ),
+      estimation_type = "constant",
+      value = c(
+        yoy_inflection_point_asc,
+        yoy_slope_asc,
+        yoy_inflection_point_desc,
+        yoy_slope_desc
+      )
+    ),
+    by = c("fleet", "label")
+  )
+
+selectivity_survey_fleet <- FIMS::setup_default_Selectivity(
+  data = data_fims,
+  fleet = survey_fleet_name,
+  module_type = "Logistic"
+) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      fleet = survey_fleet_name,
+      label = c("inflection_point", "slope"),
+      value = c(
+        selectivity_inflection_point,
+        selectivity_slope
+      )
+    ),
+    by = c("fleet", "label")
+  )
+
+# Estimate maturity parameters
+maturity_parameters <- ecosystemom::estimate_true_maturity(
+  ages = ages,
+  spawning_proportion = c(0, 0.1, 0.5, 0.9, 1, 1, 1),
+  functional_form = "logistic"
+)
+
+# Estimate recruitment log_sd
+recruitment_ewe <- number_agecomp_om |>
+  dplyr::filter(truth_group == "0", truth_year != model_years[1]) |>
+  dplyr::pull(truth_value)
+
+log_sd_proxy <- (sd(log(recruitment_ewe) - mean(log(recruitment_ewe)))) |>
+ log()
+
+# Update parameter values using OM-derived truth information
+updated_parameters <- default_parameters |>
+  dplyr::filter(
+    !(fleet %in% c(
+      fishing_fleet_name,
+      survey_fleet_name,
+      yoy_fleet_name
+    ) & module_name == "Selectivity")
+  ) |>
+  dplyr::bind_rows(
+    selectivity_fishing_fleet,
+    selectivity_survey_fleet,
+    selectivity_yoy_fleet
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      fleet = fishing_fleet_name,
+      label = "log_Fmort",
+      timing = fishing_mortality_index_om[["truth_year"]],
+      value = fishing_mortality_index_om[["truth_value"]] |>
+        log()
+    ), 
+    by = c("fleet", "label", "timing")
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      fleet = survey_fleet_name,
+      label = c("log_q"),
+      estimation_type = "fixed_effects",
+      value = log(catchability_survey)
+    ),
+    by = c("fleet", "label")
+  )  |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      fleet = yoy_fleet_name,
+      label = "log_q",
+      estimation_type = "fixed_effects",
+      value = log(yoy_q)
+    ),
+    by = c("fleet", "label")
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      label = "log_rzero",
+      module_type = "BevertonHolt",
+      value = number_agecomp_om |>
+        dplyr::filter(truth_group == "0") |>
+        dplyr::pull(truth_value) |>
+        mean() |>
+        log()
+    ),
+    by = c("label", "module_type")
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      label = "logit_steep", 
+      module_type = "BevertonHolt",
+      # calculate from vulnerability matrix: v / (v + 1)
+      # v = 411.23 + 1.02 + 191.58 + 2 + 1016.36 + 12.18 + 2 + 403.26 = 2039.63
+      # h = v / (v + 1) = 0.99
+      value = -log(1.0 - 0.99) + log(0.99 - 0.2)
+    ),
+    by = c("label", "module_type")
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      label = "log_sd",
+      module_type = "BevertonHolt",
+      # estimation_type = "constant",
+      value = log_sd_proxy
+    ),
+    by = c("label", "module_type")
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      label = "log_devs",
+      estimation_type = "random_effects",
+      module_type = "BevertonHolt"
+    ),
+    by = c("label", "module_type")
+  ) |>
+  dplyr::filter(!(module_name == "Maturity")) |>
+  dplyr::bind_rows(maturity_parameters) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      label = "log_M", 
+      age = unname(ages[natural_mortality_agecomp_om[["truth_group"]]]),
+      timing = natural_mortality_agecomp_om[["truth_year"]],
+      value = log(natural_mortality_agecomp_om[["truth_value"]])
+    ),
+    by = c("label", "age", "timing")
+  ) |>
+  dplyr::rows_update(
+    y = tibble::tibble(
+      label = "log_init_naa",
+      age = number_agecomp_om |>
+        dplyr::filter(truth_year == model_years[1]) |>
+        dplyr::pull(truth_group) |>
+        (\(x) unname(ages[x]))(),
+      value = number_agecomp_om |>
+        dplyr::filter(truth_year == model_years[1]) |>
+        dplyr::pull(truth_value) |>
+        log()
+    ),
+    by = c("label", "age")
+  )
+
+# Display updated parameter table
+updated_parameters |>
+  scroll_table()
+```
+</details>
+
+# Fit the FIMS Model
+After configuring model structure and parameter values, the FIMS estimation model can be initialized and optimized.
+
+The workflow below:
+
+- Initializes the FIMS model object using the prepared data and parameter values.
+- Runs optimization to estimate model parameters.
+- Extracts estimated quantities for downstream comparison with the OM “truth”.
+- Clears the FIMS interface to reset the modeling environment.
+
+<details>
+<summary>Click to expand/collapse code</summary>
+```{r fit-fims, echo = TRUE, message = TRUE}
+fit_fims <- updated_parameters |>
+  FIMS::initialize_fims(data = data_fims) |>
+  FIMS::fit_fims(
+    optimize = TRUE,
+    control = list(
+      eval.max = 50000,
+      iter.max = 30000,
+      trace = 0
+    )
+  )
+```
+</details>
+
+<details>
+<summary>Click to expand/collapse code</summary>
+```{r update-estimates, echo = TRUE, message = FALSE}
+# Extract estimates
+year_lookup <- data.frame(
+  year_i = 1:(length(model_years) + 1),
+  year = c(model_years, get_end_year(data_fims) + 1)
+)
+
+estimates_fims <- FIMS::get_estimates(fit_fims) |>
+  dplyr::left_join(
+    year_lookup,
+    by = c("year_i")
+  ) |>
+  dplyr::mutate(
+    uncertainty_label = "se",
+    estimate = estimated,
+    age = age_i
+  )
+
+asc_ip  <- estimates_fims |>
+  dplyr::filter(module_id == 1, label == "inflection_point_asc") |> 
+  dplyr::pull(estimated)
+asc_s   <- estimates_fims |>
+  dplyr::filter(module_id == 1, label == "slope_asc") |>
+  dplyr::pull(estimated)
+desc_ip <- estimates_fims |>
+  dplyr::filter(module_id == 1, label == "inflection_point_desc") |> 
+  dplyr::pull(estimated)
+desc_s  <- estimates_fims |>
+  dplyr::filter(module_id == 1, label == "slope_desc") |> 
+  dplyr::pull(estimated)
+
+# Compute true peak max across ages
+s_asc     <- 1 / (1 + exp(-asc_s * (ages - asc_ip)))
+s_desc    <- 1 / (1 + exp(-desc_s * (ages - desc_ip)))
+s_max_estimated <- max(s_asc * (1 - s_desc))
+
+estimates_fims <- estimates_fims |>
+  # Multiply estimated fishing mortality by max selectivity
+  dplyr::mutate(
+    estimate = dplyr::if_else(
+      label == "log_Fmort" & module_id == 1,
+      log(exp(estimate) * s_max_estimated),
+      estimate
+    )
+  )
+FIMS::clear()
+```
+</details>
+
+```{r extract-estimates, echo = TRUE, message = FALSE}
+estimates_fims |>
+  dplyr::filter(estimation_type == "fixed_effects" | estimation_type == "random_effects") |>
+  dplyr::select(module_name, label, fleet, year_i, age_i, input, estimated, uncertainty) |>
+  print(n = Inf)
+```
+
+# Compare OM and FIMS 
+
+The fitted FIMS model can now be compared against the ecosystem OM “truth” used to generate the simulated observations. 
+
+```{r biomass-comparison, echo = FALSE, message = FALSE}
+shared_scales <- list(
+  ggplot2::scale_linetype_manual(
+    name = "Model",
+    labels = c("EM", "OM"),
+    values = c("solid", "dashed") 
+  ),
+  ggplot2::scale_color_manual(
+    name = "Model",
+    labels = c("EM", "OM"),
+    values = c(
+      "EM" = "black",
+      "OM" = "#003087"
+    )
+  )
+)
+
+biomass_om <- biomass_index_om |>
+  dplyr::select(year = truth_year, OM = truth_value)
+
+biomass_em <- stockplotr::filter_data(
+  estimates_fims |>
+    dplyr::filter(
+      label == "biomass",
+      year %in% model_years
+    ),
+  label_name = "biomass",
+  geom = "line"
+) |>
+  dplyr::mutate(group_var = "EM")
+
+stockplotr::plot_timeseries(
+  biomass_em,
+  x = "year",
+  y = "estimate",
+  ylab = "Biomass (metric ton)"
+) +
+  stockplotr::theme_noaa() +
+  ggplot2::geom_line(
+    data = biomass_om, 
+    ggplot2::aes(x = year, y = OM, color = "OM"),
+    linetype = "dashed"
+  ) +
+  shared_scales
+```
+
+```{r recruitment-comparison, echo = FALSE, message = FALSE}
+recruitment_om <- number_agecomp_om |>
+  dplyr::filter(truth_group == "0") |>
+  dplyr::select(year = truth_year, OM = truth_value)
+
+recruitment_em <- stockplotr::filter_data(
+  estimates_fims |>
+    dplyr::filter(
+      label == "expected_recruitment",
+      year %in% model_years
+    ),
+  label_name = "expected_recruitment",
+  geom = "line"
+) |>
+  dplyr::mutate(group_var = "EM")
+
+stockplotr::plot_timeseries(
+  recruitment_em,
+  x = "year",
+  y = "estimate",
+  ylab = "Recruits (number)"
+) +
+  stockplotr::theme_noaa() +
+  ggplot2::geom_line(
+    data = recruitment_om,
+    ggplot2::aes(x = year, y = OM, color = "OM"),
+    linetype = "dashed"
+  ) +
+  shared_scales
+
+```
+
+```{r fishing-mortality-comparison, echo = FALSE, message = FALSE}
+f_om <- fishing_mortality_index_om |>
+  dplyr::select(year = truth_year, OM = truth_value) |>
+  dplyr::mutate(OM = log(OM))
+
+f_em <- stockplotr::filter_data(
+  estimates_fims |> 
+    dplyr::filter(module_id == 1),
+  label_name = "log_Fmort$",
+  geom = "line"
+) |>
+  dplyr::mutate(group_var = "EM")
+
+stockplotr::plot_timeseries(
+  f_em,
+  x = "year",
+  y = "estimate",
+  ylab = "Natural log of Fishing Mortality"
+) +
+  stockplotr::theme_noaa() +
+  ggplot2::geom_line(
+    data = f_om, 
+    ggplot2::aes(x = year, y = OM, color = "OM"),
+    linetype = "dashed"
+  ) +
+  ggplot2::scale_linetype_manual(
+    name = "Model",
+    labels = c("EM", "OM"),
+    values = c("solid", "dashed")
+  ) +
+  ggplot2::scale_color_manual(
+    name = "Model",
+    labels = c("OM", "EM"),
+    values = c(
+      "OM" = "#003087",
+      "EM" = "black"
+    )
+  )
+```
+
+```{r index-comparison, echo = FALSE, message = FALSE}
+shared_scales <- list(
+  stockplotr::theme_noaa(),
+  ggplot2::scale_color_manual(
+    labels = c("Estimated", "Observed"),
+    values = c("black", "#003087")
+  ),
+  ggplot2::guides(
+    color = ggplot2::guide_legend(
+      override.aes = list( 
+        shape = c(NA, 16),          # No dot for estimate, circle (16) for Observed
+        linetype = c("solid", "blank") # Solid line for estimate, no line for Observed
+      )
+    )
+  )
+)
+
+# Catch
+catch_data <- stockplotr::filter_data(
+  estimates_fims |> dplyr::filter(module_id == 1),
+  label_name = "^catch_expected$",
+  geom = "line"
+) |>
+dplyr::mutate(group_var = "Estimated")
+
+stockplotr::plot_timeseries(
+  catch_data,
+  x = "year",
+  y = "estimate",
+  ylab = "Landings (metric tons)"
+) +
+  ggplot2::geom_point(
+    data = catch_data,
+    ggplot2::aes(x = year, y = estimate, color = "Estimated")
+  ) +
+  ggplot2::geom_point(
+    data = catch_data,
+    ggplot2::aes(x = year, y = observed, color = "Observed")
+  ) +
+  shared_scales
+
+# Survey
+survey_index_data <- stockplotr::filter_data(
+  estimates_fims |> dplyr::filter(module_id == 3),
+  label_name = "^index_expected$",
+  geom = "line"
+) |>
+dplyr::mutate(group_var = "Estimated")
+
+stockplotr::plot_timeseries(
+  survey_index_data,
+  x = "year",
+  y = "estimate",
+  ylab = "Relative Index of Biomass"
+) +
+  ggplot2::geom_point(
+    data = survey_index_data,
+    ggplot2::aes(x = year, y = estimate, color = "Estimated")
+  ) +
+  ggplot2::geom_point(
+    data = survey_index_data,
+    ggplot2::aes(x = year, y = observed, color = "Observed")
+  ) +
+  shared_scales
+
+survey_index_data <- stockplotr::filter_data(
+  estimates_fims |> dplyr::filter(module_id == 2),
+  label_name = "^index_expected$",
+  geom = "line"
+) |>
+dplyr::mutate(group_var = "Estimated")
+
+stockplotr::plot_timeseries(
+  survey_index_data,
+  x = "year",
+  y = "estimate",
+  ylab = "Young-of-Year Index"
+) +
+  ggplot2::geom_point(
+    data = survey_index_data,
+    ggplot2::aes(x = year, y = estimate, color = "Estimated")
+  ) +
+  ggplot2::geom_point(
+    data = survey_index_data,
+    ggplot2::aes(x = year, y = observed, color = "Observed")
+  ) +
+  shared_scales
+```
+
+```{r agecomp-comparison, echo = FALSE, message = FALSE}
+# Survey
+survey_agecomp_data <- stockplotr::filter_data(
+  estimates_fims |> dplyr::filter(module_id == 3),
+  label_name = "^agecomp_expected$",
+  geom = "point"
+)
+
+stockplotr::plot_aa(
+  survey_agecomp_data,
+  z = "estimate",
+  ylab = "Survey Number-at-Age (Estimated)"
+) +
+  stockplotr::theme_noaa()
+
+stockplotr::plot_aa(
+  survey_agecomp_data,
+  z = "observed",
+  ylab = "Survey Number-at-Age (Observed)"
+) +
+  stockplotr::theme_noaa()
+
+# Catch
+catch_agecomp_data <- stockplotr::filter_data(
+  estimates_fims |> dplyr::filter(module_id == 1),
+  label_name = "^agecomp_expected$",
+  geom = "point"
+)
+
+stockplotr::plot_aa(
+  catch_agecomp_data,
+  z = "estimate",
+  ylab = "Catch Number-at-Age (Estimated)"
+) +
+  stockplotr::theme_noaa()
+
+stockplotr::plot_aa(
+  catch_agecomp_data,
+  z = "observed",
+  ylab = "Catch Number-at-Age (Observed)"
+) +
+  stockplotr::theme_noaa()
+```
+
+# Create DSEM inputs
+In addition to supporting fisheries stock assessment workflows, {ecosystemom} can also be used to generate candidate inputs for Dynamic Structural Equation Models (DSEMs). These models provide a flexible framework for evaluating ecosystem linkages, environmental drivers, and trophic interactions through time.
+
+The `create_dsem_inputs()` function:
+
+- extracts and reshapes ecosystem time-series data,
+- generates candidate SEM pathways based on trophic interactions, and
+- filters trophic links using a user-defined diet composition threshold.
+
+In this example, trophic links are derived from the static Ecopath diet composition matrix, where diet_composition_threshold controls the minimum diet proportion retained in the candidate SEM structure.
+```{r dsem, echo = TRUE, message = FALSE}
+# Load diet composition data
+data_diet_composition <- load_diet_composition(
+  file.path(ewe_nwatlantic_path, "diet_composition.csv")
+)
+
+data <- tibble::tibble(
+  data_om = list(data_om),
+  data_diet_composition = list(data_diet_composition)
+)
+
+sem <- create_dsem_inputs(
+  data = data,
+  focal_functional_group = c("menhaden 0"),
+  diet_composition_threshold = 0.05
+)
+
+sem[["sem_tibble"]][[1]] |>
+  scroll_table()
+
+sem[["sem_lines"]]
+
+# Fit Dynamic Structural Equation Model (DSEM)
+fit_dsem <- dsem::dsem(
+  sem = sem[["sem_lines"]],
+  tsdata = sem[["data_time_series_sem"]][[1]],
+  control = dsem::dsem_control(quiet = TRUE)
+)
+
+# Display model summary
+fit_dsem |>
+  summary() |>
+  dplyr::select(path, Estimate, Std_Error, p_value) |>
+  knitr::kable(digits = 3)
+```
+
+# Next steps
+
+Future development of {ecosystemom} will focus on expanding helper functions for initializing and configuring FIMS models directly from ecosystem operating model outputs, and better diagnosing structural matches and mismatches between modeling frameworks. Additional planned extensions include support for a broader suite of ecosystem operating models beyond Ecosim, such as Ecospace, individual-based implementations of Ecospace, and Atlantis, enabling more flexible and general ecosystem-to-assessment simulation workflows across modeling platforms.
