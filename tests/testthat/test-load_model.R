@@ -218,4 +218,3 @@ test_that("load_model_ewe_ecosim() warns when negative natural mortality is dete
     regexp = r"(Detected negative natural mortality in year\(s\):|We used 0 for those negative natural mortality values for now|Please check the Ecosim fishing mortality input)"
   )
 })
-
