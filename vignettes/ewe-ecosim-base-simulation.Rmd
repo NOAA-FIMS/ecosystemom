@@ -98,7 +98,7 @@ data_om |>
   dplyr::mutate(file_name = "./biomass_monthly.csv") |>
   scroll_table()
 
-data_om |> 
+data_om |>
   dplyr::distinct(type, species) |>
   scroll_table()
 ```
@@ -125,13 +125,13 @@ catch_index_om <- truth_om |>
     truth_label == "catch",
     truth_type == "index",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
-    truth_value = truth_value * biomass_scalar, 
+    truth_value = truth_value * biomass_scalar,
     truth_unit = "mt"
-  ) 
-  
+  )
+
 catch_index_om |>
   scroll_table()
 
@@ -142,7 +142,7 @@ weight_agecomp_om <- truth_om |>
     truth_label == "weight",
     truth_type == "agecomp",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
     truth_value = truth_value * weight_scalar,
@@ -150,7 +150,7 @@ weight_agecomp_om <- truth_om |>
   )
 
 # Extract and unnest annual catch-at-age in numbers
-catch_agecomp_om <- truth_om |> 
+catch_agecomp_om <- truth_om |>
   dplyr::filter(
     truth_label == "catch",
     truth_type == "agecomp",
@@ -163,12 +163,12 @@ catch_agecomp_om <- truth_om |>
   ) |>
   dplyr::left_join(
     weight_agecomp_om |>
-      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit),
     by = c("truth_year", "truth_group"),
     suffix = c("_catch", "_weight")
   ) |>
   dplyr::mutate(
-    truth_value = ceiling(truth_value_catch / truth_value_weight), 
+    truth_value = ceiling(truth_value_catch / truth_value_weight),
     truth_unit = "numbers"
   ) |>
   dplyr::select(-truth_value_catch, -truth_value_weight)
@@ -179,10 +179,10 @@ biomass_index_om <- truth_om |>
     truth_label == "biomass",
     truth_type == "index",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
-    truth_value = truth_value * biomass_scalar, 
+    truth_value = truth_value * biomass_scalar,
     truth_unit = "mt"
   )
 
@@ -192,7 +192,7 @@ number_agecomp_om <- truth_om |>
     truth_label == "numbers",
     truth_type == "agecomp",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
     truth_value = ceiling(truth_value * biomass_scalar / weight_scalar),
@@ -205,7 +205,7 @@ natural_mortality_agecomp_om <- truth_om |>
     truth_label == "natural_mortality",
     truth_type == "agecomp",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om))
 
 # Extract and unnest annual fishing mortality by age
@@ -214,7 +214,7 @@ fishing_mortality_agecomp_om <- truth_om |>
     truth_label == "fishing_mortality",
     truth_type == "agecomp",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om))
 
 # Extract and unnest annual fishing mortality: apical F
@@ -225,7 +225,6 @@ fishing_mortality_index_om <- truth_om |>
     truth_time_step == "yearly"
   ) |>
   tidyr::unnest(cols = c(truth_om))
-
 ```
 
 # Generate Sampled Data
@@ -236,10 +235,10 @@ To mimic observed fisheries data, sampled observations are generated from the OM
 Observed catch data are simulated by applying lognormal observation error to the “true” catch values with a standard deviation of 0.05. Age composition data are generated using a multinomial sampling distribution with an effective sample size of N=100.
 ```{r sample-fishery-dependent-data, echo=TRUE, message=FALSE}
 catch_index_sd <- 0.05
-catch_index_sampled <- catch_index_om |> 
+catch_index_sampled <- catch_index_om |>
   dplyr::mutate(
     sampled_value = sample_lognormal(
-      x = truth_value, 
+      x = truth_value,
       sd = catch_index_sd
     )
   )
@@ -249,13 +248,13 @@ catch_index_sampled |>
 
 catch_agecomp_sample_size <- 100
 catch_agecomp_sampled <- catch_agecomp_om |>
-  dplyr::group_by(truth_year) |> 
+  dplyr::group_by(truth_year) |>
   dplyr::mutate(
     sampled_value = sample_multinomial(
       x = truth_value,
       sample_size = catch_agecomp_sample_size
     )
-  ) |> 
+  ) |>
   dplyr::ungroup()
 ```
 
@@ -278,7 +277,7 @@ names(yoy_selectivity) <- functional_groups |>
 yoy_index_sampled <- number_agecomp_om |>
   dplyr::left_join(
     weight_agecomp_om |>
-      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit),
     by = c("truth_year", "truth_group"),
     suffix = c("_number", "_weight")
   ) |>
@@ -287,12 +286,12 @@ yoy_index_sampled <- number_agecomp_om |>
     truth_value_selected_number = ceiling(truth_value_number * yoy_q),
     truth_value_selected_biomass = truth_value_selected_number * truth_value_weight,
     sampled_value = sample_lognormal(
-      x = truth_value_selected_biomass, 
+      x = truth_value_selected_biomass,
       sd = yoy_index_sd
     )
   ) |>
   dplyr::select(
-    -truth_value_number, -truth_value_weight, 
+    -truth_value_number, -truth_value_weight,
     -truth_value_selected_number, -truth_value_selected_biomass
   ) |>
   dplyr::mutate(
@@ -306,7 +305,7 @@ yoy_inflection_point_asc <- -1.0
 yoy_slope_asc <- 10
 yoy_inflection_point_desc <- 0.5
 yoy_slope_desc <- 10
-yoy_selectivity_ascending  <- 1 / (1 + exp(-yoy_slope_asc * (ages - yoy_inflection_point_asc)))
+yoy_selectivity_ascending <- 1 / (1 + exp(-yoy_slope_asc * (ages - yoy_inflection_point_asc)))
 yoy_selectivity_descending <- 1 / (1 + exp(-yoy_slope_desc * (ages - yoy_inflection_point_desc)))
 yoy_selectivity <- yoy_selectivity_ascending * (1 - yoy_selectivity_descending)
 
@@ -326,7 +325,7 @@ names(selectivity_survey) <- functional_groups |>
 survey_data <- number_agecomp_om |>
   dplyr::left_join(
     weight_agecomp_om |>
-      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit),
     by = c("truth_year", "truth_group"),
     suffix = c("_number", "_weight")
   ) |>
@@ -361,15 +360,15 @@ survey_index_sampled <- survey_data |>
   ) |>
   dplyr::mutate(
     sampled_value = sample_lognormal(
-      x = truth_value, 
+      x = truth_value,
       sd = survey_index_sd
     )
   )
 
 # Survey agecomp
 survey_agecomp_sample_size <- 100
-survey_agecomp_sampled <- survey_data |> 
-  dplyr::group_by(truth_year) |> 
+survey_agecomp_sampled <- survey_data |>
+  dplyr::group_by(truth_year) |>
   dplyr::mutate(
     sampled_value = sample_multinomial(
       x = truth_value_selected_number,
@@ -484,13 +483,13 @@ weight_year_plus <- weight_at_age |>
   dplyr::mutate(timing = timing + 1)
 
 weight_at_age_data <- dplyr::bind_rows(
-  weight_at_age, 
+  weight_at_age,
   weight_year_plus
 )
 
 data_fims <- rbind(catch_data, index_data, age_data, weight_at_age_data) |>
   dplyr::mutate(
-    length = NA, 
+    length = NA,
     .after = "age"
   ) |>
   FIMS::FIMSFrame()
@@ -526,7 +525,7 @@ catch_selectivity_inflection_point_desc <- 4.0
 catch_selectivity_slope_desc <- 1.5
 
 # Alternative option: Estimate selectivity from OM fishing mortality-at-age
-# Mismatch note: the ecosystem model OM scales fishing selectivity (double 
+# Mismatch note: the ecosystem model OM scales fishing selectivity (double
 # logistic) to a maximum of 1, where FIMS does not.
 catch_selectivity <- estimate_true_selectivity(
   data = fishing_mortality_agecomp_om,
@@ -615,7 +614,7 @@ recruitment_ewe <- number_agecomp_om |>
   dplyr::pull(truth_value)
 
 log_sd_proxy <- (sd(log(recruitment_ewe) - mean(log(recruitment_ewe)))) |>
- log()
+  log()
 
 # Update parameter values using OM-derived truth information
 updated_parameters <- default_parameters |>
@@ -638,7 +637,7 @@ updated_parameters <- default_parameters |>
       timing = fishing_mortality_index_om[["truth_year"]],
       value = fishing_mortality_index_om[["truth_value"]] |>
         log()
-    ), 
+    ),
     by = c("fleet", "label", "timing")
   ) |>
   dplyr::rows_update(
@@ -649,7 +648,7 @@ updated_parameters <- default_parameters |>
       value = log(catchability_survey)
     ),
     by = c("fleet", "label")
-  )  |>
+  ) |>
   dplyr::rows_update(
     y = tibble::tibble(
       fleet = yoy_fleet_name,
@@ -673,7 +672,7 @@ updated_parameters <- default_parameters |>
   ) |>
   dplyr::rows_update(
     y = tibble::tibble(
-      label = "logit_steep", 
+      label = "logit_steep",
       module_type = "BevertonHolt",
       # calculate from vulnerability matrix: v / (v + 1)
       # v = 411.23 + 1.02 + 191.58 + 2 + 1016.36 + 12.18 + 2 + 403.26 = 2039.63
@@ -703,7 +702,7 @@ updated_parameters <- default_parameters |>
   dplyr::bind_rows(maturity_parameters) |>
   dplyr::rows_update(
     y = tibble::tibble(
-      label = "log_M", 
+      label = "log_M",
       age = unname(ages[natural_mortality_agecomp_om[["truth_group"]]]),
       timing = natural_mortality_agecomp_om[["truth_year"]],
       value = log(natural_mortality_agecomp_om[["truth_value"]])
@@ -777,22 +776,22 @@ estimates_fims <- FIMS::get_estimates(fit_fims) |>
     age = age_i
   )
 
-asc_ip  <- estimates_fims |>
-  dplyr::filter(module_id == 1, label == "inflection_point_asc") |> 
+asc_ip <- estimates_fims |>
+  dplyr::filter(module_id == 1, label == "inflection_point_asc") |>
   dplyr::pull(estimated)
-asc_s   <- estimates_fims |>
+asc_s <- estimates_fims |>
   dplyr::filter(module_id == 1, label == "slope_asc") |>
   dplyr::pull(estimated)
 desc_ip <- estimates_fims |>
-  dplyr::filter(module_id == 1, label == "inflection_point_desc") |> 
+  dplyr::filter(module_id == 1, label == "inflection_point_desc") |>
   dplyr::pull(estimated)
-desc_s  <- estimates_fims |>
-  dplyr::filter(module_id == 1, label == "slope_desc") |> 
+desc_s <- estimates_fims |>
+  dplyr::filter(module_id == 1, label == "slope_desc") |>
   dplyr::pull(estimated)
 
 # Compute true peak max across ages
-s_asc     <- 1 / (1 + exp(-asc_s * (ages - asc_ip)))
-s_desc    <- 1 / (1 + exp(-desc_s * (ages - desc_ip)))
+s_asc <- 1 / (1 + exp(-asc_s * (ages - asc_ip)))
+s_desc <- 1 / (1 + exp(-desc_s * (ages - desc_ip)))
 s_max_estimated <- max(s_asc * (1 - s_desc))
 
 estimates_fims <- estimates_fims |>
@@ -824,7 +823,7 @@ shared_scales <- list(
   ggplot2::scale_linetype_manual(
     name = "Model",
     labels = c("EM", "OM"),
-    values = c("solid", "dashed") 
+    values = c("solid", "dashed")
   ),
   ggplot2::scale_color_manual(
     name = "Model",
@@ -858,7 +857,7 @@ stockplotr::plot_timeseries(
 ) +
   stockplotr::theme_noaa() +
   ggplot2::geom_line(
-    data = biomass_om, 
+    data = biomass_om,
     ggplot2::aes(x = year, y = OM, color = "OM"),
     linetype = "dashed"
   ) +
@@ -894,7 +893,6 @@ stockplotr::plot_timeseries(
     linetype = "dashed"
   ) +
   shared_scales
-
 ```
 
 ```{r fishing-mortality-comparison, echo = FALSE, message = FALSE}
@@ -903,7 +901,7 @@ f_om <- fishing_mortality_index_om |>
   dplyr::mutate(OM = log(OM))
 
 f_em <- stockplotr::filter_data(
-  estimates_fims |> 
+  estimates_fims |>
     dplyr::filter(module_id == 1),
   label_name = "log_Fmort$",
   geom = "line"
@@ -918,7 +916,7 @@ stockplotr::plot_timeseries(
 ) +
   stockplotr::theme_noaa() +
   ggplot2::geom_line(
-    data = f_om, 
+    data = f_om,
     ggplot2::aes(x = year, y = OM, color = "OM"),
     linetype = "dashed"
   ) +
@@ -946,8 +944,8 @@ shared_scales <- list(
   ),
   ggplot2::guides(
     color = ggplot2::guide_legend(
-      override.aes = list( 
-        shape = c(NA, 16),          # No dot for estimate, circle (16) for Observed
+      override.aes = list(
+        shape = c(NA, 16), # No dot for estimate, circle (16) for Observed
         linetype = c("solid", "blank") # Solid line for estimate, no line for Observed
       )
     )
@@ -960,7 +958,7 @@ catch_data <- stockplotr::filter_data(
   label_name = "^catch_expected$",
   geom = "line"
 ) |>
-dplyr::mutate(group_var = "Estimated")
+  dplyr::mutate(group_var = "Estimated")
 
 stockplotr::plot_timeseries(
   catch_data,
@@ -984,7 +982,7 @@ survey_index_data <- stockplotr::filter_data(
   label_name = "^index_expected$",
   geom = "line"
 ) |>
-dplyr::mutate(group_var = "Estimated")
+  dplyr::mutate(group_var = "Estimated")
 
 stockplotr::plot_timeseries(
   survey_index_data,
@@ -1007,7 +1005,7 @@ survey_index_data <- stockplotr::filter_data(
   label_name = "^index_expected$",
   geom = "line"
 ) |>
-dplyr::mutate(group_var = "Estimated")
+  dplyr::mutate(group_var = "Estimated")
 
 stockplotr::plot_timeseries(
   survey_index_data,
