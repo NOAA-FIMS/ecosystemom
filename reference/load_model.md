@@ -33,4 +33,4 @@ load_model(
 ## Value
 
 A tibble is returned that matches the structure of
-[ewe_ecosim_base_nwatlantic](ewe_ecosim_base_nwatlantic.md).
+[ewe_ecosim_base_nwatlantic](https://noaa-fims.github.io/ecosystemom/reference/ewe_ecosim_base_nwatlantic.md).

@@ -2,9 +2,10 @@
 
 The truth from an ecosystem model is often in different units than what
 is needed to sample from. This function takes output data from
-[`load_model()`](load_model.md) and calculates additional true
-information such as converting monthly age-composition information into
-annual data. No sampling is performed just mathematical operations.
+[`load_model()`](https://noaa-fims.github.io/ecosystemom/reference/load_model.md)
+and calculates additional true information such as converting monthly
+age-composition information into annual data. No sampling is performed
+just mathematical operations.
 
 ## Usage
 
@@ -17,7 +18,8 @@ get_truth(data, species_name)
 - data:
 
   A tibble containing ecosystem model (e.g., Ecopath with Ecosim)
-  outputs from [`load_model()`](load_model.md).
+  outputs from
+  [`load_model()`](https://noaa-fims.github.io/ecosystemom/reference/load_model.md).
 
 - species_name:
 

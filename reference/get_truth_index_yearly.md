@@ -14,7 +14,8 @@ get_truth_index_yearly(truth_index_monthly)
 - truth_index_monthly:
 
   A tibble containing the monthly index data for a species. Returned
-  from [`get_truth_index_monthly()`](get_truth_index_monthly.md).
+  from
+  [`get_truth_index_monthly()`](https://noaa-fims.github.io/ecosystemom/reference/get_truth_index_monthly.md).
 
 ## Value
 

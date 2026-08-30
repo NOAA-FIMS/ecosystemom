@@ -14,7 +14,7 @@ get_truth_monthly(data, species_name, truth_type)
 - data:
 
   A tibble containing ecosystem model outputs from
-  [`load_model()`](load_model.md).
+  [`load_model()`](https://noaa-fims.github.io/ecosystemom/reference/load_model.md).
 
 - species_name:
 

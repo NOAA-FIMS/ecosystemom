@@ -1,5 +1,9 @@
 pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2026-08-04T15:32Z
+articles:
+  ewe-ecosim-base-simulation: ewe-ecosim-base-simulation.html
+last_built: 2026-08-30T17:10Z
+urls:
+  reference: https://noaa-fims.github.io/ecosystemom/reference
+  article: https://noaa-fims.github.io/ecosystemom/articles

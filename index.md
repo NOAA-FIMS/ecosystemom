@@ -38,20 +38,21 @@ or contact Bai Li at <bai.li@noaa.gov>
 
 The package includes functions below:
 
-- [`load_model()`](reference/load_model.md) — import and standardize
-  output from ecosystem operating models (OM). For example, this
-  function can be used to read and standardize Ecopath with Ecosim (EwE)
-  Ecosim outputs for downstream analyses within {ecosystemom}.
-- [`get_truth()`](reference/get_truth.md) — extract “true” population
-  quantities from the OM, including annual or monthly biomass
-  trajectories and biomass-at-age.
+- [`load_model()`](https://noaa-fims.github.io/ecosystemom/reference/load_model.md)
+  — import and standardize output from ecosystem operating models (OM).
+  For example, this function can be used to read and standardize Ecopath
+  with Ecosim (EwE) Ecosim outputs for downstream analyses within
+  {ecosystemom}.
+- [`get_truth()`](https://noaa-fims.github.io/ecosystemom/reference/get_truth.md)
+  — extract “true” population quantities from the OM, including annual
+  or monthly biomass trajectories and biomass-at-age.
 - `sample_*()` — generate sampled observations from OM outputs that
   incorporate sampling and observation error for use in estimation
   models such as the Fisheries Integrated Modeling System (FIMS).
-- [`create_dsem_inputs()`](reference/create_dsem_inputs.md) — prepare
-  environmental covariates or diet composition data from the OM to
-  support candidate model specifications for dynamic structural equation
-  models (DSEMs) and related ecosystem-informed analyses.
+- [`create_dsem_inputs()`](https://noaa-fims.github.io/ecosystemom/reference/create_dsem_inputs.md)
+  — prepare environmental covariates or diet composition data from the
+  OM to support candidate model specifications for dynamic structural
+  equation models (DSEMs) and related ecosystem-informed analyses.
 
 ## Pkgdown site
 

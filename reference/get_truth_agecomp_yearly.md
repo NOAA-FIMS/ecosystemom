@@ -15,7 +15,7 @@ get_truth_agecomp_yearly(truth_agecomp_monthly)
 
   A tibble containing the monthly age composition data for a species.
   Returned from
-  [`get_truth_agecomp_monthly()`](get_truth_agecomp_monthly.md).
+  [`get_truth_agecomp_monthly()`](https://noaa-fims.github.io/ecosystemom/reference/get_truth_agecomp_monthly.md).
 
 ## Value
 

@@ -56,14 +56,14 @@ suffixes such as `"juv"` and `"adult"`. However, functional group names
 in real EwE models are not always consistent. If your model uses names
 that cannot be parsed correctly, you can create the functional group
 tibble yourself and pass that tibble to functions such as
-[`load_csv_ewe()`](load_csv_ewe.md).
+[`load_csv_ewe()`](https://noaa-fims.github.io/ecosystemom/reference/load_csv_ewe.md).
 
 A custom functional group tibble must contain one row for each
 functional group in the model and the same four columns returned by this
 function. See the return section for more details on the columns. To
 create the last column, `functional_group_snake_case`, consider calling
-[`split_functional_groups()`](split_functional_groups.md) on the
-original names and then manually edit `species` and `group` where
+[`split_functional_groups()`](https://noaa-fims.github.io/ecosystemom/reference/split_functional_groups.md)
+on the original names and then manually edit `species` and `group` where
 needed.
 
 The custom tibble should be checked before it is used in model-loading
@@ -74,8 +74,9 @@ equals the number of living and non-living groups in the EwE output
 files you are about to load. If those columns are misaligned, downstream
 data can be read into the wrong functional group. When in doubt, start
 with the output of `get_functional_groups()` or
-[`split_functional_groups()`](split_functional_groups.md), inspect the
-result, and then replace only the rows that were parsed incorrectly.
+[`split_functional_groups()`](https://noaa-fims.github.io/ecosystemom/reference/split_functional_groups.md),
+inspect the result, and then replace only the rows that were parsed
+incorrectly.
 
 ## Examples
 
