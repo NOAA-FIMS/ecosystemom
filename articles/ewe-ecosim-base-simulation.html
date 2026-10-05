@@ -849,7 +849,7 @@ menhaden_6_plus
 </div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">data_om</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">data_om</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">type</span>, <span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">scroll_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -1755,13 +1755,13 @@ yearly
 <span>    <span class="va">truth_label</span> <span class="op">==</span> <span class="st">"catch"</span>,</span>
 <span>    <span class="va">truth_type</span> <span class="op">==</span> <span class="st">"index"</span>,</span>
 <span>    <span class="va">truth_time_step</span> <span class="op">==</span> <span class="st">"yearly"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">truth_om</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    truth_value <span class="op">=</span> <span class="va">truth_value</span> <span class="op">*</span> <span class="va">biomass_scalar</span>, </span>
+<span>    truth_value <span class="op">=</span> <span class="va">truth_value</span> <span class="op">*</span> <span class="va">biomass_scalar</span>,</span>
 <span>    truth_unit <span class="op">=</span> <span class="st">"mt"</span></span>
-<span>  <span class="op">)</span> </span>
-<span>  </span>
+<span>  <span class="op">)</span></span>
+<span></span>
 <span><span class="va">catch_index_om</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">scroll_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -2561,7 +2561,7 @@ mt
 <span>    <span class="va">truth_label</span> <span class="op">==</span> <span class="st">"weight"</span>,</span>
 <span>    <span class="va">truth_type</span> <span class="op">==</span> <span class="st">"agecomp"</span>,</span>
 <span>    <span class="va">truth_time_step</span> <span class="op">==</span> <span class="st">"yearly"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">truth_om</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    truth_value <span class="op">=</span> <span class="va">truth_value</span> <span class="op">*</span> <span class="va">weight_scalar</span>,</span>
@@ -2569,7 +2569,7 @@ mt
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract and unnest annual catch-at-age in numbers</span></span>
-<span><span class="va">catch_agecomp_om</span> <span class="op">&lt;-</span> <span class="va">truth_om</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">catch_agecomp_om</span> <span class="op">&lt;-</span> <span class="va">truth_om</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">truth_label</span> <span class="op">==</span> <span class="st">"catch"</span>,</span>
 <span>    <span class="va">truth_type</span> <span class="op">==</span> <span class="st">"agecomp"</span>,</span>
@@ -2582,12 +2582,12 @@ mt
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
 <span>    <span class="va">weight_agecomp_om</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">species_name</span>, <span class="op">-</span><span class="va">truth_label</span>, <span class="op">-</span><span class="va">truth_type</span>, <span class="op">-</span><span class="va">truth_time_step</span>, <span class="op">-</span><span class="va">truth_unit</span><span class="op">)</span>, </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">species_name</span>, <span class="op">-</span><span class="va">truth_label</span>, <span class="op">-</span><span class="va">truth_type</span>, <span class="op">-</span><span class="va">truth_time_step</span>, <span class="op">-</span><span class="va">truth_unit</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth_year"</span>, <span class="st">"truth_group"</span><span class="op">)</span>,</span>
 <span>    suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_catch"</span>, <span class="st">"_weight"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    truth_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">truth_value_catch</span> <span class="op">/</span> <span class="va">truth_value_weight</span><span class="op">)</span>, </span>
+<span>    truth_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">truth_value_catch</span> <span class="op">/</span> <span class="va">truth_value_weight</span><span class="op">)</span>,</span>
 <span>    truth_unit <span class="op">=</span> <span class="st">"numbers"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">truth_value_catch</span>, <span class="op">-</span><span class="va">truth_value_weight</span><span class="op">)</span></span>
@@ -2598,10 +2598,10 @@ mt
 <span>    <span class="va">truth_label</span> <span class="op">==</span> <span class="st">"biomass"</span>,</span>
 <span>    <span class="va">truth_type</span> <span class="op">==</span> <span class="st">"index"</span>,</span>
 <span>    <span class="va">truth_time_step</span> <span class="op">==</span> <span class="st">"yearly"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">truth_om</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    truth_value <span class="op">=</span> <span class="va">truth_value</span> <span class="op">*</span> <span class="va">biomass_scalar</span>, </span>
+<span>    truth_value <span class="op">=</span> <span class="va">truth_value</span> <span class="op">*</span> <span class="va">biomass_scalar</span>,</span>
 <span>    truth_unit <span class="op">=</span> <span class="st">"mt"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -2611,7 +2611,7 @@ mt
 <span>    <span class="va">truth_label</span> <span class="op">==</span> <span class="st">"numbers"</span>,</span>
 <span>    <span class="va">truth_type</span> <span class="op">==</span> <span class="st">"agecomp"</span>,</span>
 <span>    <span class="va">truth_time_step</span> <span class="op">==</span> <span class="st">"yearly"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">truth_om</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    truth_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">truth_value</span> <span class="op">*</span> <span class="va">biomass_scalar</span> <span class="op">/</span> <span class="va">weight_scalar</span><span class="op">)</span>,</span>
@@ -2624,7 +2624,7 @@ mt
 <span>    <span class="va">truth_label</span> <span class="op">==</span> <span class="st">"natural_mortality"</span>,</span>
 <span>    <span class="va">truth_type</span> <span class="op">==</span> <span class="st">"agecomp"</span>,</span>
 <span>    <span class="va">truth_time_step</span> <span class="op">==</span> <span class="st">"yearly"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">truth_om</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract and unnest annual fishing mortality by age</span></span>
@@ -2633,7 +2633,7 @@ mt
 <span>    <span class="va">truth_label</span> <span class="op">==</span> <span class="st">"fishing_mortality"</span>,</span>
 <span>    <span class="va">truth_type</span> <span class="op">==</span> <span class="st">"agecomp"</span>,</span>
 <span>    <span class="va">truth_time_step</span> <span class="op">==</span> <span class="st">"yearly"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">truth_om</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract and unnest annual fishing mortality: apical F</span></span>
@@ -2659,10 +2659,10 @@ composition data are generated using a multinomial sampling distribution
 with an effective sample size of N=100.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">catch_index_sd</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
-<span><span class="va">catch_index_sampled</span> <span class="op">&lt;-</span> <span class="va">catch_index_om</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">catch_index_sampled</span> <span class="op">&lt;-</span> <span class="va">catch_index_om</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    sampled_value <span class="op">=</span> <span class="fu"><a href="../reference/sample_lognormal.html">sample_lognormal</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">truth_value</span>, </span>
+<span>      x <span class="op">=</span> <span class="va">truth_value</span>,</span>
 <span>      sd <span class="op">=</span> <span class="va">catch_index_sd</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
@@ -3563,13 +3563,13 @@ mt
 <code class="sourceCode R"><span></span>
 <span><span class="va">catch_agecomp_sample_size</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
 <span><span class="va">catch_agecomp_sampled</span> <span class="op">&lt;-</span> <span class="va">catch_agecomp_om</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">truth_year</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">truth_year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    sampled_value <span class="op">=</span> <span class="fu"><a href="../reference/sample_multinomial.html">sample_multinomial</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">truth_value</span>,</span>
 <span>      sample_size <span class="op">=</span> <span class="va">catch_agecomp_sample_size</span></span>
 <span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -3599,7 +3599,7 @@ sampling distribution with an effective sample size of N=100.</p>
 <span><span class="va">yoy_index_sampled</span> <span class="op">&lt;-</span> <span class="va">number_agecomp_om</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
 <span>    <span class="va">weight_agecomp_om</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">species_name</span>, <span class="op">-</span><span class="va">truth_label</span>, <span class="op">-</span><span class="va">truth_type</span>, <span class="op">-</span><span class="va">truth_time_step</span>, <span class="op">-</span><span class="va">truth_unit</span><span class="op">)</span>, </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">species_name</span>, <span class="op">-</span><span class="va">truth_label</span>, <span class="op">-</span><span class="va">truth_type</span>, <span class="op">-</span><span class="va">truth_time_step</span>, <span class="op">-</span><span class="va">truth_unit</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth_year"</span>, <span class="st">"truth_group"</span><span class="op">)</span>,</span>
 <span>    suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_number"</span>, <span class="st">"_weight"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -3608,12 +3608,12 @@ sampling distribution with an effective sample size of N=100.</p>
 <span>    truth_value_selected_number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">truth_value_number</span> <span class="op">*</span> <span class="va">yoy_q</span><span class="op">)</span>,</span>
 <span>    truth_value_selected_biomass <span class="op">=</span> <span class="va">truth_value_selected_number</span> <span class="op">*</span> <span class="va">truth_value_weight</span>,</span>
 <span>    sampled_value <span class="op">=</span> <span class="fu"><a href="../reference/sample_lognormal.html">sample_lognormal</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">truth_value_selected_biomass</span>, </span>
+<span>      x <span class="op">=</span> <span class="va">truth_value_selected_biomass</span>,</span>
 <span>      sd <span class="op">=</span> <span class="va">yoy_index_sd</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span>    <span class="op">-</span><span class="va">truth_value_number</span>, <span class="op">-</span><span class="va">truth_value_weight</span>, </span>
+<span>    <span class="op">-</span><span class="va">truth_value_number</span>, <span class="op">-</span><span class="va">truth_value_weight</span>,</span>
 <span>    <span class="op">-</span><span class="va">truth_value_selected_number</span>, <span class="op">-</span><span class="va">truth_value_selected_biomass</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -3627,7 +3627,7 @@ sampling distribution with an effective sample size of N=100.</p>
 <span><span class="va">yoy_slope_asc</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">yoy_inflection_point_desc</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span><span class="va">yoy_slope_desc</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
-<span><span class="va">yoy_selectivity_ascending</span>  <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">yoy_slope_asc</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">yoy_inflection_point_asc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">yoy_selectivity_ascending</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">yoy_slope_asc</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">yoy_inflection_point_asc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">yoy_selectivity_descending</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">yoy_slope_desc</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">yoy_inflection_point_desc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">yoy_selectivity</span> <span class="op">&lt;-</span> <span class="va">yoy_selectivity_ascending</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">yoy_selectivity_descending</span><span class="op">)</span></span>
 <span></span>
@@ -3647,7 +3647,7 @@ sampling distribution with an effective sample size of N=100.</p>
 <span><span class="va">survey_data</span> <span class="op">&lt;-</span> <span class="va">number_agecomp_om</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
 <span>    <span class="va">weight_agecomp_om</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">species_name</span>, <span class="op">-</span><span class="va">truth_label</span>, <span class="op">-</span><span class="va">truth_type</span>, <span class="op">-</span><span class="va">truth_time_step</span>, <span class="op">-</span><span class="va">truth_unit</span><span class="op">)</span>, </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">species_name</span>, <span class="op">-</span><span class="va">truth_label</span>, <span class="op">-</span><span class="va">truth_type</span>, <span class="op">-</span><span class="va">truth_time_step</span>, <span class="op">-</span><span class="va">truth_unit</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth_year"</span>, <span class="st">"truth_group"</span><span class="op">)</span>,</span>
 <span>    suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_number"</span>, <span class="st">"_weight"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -3682,15 +3682,15 @@ sampling distribution with an effective sample size of N=100.</p>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    sampled_value <span class="op">=</span> <span class="fu"><a href="../reference/sample_lognormal.html">sample_lognormal</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">truth_value</span>, </span>
+<span>      x <span class="op">=</span> <span class="va">truth_value</span>,</span>
 <span>      sd <span class="op">=</span> <span class="va">survey_index_sd</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Survey agecomp</span></span>
 <span><span class="va">survey_agecomp_sample_size</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
-<span><span class="va">survey_agecomp_sampled</span> <span class="op">&lt;-</span> <span class="va">survey_data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">truth_year</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">survey_agecomp_sampled</span> <span class="op">&lt;-</span> <span class="va">survey_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">truth_year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    sampled_value <span class="op">=</span> <span class="fu"><a href="../reference/sample_multinomial.html">sample_multinomial</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">truth_value_selected_number</span>,</span>
@@ -3809,13 +3809,13 @@ Click to expand/collapse code
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>timing <span class="op">=</span> <span class="va">timing</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">weight_at_age_data</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
-<span>  <span class="va">weight_at_age</span>, </span>
+<span>  <span class="va">weight_at_age</span>,</span>
 <span>  <span class="va">weight_year_plus</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_fims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">catch_data</span>, <span class="va">index_data</span>, <span class="va">age_data</span>, <span class="va">weight_at_age_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    length <span class="op">=</span> <span class="cn">NA</span>, </span>
+<span>    length <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>    .after <span class="op">=</span> <span class="st">"age"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">FIMS</span><span class="fu">::</span><span class="fu"><a href="https://noaa-fims.github.io/FIMS/reference/FIMSFrame.html" class="external-link">FIMSFrame</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -3823,13 +3823,13 @@ Click to expand/collapse code
 <span><span class="fu">methods</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/methods/show.html" class="external-link">show</a></span><span class="op">(</span><span class="va">data_fims</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 8</span></span></span>
 <span><span class="co">#&gt;   type     fleet           age length timing observed unit   uncertainty        </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> age_comp fishing_fleet     0     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985       14 number ~ dmultinom(prob =…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> age_comp fishing_fleet     1     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985       34 number ~ dmultinom(prob =…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> age_comp fishing_fleet     2     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985       44 number ~ dmultinom(prob =…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> age_comp fishing_fleet     3     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985        8 number ~ dmultinom(prob =…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> age_comp fishing_fleet     4     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985        0 number ~ dmultinom(prob =…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> age_comp fishing_fleet     5     <span style="color: #BB0000;">NA</span>   <span style="text-decoration: underline;">1</span>985        0 number ~ dmultinom(prob =…</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> age_comp fishing_fleet     0 <span style="color: #BB0000;">NA</span>       <span style="text-decoration: underline;">1</span>985       14 number ~ dmultinom(prob =…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> age_comp fishing_fleet     1 <span style="color: #BB0000;">NA</span>       <span style="text-decoration: underline;">1</span>985       34 number ~ dmultinom(prob =…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> age_comp fishing_fleet     2 <span style="color: #BB0000;">NA</span>       <span style="text-decoration: underline;">1</span>985       44 number ~ dmultinom(prob =…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> age_comp fishing_fleet     3 <span style="color: #BB0000;">NA</span>       <span style="text-decoration: underline;">1</span>985        8 number ~ dmultinom(prob =…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> age_comp fishing_fleet     4 <span style="color: #BB0000;">NA</span>       <span style="text-decoration: underline;">1</span>985        0 number ~ dmultinom(prob =…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> age_comp fishing_fleet     5 <span style="color: #BB0000;">NA</span>       <span style="text-decoration: underline;">1</span>985        0 number ~ dmultinom(prob =…</span></span>
 <span><span class="co">#&gt; additional slots include the following:fleets:</span></span>
 <span><span class="co">#&gt; [1] "fishing_fleet" "yoy_fleet"     "survey_fleet" </span></span>
 <span><span class="co">#&gt; n_years:</span></span>
@@ -3882,7 +3882,7 @@ Click to expand/collapse code
 <span><span class="va">catch_selectivity_slope_desc</span> <span class="op">&lt;-</span> <span class="fl">1.5</span></span>
 <span></span>
 <span><span class="co"># Alternative option: Estimate selectivity from OM fishing mortality-at-age</span></span>
-<span><span class="co"># Mismatch note: the ecosystem model OM scales fishing selectivity (double </span></span>
+<span><span class="co"># Mismatch note: the ecosystem model OM scales fishing selectivity (double</span></span>
 <span><span class="co"># logistic) to a maximum of 1, where FIMS does not.</span></span>
 <span><span class="va">catch_selectivity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_true_selectivity.html">estimate_true_selectivity</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">fishing_mortality_agecomp_om</span>,</span>
@@ -3971,7 +3971,7 @@ Click to expand/collapse code
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">truth_value</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">log_sd_proxy</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">recruitment_ewe</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">recruitment_ewe</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Update parameter values using OM-derived truth information</span></span>
 <span><span class="va">updated_parameters</span> <span class="op">&lt;-</span> <span class="va">default_parameters</span> <span class="op">|&gt;</span></span>
@@ -3994,7 +3994,7 @@ Click to expand/collapse code
 <span>      timing <span class="op">=</span> <span class="va">fishing_mortality_index_om</span><span class="op">[[</span><span class="st">"truth_year"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>      value <span class="op">=</span> <span class="va">fishing_mortality_index_om</span><span class="op">[[</span><span class="st">"truth_value"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>, </span>
+<span>    <span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fleet"</span>, <span class="st">"label"</span>, <span class="st">"timing"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
@@ -4005,7 +4005,7 @@ Click to expand/collapse code
 <span>      value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">catchability_survey</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fleet"</span>, <span class="st">"label"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>  <span class="op">|&gt;</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
 <span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>      fleet <span class="op">=</span> <span class="va">yoy_fleet_name</span>,</span>
@@ -4029,7 +4029,7 @@ Click to expand/collapse code
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
 <span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>      label <span class="op">=</span> <span class="st">"logit_steep"</span>, </span>
+<span>      label <span class="op">=</span> <span class="st">"logit_steep"</span>,</span>
 <span>      module_type <span class="op">=</span> <span class="st">"BevertonHolt"</span>,</span>
 <span>      <span class="co"># calculate from vulnerability matrix: v / (v + 1)</span></span>
 <span>      <span class="co"># v = 411.23 + 1.02 + 191.58 + 2 + 1016.36 + 12.18 + 2 + 403.26 = 2039.63</span></span>
@@ -4059,7 +4059,7 @@ Click to expand/collapse code
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">maturity_parameters</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">rows_update</a></span><span class="op">(</span></span>
 <span>    y <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>      label <span class="op">=</span> <span class="st">"log_M"</span>, </span>
+<span>      label <span class="op">=</span> <span class="st">"log_M"</span>,</span>
 <span>      age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">ages</span><span class="op">[</span><span class="va">natural_mortality_agecomp_om</span><span class="op">[[</span><span class="st">"truth_group"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>      timing <span class="op">=</span> <span class="va">natural_mortality_agecomp_om</span><span class="op">[[</span><span class="st">"truth_year"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>      value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">natural_mortality_agecomp_om</span><span class="op">[[</span><span class="st">"truth_value"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -21284,8 +21284,8 @@ Click to expand/collapse code
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Maximum gradient went from <span style="color: #0000BB;">0.00509</span> to <span style="color: #0000BB;">0.00084</span> after 3 steps.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Finished optimization</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Finished sdreport</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> FIMS model version: <span style="color: #0000BB;">0.10.0.9000</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total run time was <span style="color: #0000BB;">4.35337</span> seconds</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> FIMS model version: <span style="color: #0000BB;">0.11.0.9000</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total run time was <span style="color: #0000BB;">6.97058</span> seconds</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Number of parameters: fixed_effects=50, random_effects=32, and total=82</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Maximum gradient= <span style="color: #0000BB;">0.00084</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Negative log likelihood (NLL):</span></span>
@@ -21312,22 +21312,22 @@ Click to expand/collapse code
 <span>    age <span class="op">=</span> <span class="va">age_i</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">asc_ip</span>  <span class="op">&lt;-</span> <span class="va">estimates_fims</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">module_id</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">label</span> <span class="op">==</span> <span class="st">"inflection_point_asc"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">asc_ip</span> <span class="op">&lt;-</span> <span class="va">estimates_fims</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">module_id</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">label</span> <span class="op">==</span> <span class="st">"inflection_point_asc"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">estimated</span><span class="op">)</span></span>
-<span><span class="va">asc_s</span>   <span class="op">&lt;-</span> <span class="va">estimates_fims</span> <span class="op">|&gt;</span></span>
+<span><span class="va">asc_s</span> <span class="op">&lt;-</span> <span class="va">estimates_fims</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">module_id</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">label</span> <span class="op">==</span> <span class="st">"slope_asc"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">estimated</span><span class="op">)</span></span>
 <span><span class="va">desc_ip</span> <span class="op">&lt;-</span> <span class="va">estimates_fims</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">module_id</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">label</span> <span class="op">==</span> <span class="st">"inflection_point_desc"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">module_id</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">label</span> <span class="op">==</span> <span class="st">"inflection_point_desc"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">estimated</span><span class="op">)</span></span>
-<span><span class="va">desc_s</span>  <span class="op">&lt;-</span> <span class="va">estimates_fims</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">module_id</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">label</span> <span class="op">==</span> <span class="st">"slope_desc"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">desc_s</span> <span class="op">&lt;-</span> <span class="va">estimates_fims</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">module_id</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">label</span> <span class="op">==</span> <span class="st">"slope_desc"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">estimated</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Compute true peak max across ages</span></span>
-<span><span class="va">s_asc</span>     <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">asc_s</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">asc_ip</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">s_desc</span>    <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">desc_s</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">desc_ip</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">s_asc</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">asc_s</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">asc_ip</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">s_desc</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">desc_s</span> <span class="op">*</span> <span class="op">(</span><span class="va">ages</span> <span class="op">-</span> <span class="va">desc_ip</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">s_max_estimated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">s_asc</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">s_desc</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">estimates_fims</span> <span class="op">&lt;-</span> <span class="va">estimates_fims</span> <span class="op">|&gt;</span></span>
@@ -21345,90 +21345,91 @@ Click to expand/collapse code
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">estimation_type</span> <span class="op">==</span> <span class="st">"fixed_effects"</span> <span class="op">|</span> <span class="va">estimation_type</span> <span class="op">==</span> <span class="st">"random_effects"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">module_name</span>, <span class="va">label</span>, <span class="va">fleet</span>, <span class="va">year_i</span>, <span class="va">age_i</span>, <span class="va">input</span>, <span class="va">estimated</span>, <span class="va">uncertainty</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 81 × 8</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 82 × 8</span></span></span>
 <span><span class="co">#&gt;    module_name label            fleet year_i age_i   input estimated uncertainty</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Fleet       log_Fmort        NA         1    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.82</span>     -<span style="color: #BB0000;">3.45</span>        0.258 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Fleet       log_Fmort        NA         2    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.86</span>     -<span style="color: #BB0000;">3.38</span>        0.260 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Fleet       log_Fmort        NA         3    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.94</span>     -<span style="color: #BB0000;">3.29</span>        0.259 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Fleet       log_Fmort        NA         4    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.19</span>     -<span style="color: #BB0000;">3.69</span>        0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Fleet       log_Fmort        NA         5    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.45</span>     -<span style="color: #BB0000;">2.74</span>        0.260 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Fleet       log_Fmort        NA         6    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.762</span>    -<span style="color: #BB0000;">0.177</span>       0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Fleet       log_Fmort        NA         7    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.930</span>    -<span style="color: #BB0000;">0.320</span>       0.259 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Fleet       log_Fmort        NA         8    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.515</span>     0.116       0.259 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Fleet       log_Fmort        NA         9    <span style="color: #BB0000;">NA</span>  0.111     0.638       0.256 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Fleet       log_Fmort        NA        10    <span style="color: #BB0000;">NA</span>  0.275     0.758       0.258 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Fleet       log_Fmort        NA        11    <span style="color: #BB0000;">NA</span>  0.197     0.778       0.258 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Fleet       log_Fmort        NA        12    <span style="color: #BB0000;">NA</span>  0.869     1.32        0.255 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Fleet       log_Fmort        NA        13    <span style="color: #BB0000;">NA</span>  0.761     1.30        0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Fleet       log_Fmort        NA        14    <span style="color: #BB0000;">NA</span>  1.06      1.44        0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> Fleet       log_Fmort        NA        15    <span style="color: #BB0000;">NA</span>  1.46      1.71        0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> Fleet       log_Fmort        NA        16    <span style="color: #BB0000;">NA</span>  1.73      1.82        0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> Fleet       log_Fmort        NA        17    <span style="color: #BB0000;">NA</span>  2.12      2.20        0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> Fleet       log_Fmort        NA        18    <span style="color: #BB0000;">NA</span>  3.41      2.85        0.258 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> Fleet       log_Fmort        NA        19    <span style="color: #BB0000;">NA</span>  2.78      2.54        0.254 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> Fleet       log_Fmort        NA        20    <span style="color: #BB0000;">NA</span>  4.07      2.97        0.254 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> Fleet       log_Fmort        NA        21    <span style="color: #BB0000;">NA</span>  1.83      1.90        0.249 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> Fleet       log_Fmort        NA        22    <span style="color: #BB0000;">NA</span>  1.82      1.81        0.248 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">23</span> Fleet       log_Fmort        NA        23    <span style="color: #BB0000;">NA</span>  1.32      1.63        0.256 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">24</span> Fleet       log_Fmort        NA        24    <span style="color: #BB0000;">NA</span>  0.998     1.51        0.252 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">25</span> Fleet       log_Fmort        NA        25    <span style="color: #BB0000;">NA</span>  0.831     1.25        0.252 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">26</span> Fleet       log_Fmort        NA        26    <span style="color: #BB0000;">NA</span>  0.489     0.928       0.256 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">27</span> Fleet       log_Fmort        NA        27    <span style="color: #BB0000;">NA</span>  0.054<span style="text-decoration: underline;">2</span>    0.724       0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">28</span> Fleet       log_Fmort        NA        28    <span style="color: #BB0000;">NA</span>  0.492     0.930       0.256 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">29</span> Fleet       log_Fmort        NA        29    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.043</span><span style="color: #BB0000; text-decoration: underline;">0</span>    0.475       0.256 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">30</span> Fleet       log_Fmort        NA        30    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.123</span>     0.285       0.255 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">31</span> Fleet       log_Fmort        NA        31    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.512</span>     0.033<span style="text-decoration: underline;">4</span>      0.257 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">32</span> Fleet       log_Fmort        NA        32    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.989</span>    -<span style="color: #BB0000;">0.454</span>       0.259 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">33</span> Fleet       log_Fmort        NA        33    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.798</span>    -<span style="color: #BB0000;">0.333</span>       0.263 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">34</span> Fleet       log_q            NA        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.00</span>     -<span style="color: #BB0000;">3.07</span>        0.024<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">35</span> Fleet       log_q            NA        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.00</span>     -<span style="color: #BB0000;">2.93</span>        0.098<span style="text-decoration: underline;">4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Fleet       log_Fmort        fish…      1    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.82</span>     -<span style="color: #BB0000;">3.45</span>        0.258 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Fleet       log_Fmort        fish…      2    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.86</span>     -<span style="color: #BB0000;">3.38</span>        0.260 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Fleet       log_Fmort        fish…      3    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.94</span>     -<span style="color: #BB0000;">3.29</span>        0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Fleet       log_Fmort        fish…      4    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">4.19</span>     -<span style="color: #BB0000;">3.69</span>        0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Fleet       log_Fmort        fish…      5    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.45</span>     -<span style="color: #BB0000;">2.74</span>        0.260 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Fleet       log_Fmort        fish…      6    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.762</span>    -<span style="color: #BB0000;">0.177</span>       0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Fleet       log_Fmort        fish…      7    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.930</span>    -<span style="color: #BB0000;">0.320</span>       0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Fleet       log_Fmort        fish…      8    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.515</span>     0.116       0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Fleet       log_Fmort        fish…      9    <span style="color: #BB0000;">NA</span>  0.111     0.638       0.256 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Fleet       log_Fmort        fish…     10    <span style="color: #BB0000;">NA</span>  0.275     0.758       0.258 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Fleet       log_Fmort        fish…     11    <span style="color: #BB0000;">NA</span>  0.197     0.778       0.258 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Fleet       log_Fmort        fish…     12    <span style="color: #BB0000;">NA</span>  0.869     1.32        0.255 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Fleet       log_Fmort        fish…     13    <span style="color: #BB0000;">NA</span>  0.761     1.30        0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Fleet       log_Fmort        fish…     14    <span style="color: #BB0000;">NA</span>  1.06      1.44        0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> Fleet       log_Fmort        fish…     15    <span style="color: #BB0000;">NA</span>  1.46      1.71        0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> Fleet       log_Fmort        fish…     16    <span style="color: #BB0000;">NA</span>  1.73      1.82        0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> Fleet       log_Fmort        fish…     17    <span style="color: #BB0000;">NA</span>  2.12      2.20        0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> Fleet       log_Fmort        fish…     18    <span style="color: #BB0000;">NA</span>  3.41      2.85        0.258 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> Fleet       log_Fmort        fish…     19    <span style="color: #BB0000;">NA</span>  2.78      2.54        0.254 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> Fleet       log_Fmort        fish…     20    <span style="color: #BB0000;">NA</span>  4.07      2.97        0.254 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> Fleet       log_Fmort        fish…     21    <span style="color: #BB0000;">NA</span>  1.83      1.90        0.249 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> Fleet       log_Fmort        fish…     22    <span style="color: #BB0000;">NA</span>  1.82      1.81        0.248 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">23</span> Fleet       log_Fmort        fish…     23    <span style="color: #BB0000;">NA</span>  1.32      1.63        0.256 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">24</span> Fleet       log_Fmort        fish…     24    <span style="color: #BB0000;">NA</span>  0.998     1.51        0.252 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">25</span> Fleet       log_Fmort        fish…     25    <span style="color: #BB0000;">NA</span>  0.831     1.25        0.252 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">26</span> Fleet       log_Fmort        fish…     26    <span style="color: #BB0000;">NA</span>  0.489     0.928       0.256 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">27</span> Fleet       log_Fmort        fish…     27    <span style="color: #BB0000;">NA</span>  0.054<span style="text-decoration: underline;">2</span>    0.724       0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">28</span> Fleet       log_Fmort        fish…     28    <span style="color: #BB0000;">NA</span>  0.492     0.930       0.256 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">29</span> Fleet       log_Fmort        fish…     29    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.043</span><span style="color: #BB0000; text-decoration: underline;">0</span>    0.475       0.256 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">30</span> Fleet       log_Fmort        fish…     30    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.123</span>     0.285       0.255 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">31</span> Fleet       log_Fmort        fish…     31    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.512</span>     0.033<span style="text-decoration: underline;">4</span>      0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">32</span> Fleet       log_Fmort        fish…     32    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.989</span>    -<span style="color: #BB0000;">0.454</span>       0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">33</span> Fleet       log_Fmort        fish…     33    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">0.798</span>    -<span style="color: #BB0000;">0.333</span>       0.263 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">34</span> Fleet       log_q            yoy_…     <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.00</span>     -<span style="color: #BB0000;">3.07</span>        0.024<span style="text-decoration: underline;">3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">35</span> Fleet       log_q            surv…     <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> -<span style="color: #BB0000;">3.00</span>     -<span style="color: #BB0000;">2.93</span>        0.098<span style="text-decoration: underline;">4</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">36</span> Recruitment log_rzero        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> 25.0      24.4         0.255 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">37</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         2    <span style="color: #BB0000;">NA</span>  0         1.47       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">38</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         3    <span style="color: #BB0000;">NA</span>  0         1.25       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">39</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         4    <span style="color: #BB0000;">NA</span>  0         1.29       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">40</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         5    <span style="color: #BB0000;">NA</span>  0         1.17       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">41</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         6    <span style="color: #BB0000;">NA</span>  0         1.02       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">42</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         7    <span style="color: #BB0000;">NA</span>  0         1.21       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">43</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         8    <span style="color: #BB0000;">NA</span>  0         1.26       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">44</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         9    <span style="color: #BB0000;">NA</span>  0         1.28       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">45</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        10    <span style="color: #BB0000;">NA</span>  0         1.20       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">46</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        11    <span style="color: #BB0000;">NA</span>  0         1.07       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">47</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        12    <span style="color: #BB0000;">NA</span>  0         1.11       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">48</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        13    <span style="color: #BB0000;">NA</span>  0         1.10       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">49</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        14    <span style="color: #BB0000;">NA</span>  0         1.15       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">50</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        15    <span style="color: #BB0000;">NA</span>  0         0.864      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">51</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        16    <span style="color: #BB0000;">NA</span>  0         0.599      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">52</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        17    <span style="color: #BB0000;">NA</span>  0         0.410      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">53</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        18    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.401</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">54</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        19    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.06</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">55</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        20    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.00</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">56</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        21    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.79</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">57</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        22    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.57</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">58</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        23    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.38</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">59</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        24    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.40</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">60</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        25    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.06</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">61</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        26    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.70</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">62</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        27    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.31</span>       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">63</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        28    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.849</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">64</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        29    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.509</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">65</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        30    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.180</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">66</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        31    <span style="color: #BB0000;">NA</span>  0         0.287      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">67</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        32    <span style="color: #BB0000;">NA</span>  0         0.646      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">68</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        33    <span style="color: #BB0000;">NA</span>  0         1.06       <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">69</span> Selectivity inflection_poin… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  1.5       1.62        0.074<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">70</span> Selectivity slope_asc        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  2         2.75        0.058<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">71</span> Selectivity inflection_poin… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  4         2.64        0.441 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">72</span> Selectivity slope_desc       <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  1.5       1.18        0.126 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">73</span> Selectivity inflection_point <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  3.03      3.34        0.062<span style="text-decoration: underline;">1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">74</span> Selectivity slope            <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  2.2       2.00        0.027<span style="text-decoration: underline;">2</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">37</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         2    <span style="color: #BB0000;">NA</span>  0         1.47        0.262 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">38</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         3    <span style="color: #BB0000;">NA</span>  0         1.25        0.262 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">39</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         4    <span style="color: #BB0000;">NA</span>  0         1.29        0.261 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">40</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         5    <span style="color: #BB0000;">NA</span>  0         1.17        0.261 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">41</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         6    <span style="color: #BB0000;">NA</span>  0         1.02        0.261 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">42</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         7    <span style="color: #BB0000;">NA</span>  0         1.21        0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">43</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         8    <span style="color: #BB0000;">NA</span>  0         1.26        0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">44</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>         9    <span style="color: #BB0000;">NA</span>  0         1.28        0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">45</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        10    <span style="color: #BB0000;">NA</span>  0         1.20        0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">46</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        11    <span style="color: #BB0000;">NA</span>  0         1.07        0.260 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">47</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        12    <span style="color: #BB0000;">NA</span>  0         1.11        0.260 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">48</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        13    <span style="color: #BB0000;">NA</span>  0         1.10        0.260 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">49</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        14    <span style="color: #BB0000;">NA</span>  0         1.15        0.259 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">50</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        15    <span style="color: #BB0000;">NA</span>  0         0.864       0.260 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">51</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        16    <span style="color: #BB0000;">NA</span>  0         0.599       0.261 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">52</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        17    <span style="color: #BB0000;">NA</span>  0         0.410       0.260 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">53</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        18    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.401</span>       0.260 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">54</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        19    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.06</span>        0.262 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">55</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        20    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.00</span>        0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">56</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        21    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.79</span>        0.257 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">57</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        22    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.57</span>        0.246 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">58</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        23    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.38</span>        0.246 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">59</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        24    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.40</span>        0.241 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">60</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        25    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">2.06</span>        0.245 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">61</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        26    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.70</span>        0.247 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">62</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        27    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">1.31</span>        0.250 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">63</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        28    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.849</span>       0.253 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">64</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        29    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.509</span>       0.256 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">65</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        30    <span style="color: #BB0000;">NA</span>  0        -<span style="color: #BB0000;">0.180</span>       0.258 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">66</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        31    <span style="color: #BB0000;">NA</span>  0         0.287       0.261 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">67</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        32    <span style="color: #BB0000;">NA</span>  0         0.646       0.265 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">68</span> Recruitment log_devs         <span style="color: #BB0000;">NA</span>        33    <span style="color: #BB0000;">NA</span>  0         1.06        0.268 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">69</span> Selectivity inflection_poin… fish…     <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  1.5       1.62        0.074<span style="text-decoration: underline;">3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">70</span> Selectivity slope_asc        fish…     <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  2         2.75        0.058<span style="text-decoration: underline;">0</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">71</span> Selectivity inflection_poin… fish…     <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  4         2.64        0.441 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">72</span> Selectivity slope_desc       fish…     <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  1.5       1.18        0.126 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">73</span> Selectivity inflection_point surv…     <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  3.03      3.34        0.062<span style="text-decoration: underline;">1</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">74</span> Selectivity slope            surv…     <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  2.2       2.00        0.027<span style="text-decoration: underline;">2</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">75</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     1 25.7      25.8         0.074<span style="text-decoration: underline;">2</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">76</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     2 24.0      24.2         0.096<span style="text-decoration: underline;">8</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">77</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     3 22.7      23.0         0.106 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">78</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     4 21.2      21.2         0.152 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">79</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     5 19.7      19.5         0.257 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">80</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     6 18.5      18.8         0.360 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">81</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     7 18.0      17.7         0.656</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">81</span> Population  log_init_naa     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     7 18.0      17.7         0.656 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">82</span> Recruitment log_sd           <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>  0.335     0.338       0.125</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="compare-om-and-fims">Compare OM and FIMS<a class="anchor" aria-label="anchor" href="#compare-om-and-fims"></a>

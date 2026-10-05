@@ -132,7 +132,7 @@ data_om |>
 ``` r
 
 
-data_om |> 
+data_om |>
   dplyr::distinct(type, species) |>
   scroll_table()
 ```
@@ -268,13 +268,13 @@ catch_index_om <- truth_om |>
     truth_label == "catch",
     truth_type == "index",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
-    truth_value = truth_value * biomass_scalar, 
+    truth_value = truth_value * biomass_scalar,
     truth_unit = "mt"
-  ) 
-  
+  )
+
 catch_index_om |>
   scroll_table()
 ```
@@ -325,7 +325,7 @@ weight_agecomp_om <- truth_om |>
     truth_label == "weight",
     truth_type == "agecomp",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
     truth_value = truth_value * weight_scalar,
@@ -333,7 +333,7 @@ weight_agecomp_om <- truth_om |>
   )
 
 # Extract and unnest annual catch-at-age in numbers
-catch_agecomp_om <- truth_om |> 
+catch_agecomp_om <- truth_om |>
   dplyr::filter(
     truth_label == "catch",
     truth_type == "agecomp",
@@ -346,12 +346,12 @@ catch_agecomp_om <- truth_om |>
   ) |>
   dplyr::left_join(
     weight_agecomp_om |>
-      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit),
     by = c("truth_year", "truth_group"),
     suffix = c("_catch", "_weight")
   ) |>
   dplyr::mutate(
-    truth_value = ceiling(truth_value_catch / truth_value_weight), 
+    truth_value = ceiling(truth_value_catch / truth_value_weight),
     truth_unit = "numbers"
   ) |>
   dplyr::select(-truth_value_catch, -truth_value_weight)
@@ -362,10 +362,10 @@ biomass_index_om <- truth_om |>
     truth_label == "biomass",
     truth_type == "index",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
-    truth_value = truth_value * biomass_scalar, 
+    truth_value = truth_value * biomass_scalar,
     truth_unit = "mt"
   )
 
@@ -375,7 +375,7 @@ number_agecomp_om <- truth_om |>
     truth_label == "numbers",
     truth_type == "agecomp",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om)) |>
   dplyr::mutate(
     truth_value = ceiling(truth_value * biomass_scalar / weight_scalar),
@@ -388,7 +388,7 @@ natural_mortality_agecomp_om <- truth_om |>
     truth_label == "natural_mortality",
     truth_type == "agecomp",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om))
 
 # Extract and unnest annual fishing mortality by age
@@ -397,7 +397,7 @@ fishing_mortality_agecomp_om <- truth_om |>
     truth_label == "fishing_mortality",
     truth_type == "agecomp",
     truth_time_step == "yearly"
-  ) |> 
+  ) |>
   tidyr::unnest(cols = c(truth_om))
 
 # Extract and unnest annual fishing mortality: apical F
@@ -425,10 +425,10 @@ with an effective sample size of N=100.
 ``` r
 
 catch_index_sd <- 0.05
-catch_index_sampled <- catch_index_om |> 
+catch_index_sampled <- catch_index_om |>
   dplyr::mutate(
     sampled_value = sample_lognormal(
-      x = truth_value, 
+      x = truth_value,
       sd = catch_index_sd
     )
   )
@@ -478,13 +478,13 @@ catch_index_sampled |>
 
 catch_agecomp_sample_size <- 100
 catch_agecomp_sampled <- catch_agecomp_om |>
-  dplyr::group_by(truth_year) |> 
+  dplyr::group_by(truth_year) |>
   dplyr::mutate(
     sampled_value = sample_multinomial(
       x = truth_value,
       sample_size = catch_agecomp_sample_size
     )
-  ) |> 
+  ) |>
   dplyr::ungroup()
 ```
 
@@ -516,7 +516,7 @@ names(yoy_selectivity) <- functional_groups |>
 yoy_index_sampled <- number_agecomp_om |>
   dplyr::left_join(
     weight_agecomp_om |>
-      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit),
     by = c("truth_year", "truth_group"),
     suffix = c("_number", "_weight")
   ) |>
@@ -525,12 +525,12 @@ yoy_index_sampled <- number_agecomp_om |>
     truth_value_selected_number = ceiling(truth_value_number * yoy_q),
     truth_value_selected_biomass = truth_value_selected_number * truth_value_weight,
     sampled_value = sample_lognormal(
-      x = truth_value_selected_biomass, 
+      x = truth_value_selected_biomass,
       sd = yoy_index_sd
     )
   ) |>
   dplyr::select(
-    -truth_value_number, -truth_value_weight, 
+    -truth_value_number, -truth_value_weight,
     -truth_value_selected_number, -truth_value_selected_biomass
   ) |>
   dplyr::mutate(
@@ -544,7 +544,7 @@ yoy_inflection_point_asc <- -1.0
 yoy_slope_asc <- 10
 yoy_inflection_point_desc <- 0.5
 yoy_slope_desc <- 10
-yoy_selectivity_ascending  <- 1 / (1 + exp(-yoy_slope_asc * (ages - yoy_inflection_point_asc)))
+yoy_selectivity_ascending <- 1 / (1 + exp(-yoy_slope_asc * (ages - yoy_inflection_point_asc)))
 yoy_selectivity_descending <- 1 / (1 + exp(-yoy_slope_desc * (ages - yoy_inflection_point_desc)))
 yoy_selectivity <- yoy_selectivity_ascending * (1 - yoy_selectivity_descending)
 
@@ -564,7 +564,7 @@ names(selectivity_survey) <- functional_groups |>
 survey_data <- number_agecomp_om |>
   dplyr::left_join(
     weight_agecomp_om |>
-      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit), 
+      dplyr::select(-species_name, -truth_label, -truth_type, -truth_time_step, -truth_unit),
     by = c("truth_year", "truth_group"),
     suffix = c("_number", "_weight")
   ) |>
@@ -599,15 +599,15 @@ survey_index_sampled <- survey_data |>
   ) |>
   dplyr::mutate(
     sampled_value = sample_lognormal(
-      x = truth_value, 
+      x = truth_value,
       sd = survey_index_sd
     )
   )
 
 # Survey agecomp
 survey_agecomp_sample_size <- 100
-survey_agecomp_sampled <- survey_data |> 
-  dplyr::group_by(truth_year) |> 
+survey_agecomp_sampled <- survey_data |>
+  dplyr::group_by(truth_year) |>
   dplyr::mutate(
     sampled_value = sample_multinomial(
       x = truth_value_selected_number,
@@ -727,13 +727,13 @@ weight_year_plus <- weight_at_age |>
   dplyr::mutate(timing = timing + 1)
 
 weight_at_age_data <- dplyr::bind_rows(
-  weight_at_age, 
+  weight_at_age,
   weight_year_plus
 )
 
 data_fims <- rbind(catch_data, index_data, age_data, weight_at_age_data) |>
   dplyr::mutate(
-    length = NA, 
+    length = NA,
     .after = "age"
   ) |>
   FIMS::FIMSFrame()
@@ -741,13 +741,13 @@ data_fims <- rbind(catch_data, index_data, age_data, weight_at_age_data) |>
 methods::show(data_fims)
 #> # A tibble: 6 × 8
 #>   type     fleet           age length timing observed unit   uncertainty        
-#>   <chr>    <chr>         <int>  <dbl>  <dbl>    <dbl> <chr>  <chr>              
-#> 1 age_comp fishing_fleet     0     NA   1985       14 number ~ dmultinom(prob =…
-#> 2 age_comp fishing_fleet     1     NA   1985       34 number ~ dmultinom(prob =…
-#> 3 age_comp fishing_fleet     2     NA   1985       44 number ~ dmultinom(prob =…
-#> 4 age_comp fishing_fleet     3     NA   1985        8 number ~ dmultinom(prob =…
-#> 5 age_comp fishing_fleet     4     NA   1985        0 number ~ dmultinom(prob =…
-#> 6 age_comp fishing_fleet     5     NA   1985        0 number ~ dmultinom(prob =…
+#>   <chr>    <chr>         <int> <lgl>   <dbl>    <dbl> <chr>  <chr>              
+#> 1 age_comp fishing_fleet     0 NA       1985       14 number ~ dmultinom(prob =…
+#> 2 age_comp fishing_fleet     1 NA       1985       34 number ~ dmultinom(prob =…
+#> 3 age_comp fishing_fleet     2 NA       1985       44 number ~ dmultinom(prob =…
+#> 4 age_comp fishing_fleet     3 NA       1985        8 number ~ dmultinom(prob =…
+#> 5 age_comp fishing_fleet     4 NA       1985        0 number ~ dmultinom(prob =…
+#> 6 age_comp fishing_fleet     5 NA       1985        0 number ~ dmultinom(prob =…
 #> additional slots include the following:fleets:
 #> [1] "fishing_fleet" "yoy_fleet"     "survey_fleet" 
 #> n_years:
@@ -801,7 +801,7 @@ catch_selectivity_inflection_point_desc <- 4.0
 catch_selectivity_slope_desc <- 1.5
 
 # Alternative option: Estimate selectivity from OM fishing mortality-at-age
-# Mismatch note: the ecosystem model OM scales fishing selectivity (double 
+# Mismatch note: the ecosystem model OM scales fishing selectivity (double
 # logistic) to a maximum of 1, where FIMS does not.
 catch_selectivity <- estimate_true_selectivity(
   data = fishing_mortality_agecomp_om,
@@ -890,7 +890,7 @@ recruitment_ewe <- number_agecomp_om |>
   dplyr::pull(truth_value)
 
 log_sd_proxy <- (sd(log(recruitment_ewe) - mean(log(recruitment_ewe)))) |>
- log()
+  log()
 
 # Update parameter values using OM-derived truth information
 updated_parameters <- default_parameters |>
@@ -913,7 +913,7 @@ updated_parameters <- default_parameters |>
       timing = fishing_mortality_index_om[["truth_year"]],
       value = fishing_mortality_index_om[["truth_value"]] |>
         log()
-    ), 
+    ),
     by = c("fleet", "label", "timing")
   ) |>
   dplyr::rows_update(
@@ -924,7 +924,7 @@ updated_parameters <- default_parameters |>
       value = log(catchability_survey)
     ),
     by = c("fleet", "label")
-  )  |>
+  ) |>
   dplyr::rows_update(
     y = tibble::tibble(
       fleet = yoy_fleet_name,
@@ -948,7 +948,7 @@ updated_parameters <- default_parameters |>
   ) |>
   dplyr::rows_update(
     y = tibble::tibble(
-      label = "logit_steep", 
+      label = "logit_steep",
       module_type = "BevertonHolt",
       # calculate from vulnerability matrix: v / (v + 1)
       # v = 411.23 + 1.02 + 191.58 + 2 + 1016.36 + 12.18 + 2 + 403.26 = 2039.63
@@ -978,7 +978,7 @@ updated_parameters <- default_parameters |>
   dplyr::bind_rows(maturity_parameters) |>
   dplyr::rows_update(
     y = tibble::tibble(
-      label = "log_M", 
+      label = "log_M",
       age = unname(ages[natural_mortality_agecomp_om[["truth_group"]]]),
       timing = natural_mortality_agecomp_om[["truth_year"]],
       value = log(natural_mortality_agecomp_om[["truth_value"]])
@@ -1430,8 +1430,8 @@ fit_fims <- updated_parameters |>
 #> ℹ Maximum gradient went from 0.00509 to 0.00084 after 3 steps.
 #> ✔ Finished optimization
 #> ✔ Finished sdreport
-#> ℹ FIMS model version: 0.10.0.9000
-#> ℹ Total run time was 4.35337 seconds
+#> ℹ FIMS model version: 0.11.0.9000
+#> ℹ Total run time was 6.97058 seconds
 #> ℹ Number of parameters: fixed_effects=50, random_effects=32, and total=82
 #> ℹ Maximum gradient= 0.00084
 #> ℹ Negative log likelihood (NLL):
@@ -1461,22 +1461,22 @@ estimates_fims <- FIMS::get_estimates(fit_fims) |>
     age = age_i
   )
 
-asc_ip  <- estimates_fims |>
-  dplyr::filter(module_id == 1, label == "inflection_point_asc") |> 
+asc_ip <- estimates_fims |>
+  dplyr::filter(module_id == 1, label == "inflection_point_asc") |>
   dplyr::pull(estimated)
-asc_s   <- estimates_fims |>
+asc_s <- estimates_fims |>
   dplyr::filter(module_id == 1, label == "slope_asc") |>
   dplyr::pull(estimated)
 desc_ip <- estimates_fims |>
-  dplyr::filter(module_id == 1, label == "inflection_point_desc") |> 
+  dplyr::filter(module_id == 1, label == "inflection_point_desc") |>
   dplyr::pull(estimated)
-desc_s  <- estimates_fims |>
-  dplyr::filter(module_id == 1, label == "slope_desc") |> 
+desc_s <- estimates_fims |>
+  dplyr::filter(module_id == 1, label == "slope_desc") |>
   dplyr::pull(estimated)
 
 # Compute true peak max across ages
-s_asc     <- 1 / (1 + exp(-asc_s * (ages - asc_ip)))
-s_desc    <- 1 / (1 + exp(-desc_s * (ages - desc_ip)))
+s_asc <- 1 / (1 + exp(-asc_s * (ages - asc_ip)))
+s_desc <- 1 / (1 + exp(-desc_s * (ages - desc_ip)))
 s_max_estimated <- max(s_asc * (1 - s_desc))
 
 estimates_fims <- estimates_fims |>
@@ -1497,90 +1497,91 @@ estimates_fims |>
   dplyr::filter(estimation_type == "fixed_effects" | estimation_type == "random_effects") |>
   dplyr::select(module_name, label, fleet, year_i, age_i, input, estimated, uncertainty) |>
   print(n = Inf)
-#> # A tibble: 81 × 8
+#> # A tibble: 82 × 8
 #>    module_name label            fleet year_i age_i   input estimated uncertainty
 #>    <chr>       <chr>            <chr>  <int> <int>   <dbl>     <dbl>       <dbl>
-#>  1 Fleet       log_Fmort        NA         1    NA -3.82     -3.45        0.258 
-#>  2 Fleet       log_Fmort        NA         2    NA -3.86     -3.38        0.260 
-#>  3 Fleet       log_Fmort        NA         3    NA -3.94     -3.29        0.259 
-#>  4 Fleet       log_Fmort        NA         4    NA -4.19     -3.69        0.257 
-#>  5 Fleet       log_Fmort        NA         5    NA -3.45     -2.74        0.260 
-#>  6 Fleet       log_Fmort        NA         6    NA -0.762    -0.177       0.257 
-#>  7 Fleet       log_Fmort        NA         7    NA -0.930    -0.320       0.259 
-#>  8 Fleet       log_Fmort        NA         8    NA -0.515     0.116       0.259 
-#>  9 Fleet       log_Fmort        NA         9    NA  0.111     0.638       0.256 
-#> 10 Fleet       log_Fmort        NA        10    NA  0.275     0.758       0.258 
-#> 11 Fleet       log_Fmort        NA        11    NA  0.197     0.778       0.258 
-#> 12 Fleet       log_Fmort        NA        12    NA  0.869     1.32        0.255 
-#> 13 Fleet       log_Fmort        NA        13    NA  0.761     1.30        0.257 
-#> 14 Fleet       log_Fmort        NA        14    NA  1.06      1.44        0.257 
-#> 15 Fleet       log_Fmort        NA        15    NA  1.46      1.71        0.257 
-#> 16 Fleet       log_Fmort        NA        16    NA  1.73      1.82        0.257 
-#> 17 Fleet       log_Fmort        NA        17    NA  2.12      2.20        0.257 
-#> 18 Fleet       log_Fmort        NA        18    NA  3.41      2.85        0.258 
-#> 19 Fleet       log_Fmort        NA        19    NA  2.78      2.54        0.254 
-#> 20 Fleet       log_Fmort        NA        20    NA  4.07      2.97        0.254 
-#> 21 Fleet       log_Fmort        NA        21    NA  1.83      1.90        0.249 
-#> 22 Fleet       log_Fmort        NA        22    NA  1.82      1.81        0.248 
-#> 23 Fleet       log_Fmort        NA        23    NA  1.32      1.63        0.256 
-#> 24 Fleet       log_Fmort        NA        24    NA  0.998     1.51        0.252 
-#> 25 Fleet       log_Fmort        NA        25    NA  0.831     1.25        0.252 
-#> 26 Fleet       log_Fmort        NA        26    NA  0.489     0.928       0.256 
-#> 27 Fleet       log_Fmort        NA        27    NA  0.0542    0.724       0.257 
-#> 28 Fleet       log_Fmort        NA        28    NA  0.492     0.930       0.256 
-#> 29 Fleet       log_Fmort        NA        29    NA -0.0430    0.475       0.256 
-#> 30 Fleet       log_Fmort        NA        30    NA -0.123     0.285       0.255 
-#> 31 Fleet       log_Fmort        NA        31    NA -0.512     0.0334      0.257 
-#> 32 Fleet       log_Fmort        NA        32    NA -0.989    -0.454       0.259 
-#> 33 Fleet       log_Fmort        NA        33    NA -0.798    -0.333       0.263 
-#> 34 Fleet       log_q            NA        NA    NA -3.00     -3.07        0.0243
-#> 35 Fleet       log_q            NA        NA    NA -3.00     -2.93        0.0984
+#>  1 Fleet       log_Fmort        fish…      1    NA -3.82     -3.45        0.258 
+#>  2 Fleet       log_Fmort        fish…      2    NA -3.86     -3.38        0.260 
+#>  3 Fleet       log_Fmort        fish…      3    NA -3.94     -3.29        0.259 
+#>  4 Fleet       log_Fmort        fish…      4    NA -4.19     -3.69        0.257 
+#>  5 Fleet       log_Fmort        fish…      5    NA -3.45     -2.74        0.260 
+#>  6 Fleet       log_Fmort        fish…      6    NA -0.762    -0.177       0.257 
+#>  7 Fleet       log_Fmort        fish…      7    NA -0.930    -0.320       0.259 
+#>  8 Fleet       log_Fmort        fish…      8    NA -0.515     0.116       0.259 
+#>  9 Fleet       log_Fmort        fish…      9    NA  0.111     0.638       0.256 
+#> 10 Fleet       log_Fmort        fish…     10    NA  0.275     0.758       0.258 
+#> 11 Fleet       log_Fmort        fish…     11    NA  0.197     0.778       0.258 
+#> 12 Fleet       log_Fmort        fish…     12    NA  0.869     1.32        0.255 
+#> 13 Fleet       log_Fmort        fish…     13    NA  0.761     1.30        0.257 
+#> 14 Fleet       log_Fmort        fish…     14    NA  1.06      1.44        0.257 
+#> 15 Fleet       log_Fmort        fish…     15    NA  1.46      1.71        0.257 
+#> 16 Fleet       log_Fmort        fish…     16    NA  1.73      1.82        0.257 
+#> 17 Fleet       log_Fmort        fish…     17    NA  2.12      2.20        0.257 
+#> 18 Fleet       log_Fmort        fish…     18    NA  3.41      2.85        0.258 
+#> 19 Fleet       log_Fmort        fish…     19    NA  2.78      2.54        0.254 
+#> 20 Fleet       log_Fmort        fish…     20    NA  4.07      2.97        0.254 
+#> 21 Fleet       log_Fmort        fish…     21    NA  1.83      1.90        0.249 
+#> 22 Fleet       log_Fmort        fish…     22    NA  1.82      1.81        0.248 
+#> 23 Fleet       log_Fmort        fish…     23    NA  1.32      1.63        0.256 
+#> 24 Fleet       log_Fmort        fish…     24    NA  0.998     1.51        0.252 
+#> 25 Fleet       log_Fmort        fish…     25    NA  0.831     1.25        0.252 
+#> 26 Fleet       log_Fmort        fish…     26    NA  0.489     0.928       0.256 
+#> 27 Fleet       log_Fmort        fish…     27    NA  0.0542    0.724       0.257 
+#> 28 Fleet       log_Fmort        fish…     28    NA  0.492     0.930       0.256 
+#> 29 Fleet       log_Fmort        fish…     29    NA -0.0430    0.475       0.256 
+#> 30 Fleet       log_Fmort        fish…     30    NA -0.123     0.285       0.255 
+#> 31 Fleet       log_Fmort        fish…     31    NA -0.512     0.0334      0.257 
+#> 32 Fleet       log_Fmort        fish…     32    NA -0.989    -0.454       0.259 
+#> 33 Fleet       log_Fmort        fish…     33    NA -0.798    -0.333       0.263 
+#> 34 Fleet       log_q            yoy_…     NA    NA -3.00     -3.07        0.0243
+#> 35 Fleet       log_q            surv…     NA    NA -3.00     -2.93        0.0984
 #> 36 Recruitment log_rzero        NA        NA    NA 25.0      24.4         0.255 
-#> 37 Recruitment log_devs         NA         2    NA  0         1.47       NA     
-#> 38 Recruitment log_devs         NA         3    NA  0         1.25       NA     
-#> 39 Recruitment log_devs         NA         4    NA  0         1.29       NA     
-#> 40 Recruitment log_devs         NA         5    NA  0         1.17       NA     
-#> 41 Recruitment log_devs         NA         6    NA  0         1.02       NA     
-#> 42 Recruitment log_devs         NA         7    NA  0         1.21       NA     
-#> 43 Recruitment log_devs         NA         8    NA  0         1.26       NA     
-#> 44 Recruitment log_devs         NA         9    NA  0         1.28       NA     
-#> 45 Recruitment log_devs         NA        10    NA  0         1.20       NA     
-#> 46 Recruitment log_devs         NA        11    NA  0         1.07       NA     
-#> 47 Recruitment log_devs         NA        12    NA  0         1.11       NA     
-#> 48 Recruitment log_devs         NA        13    NA  0         1.10       NA     
-#> 49 Recruitment log_devs         NA        14    NA  0         1.15       NA     
-#> 50 Recruitment log_devs         NA        15    NA  0         0.864      NA     
-#> 51 Recruitment log_devs         NA        16    NA  0         0.599      NA     
-#> 52 Recruitment log_devs         NA        17    NA  0         0.410      NA     
-#> 53 Recruitment log_devs         NA        18    NA  0        -0.401      NA     
-#> 54 Recruitment log_devs         NA        19    NA  0        -1.06       NA     
-#> 55 Recruitment log_devs         NA        20    NA  0        -2.00       NA     
-#> 56 Recruitment log_devs         NA        21    NA  0        -2.79       NA     
-#> 57 Recruitment log_devs         NA        22    NA  0        -2.57       NA     
-#> 58 Recruitment log_devs         NA        23    NA  0        -2.38       NA     
-#> 59 Recruitment log_devs         NA        24    NA  0        -2.40       NA     
-#> 60 Recruitment log_devs         NA        25    NA  0        -2.06       NA     
-#> 61 Recruitment log_devs         NA        26    NA  0        -1.70       NA     
-#> 62 Recruitment log_devs         NA        27    NA  0        -1.31       NA     
-#> 63 Recruitment log_devs         NA        28    NA  0        -0.849      NA     
-#> 64 Recruitment log_devs         NA        29    NA  0        -0.509      NA     
-#> 65 Recruitment log_devs         NA        30    NA  0        -0.180      NA     
-#> 66 Recruitment log_devs         NA        31    NA  0         0.287      NA     
-#> 67 Recruitment log_devs         NA        32    NA  0         0.646      NA     
-#> 68 Recruitment log_devs         NA        33    NA  0         1.06       NA     
-#> 69 Selectivity inflection_poin… NA        NA    NA  1.5       1.62        0.0743
-#> 70 Selectivity slope_asc        NA        NA    NA  2         2.75        0.0580
-#> 71 Selectivity inflection_poin… NA        NA    NA  4         2.64        0.441 
-#> 72 Selectivity slope_desc       NA        NA    NA  1.5       1.18        0.126 
-#> 73 Selectivity inflection_point NA        NA    NA  3.03      3.34        0.0621
-#> 74 Selectivity slope            NA        NA    NA  2.2       2.00        0.0272
+#> 37 Recruitment log_devs         NA         2    NA  0         1.47        0.262 
+#> 38 Recruitment log_devs         NA         3    NA  0         1.25        0.262 
+#> 39 Recruitment log_devs         NA         4    NA  0         1.29        0.261 
+#> 40 Recruitment log_devs         NA         5    NA  0         1.17        0.261 
+#> 41 Recruitment log_devs         NA         6    NA  0         1.02        0.261 
+#> 42 Recruitment log_devs         NA         7    NA  0         1.21        0.259 
+#> 43 Recruitment log_devs         NA         8    NA  0         1.26        0.259 
+#> 44 Recruitment log_devs         NA         9    NA  0         1.28        0.259 
+#> 45 Recruitment log_devs         NA        10    NA  0         1.20        0.259 
+#> 46 Recruitment log_devs         NA        11    NA  0         1.07        0.260 
+#> 47 Recruitment log_devs         NA        12    NA  0         1.11        0.260 
+#> 48 Recruitment log_devs         NA        13    NA  0         1.10        0.260 
+#> 49 Recruitment log_devs         NA        14    NA  0         1.15        0.259 
+#> 50 Recruitment log_devs         NA        15    NA  0         0.864       0.260 
+#> 51 Recruitment log_devs         NA        16    NA  0         0.599       0.261 
+#> 52 Recruitment log_devs         NA        17    NA  0         0.410       0.260 
+#> 53 Recruitment log_devs         NA        18    NA  0        -0.401       0.260 
+#> 54 Recruitment log_devs         NA        19    NA  0        -1.06        0.262 
+#> 55 Recruitment log_devs         NA        20    NA  0        -2.00        0.257 
+#> 56 Recruitment log_devs         NA        21    NA  0        -2.79        0.257 
+#> 57 Recruitment log_devs         NA        22    NA  0        -2.57        0.246 
+#> 58 Recruitment log_devs         NA        23    NA  0        -2.38        0.246 
+#> 59 Recruitment log_devs         NA        24    NA  0        -2.40        0.241 
+#> 60 Recruitment log_devs         NA        25    NA  0        -2.06        0.245 
+#> 61 Recruitment log_devs         NA        26    NA  0        -1.70        0.247 
+#> 62 Recruitment log_devs         NA        27    NA  0        -1.31        0.250 
+#> 63 Recruitment log_devs         NA        28    NA  0        -0.849       0.253 
+#> 64 Recruitment log_devs         NA        29    NA  0        -0.509       0.256 
+#> 65 Recruitment log_devs         NA        30    NA  0        -0.180       0.258 
+#> 66 Recruitment log_devs         NA        31    NA  0         0.287       0.261 
+#> 67 Recruitment log_devs         NA        32    NA  0         0.646       0.265 
+#> 68 Recruitment log_devs         NA        33    NA  0         1.06        0.268 
+#> 69 Selectivity inflection_poin… fish…     NA    NA  1.5       1.62        0.0743
+#> 70 Selectivity slope_asc        fish…     NA    NA  2         2.75        0.0580
+#> 71 Selectivity inflection_poin… fish…     NA    NA  4         2.64        0.441 
+#> 72 Selectivity slope_desc       fish…     NA    NA  1.5       1.18        0.126 
+#> 73 Selectivity inflection_point surv…     NA    NA  3.03      3.34        0.0621
+#> 74 Selectivity slope            surv…     NA    NA  2.2       2.00        0.0272
 #> 75 Population  log_init_naa     NA        NA     1 25.7      25.8         0.0742
 #> 76 Population  log_init_naa     NA        NA     2 24.0      24.2         0.0968
 #> 77 Population  log_init_naa     NA        NA     3 22.7      23.0         0.106 
 #> 78 Population  log_init_naa     NA        NA     4 21.2      21.2         0.152 
 #> 79 Population  log_init_naa     NA        NA     5 19.7      19.5         0.257 
 #> 80 Population  log_init_naa     NA        NA     6 18.5      18.8         0.360 
-#> 81 Population  log_init_naa     NA        NA     7 18.0      17.7         0.656
+#> 81 Population  log_init_naa     NA        NA     7 18.0      17.7         0.656 
+#> 82 Recruitment log_sd           NA        NA    NA  0.335     0.338       0.125
 ```
 
 ## Compare OM and FIMS
