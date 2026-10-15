@@ -76,7 +76,7 @@ jobs:
         if: inputs.commit-directly == true
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: 'update data from /data-raw'
+          commit_message: 'chore: Updates data from /data-raw'
       
       - name: specify base branch
         id: specify-base
