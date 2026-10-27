@@ -15,6 +15,7 @@ utils::globalVariables(c(
 #'   * catch
 #'   * numbers-at-age by dividing biomass-at-age by weight-at-age information
 #'   * weight
+#'   * age-structured total, fishing, and natural mortality when available
 #'
 #' @param data A tibble containing ecosystem model (e.g., Ecopath with Ecosim)
 #' outputs from [ecosystemom::load_model()].
@@ -87,17 +88,29 @@ get_truth <- function(data, species_name) {
   is_ecospace <- data |>
     dplyr::filter(grepl("ecospace", file_name, ignore.case = TRUE)) |>
     nrow() > 0
+  species_data <- data |>
+    dplyr::filter(grepl(species_name, species))
+  unique_data_type <- unique(species_data[["type"]])
+
   # Create a tibble with the labels (e.g., biomass) and types (e.g., index)
   # Define available labels from data
   if (is_ecospace) {
-    labels <- c("biomass", "catch")
+    labels <- c(
+      "biomass", "catch",
+      intersect(
+        c(
+          "fishing_mortality", "natural_mortality",
+          "total_mortality", "weight"
+        ),
+        unique_data_type
+      )
+    )
   } else {
     labels <- c(
       "biomass", "catch", "fishing_mortality", "natural_mortality",
       "total_mortality", "weight"
     )
   }
-  unique_data_type <- unique(data[["type"]])
   missing_data <- setdiff(labels, unique_data_type)
   if (length(missing_data) > 0) {
     cli::cli_abort(c(
@@ -156,7 +169,7 @@ get_truth <- function(data, species_name) {
     dplyr::filter(type == "agecomp") |>
     dplyr::pull(label)
 
-  # Calculate monthly age composition (e.g., biomass, catch, and weight)
+  # Calculate monthly age composition (e.g., biomass, catch, weight, and mortality)
   truth_agecomp_monthly <- purrr::map(
     truth_monthly[agecomp_labels],
     function(x) get_truth_agecomp_monthly(x)
@@ -173,18 +186,39 @@ get_truth <- function(data, species_name) {
   truth_baa_monthly <- truth_agecomp_monthly[["biomass"]]
   if ("weight" %in% labels) {
     truth_waa_monthly <- truth_agecomp_monthly[["weight"]]
-    # Calculate numbers-at-age by dividing biomass-at-age by weight-at-age,
-    # rounded to integers
+    weight_monthly <- truth_waa_monthly |>
+      dplyr::select(
+        species, group, year, month,
+        weight_month = value
+      )
+    weight_yearly <- truth_waa_monthly |>
+      dplyr::group_by(species, group, year) |>
+      dplyr::summarise(
+        weight_year = mean(value, na.rm = TRUE),
+        .groups = "drop"
+      )
+
+    # Ecospace weights are annual snapshots, while biomass may be monthly.
+    # Use a month-specific weight where available and otherwise the yearly value.
     truth_agecomp_monthly[["numbers"]] <- truth_baa_monthly |>
+      dplyr::left_join(
+        weight_monthly,
+        by = c("species", "group", "year", "month")
+      ) |>
+      dplyr::left_join(
+        weight_yearly,
+        by = c("species", "group", "year")
+      ) |>
       dplyr::mutate(
         type = "numbers",
-        value = unlist(purrr::map2(
-          truth_baa_monthly[["value"]],
-          truth_waa_monthly[["value"]],
-          function(x, y) x / y
-        )),
+        value = dplyr::if_else(
+          dplyr::coalesce(weight_month, weight_year) > 0,
+          value / dplyr::coalesce(weight_month, weight_year),
+          NA_real_
+        ),
         unit = NA_character_
-      )
+      ) |>
+      dplyr::select(-weight_month, -weight_year)
     cli::cli_alert_info(
       "The unit for {.field numbers} is currently set to {.val NA}. Numbers need
     to be rescaled and filled in using {.fn dplyr::mutate} based on the underlying

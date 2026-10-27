@@ -58,6 +58,7 @@ The following values are calculated within this function:
 \item catch
 \item numbers-at-age by dividing biomass-at-age by weight-at-age information
 \item weight
+\item age-structured total, fishing, and natural mortality when available
 }
 }
 \examples{

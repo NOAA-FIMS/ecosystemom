@@ -160,3 +160,70 @@ test_that("get_truth() returns correct error messages", {
     regexp = "at-age data is missing"
   )
 })
+
+test_that("get_truth() uses annual Ecospace weights for monthly numbers and includes mortality", {
+  #' @description Test that Ecospace truth derives numbers from biomass divided by yearly weight and retains age-structured mortality.
+  groups <- c("Fish 0yr", "Fish 1yr")
+  biomass <- tidyr::expand_grid(
+    year = 2000:2001,
+    month = 1:2,
+    functional_group = groups
+  ) |>
+    dplyr::mutate(
+      type = "biomass",
+      value = dplyr::case_when(
+        functional_group == "Fish 0yr" & month == 1 ~ 20,
+        functional_group == "Fish 0yr" & month == 2 ~ 40,
+        TRUE ~ 10
+      ),
+      file_name = "Ecospace_Average_Biomass.csv"
+    )
+  catch <- biomass |>
+    dplyr::mutate(type = "catch", value = 1)
+  weight <- tidyr::expand_grid(
+    year = 2000:2001,
+    month = 1L,
+    functional_group = groups
+  ) |>
+    dplyr::mutate(
+      type = "weight",
+      value = 2,
+      file_name = "AgeStructure_Fish_Region_All_Weight.csv"
+    )
+  mortality <- tidyr::expand_grid(
+    year = 2000:2001,
+    month = 1L,
+    functional_group = groups,
+    type = c("total_mortality", "fishing_mortality", "natural_mortality")
+  ) |>
+    dplyr::mutate(
+      value = 0.1,
+      file_name = "AgeStructure_Fish_Region_All_Number.csv"
+    )
+  data_ecospace <- dplyr::bind_rows(biomass, catch, weight, mortality) |>
+    dplyr::mutate(
+      species = "fish",
+      group = ifelse(functional_group == "Fish 0yr", "0yr", "1yr"),
+      functional_group_snake_case = tolower(gsub(" ", "_", functional_group)),
+      unit = "mt"
+    )
+
+  truth <- get_truth(data_ecospace, species_name = "fish") |>
+    tidyr::unnest(cols = c(truth_om))
+
+  expect_true(all(c(
+    "fishing_mortality", "natural_mortality", "total_mortality", "weight", "numbers"
+  ) %in% truth[["truth_label"]]))
+  expect_equal(
+    truth |>
+      dplyr::filter(
+        truth_label == "numbers",
+        truth_time_step == "monthly",
+        truth_year == 2000,
+        truth_month == 2,
+        truth_group == "0yr"
+      ) |>
+      dplyr::pull(truth_value),
+    20
+  )
+})

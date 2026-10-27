@@ -218,3 +218,221 @@ test_that("load_model_ewe_ecosim() warns when negative natural mortality is dete
     regexp = r"(Detected negative natural mortality in year\(s\):|We used 0 for those negative natural mortality values for now|Please check the Ecosim fishing mortality input)"
   )
 })
+
+test_that("read_ecospace_age_structure() reads monthly-age columns and timestep metadata", {
+  #' @description Test that the Ecospace age-structure reader parses values and derives timesteps per year.
+  withr::with_tempdir({
+    file_path <- "ages.csv"
+    writeLines(
+      c(
+        "EcoSpaceTimeStepLength,0.0833333333333333",
+        "StartYear,1980",
+        "Timestep,Region,Fish (0yr)_0,Fish (0yr)_1",
+        "0,Ecosim Base Values,0.1,0.2",
+        "1,0,0.3,0.4"
+      ),
+      file_path
+    )
+
+    age_structure <- ecosystemom:::read_ecospace_age_structure(file_path)
+
+    expect_equal(age_structure[["steps_per_year"]], 12)
+    expect_equal(
+      age_structure[["data"]] |>
+        dplyr::filter(timestep == 1) |>
+        dplyr::arrange(age_month) |>
+        dplyr::pull(value),
+      c(0.3, 0.4)
+    )
+  })
+})
+
+test_that("calculate_ecospace_mortality() derives instantaneous F and M from cohort Z", {
+  #' @description Test that Ecospace exploitation is converted to instantaneous fishing mortality and M equals Z minus F.
+  numbers_by_age_month <- tidyr::expand_grid(
+    year = 1:2,
+    age_month = 0:23
+  ) |>
+    dplyr::mutate(
+      functional_group = ifelse(age_month < 12, "Fish 0yr", "Fish 1yr"),
+      number = dplyr::case_when(
+        year == 2 & age_month >= 12 ~ 80,
+        TRUE ~ 100
+      )
+    )
+  annual_biomass <- tidyr::expand_grid(
+    year = 1:2,
+    functional_group = c("Fish 0yr", "Fish 1yr")
+  ) |>
+    dplyr::mutate(biomass = 100)
+  annual_catch <- tidyr::expand_grid(
+    year = 1:2,
+    functional_group = c("Fish 0yr", "Fish 1yr")
+  ) |>
+    dplyr::mutate(catch = 10)
+
+  mortality <- ecosystemom:::calculate_ecospace_mortality(
+    numbers_by_age_month = numbers_by_age_month,
+    annual_biomass = annual_biomass,
+    annual_catch = annual_catch,
+    steps_per_year = 12
+  )
+
+  expected_total_mortality <- -log(80 / 100)
+  expected_fishing_mortality <- 0.1 * (
+    expected_total_mortality / (1 - exp(-expected_total_mortality))
+  )
+  expect_equal(mortality[["total_mortality"]], expected_total_mortality)
+  expect_equal(mortality[["fishing_mortality"]], expected_fishing_mortality)
+  expect_equal(
+    mortality[["natural_mortality"]],
+    expected_total_mortality - expected_fishing_mortality
+  )
+})
+
+test_that("load_model_ewe_ecospace() adds age weights and mortality in the standard schema", {
+  #' @description Test that the Ecospace age-structure file pair produces standard load_model rows using existing biomass and catch outputs.
+  withr::with_tempdir({
+    region_age_dir <- fs::path("RegionAgeStructure")
+    fs::dir_create(region_age_dir)
+    functional_groups <- split_functional_groups(c("Fish (0yr)", "Fish (1yr)"))
+
+    annual_biomass <- data.frame(
+      Year = 1:3,
+      "Fish (0yr)" = 100,
+      "Fish (1yr)" = c(100, 80, 64),
+      check.names = FALSE
+    )
+    annual_catch <- data.frame(
+      Year = 1:3,
+      "Fleet|Fish (0yr)" = 10,
+      "Fleet|Fish (1yr)" = 10,
+      check.names = FALSE
+    )
+    utils::write.csv(
+      annual_biomass,
+      "Ecospace_Annual_Average_Biomass.csv",
+      row.names = FALSE,
+      quote = FALSE
+    )
+    utils::write.csv(
+      annual_catch,
+      "Ecospace_Annual_Average_Catch.csv",
+      row.names = FALSE,
+      quote = FALSE
+    )
+
+    monthly_biomass <- data.frame(
+      TimeStep = 1:36,
+      "Fish (0yr)" = 100,
+      "Fish (1yr)" = 100,
+      check.names = FALSE
+    )
+    monthly_catch <- data.frame(
+      TimeStep = 1:36,
+      "Fish (0yr)" = 10,
+      "Fish (1yr)" = 10,
+      check.names = FALSE
+    )
+    utils::write.csv(
+      monthly_biomass,
+      "Ecospace_Average_Biomass.csv",
+      row.names = FALSE,
+      quote = FALSE
+    )
+    utils::write.csv(
+      monthly_catch,
+      "Ecospace_Average_Catch.csv",
+      row.names = FALSE,
+      quote = FALSE
+    )
+
+    age_month_indices <- 0:23
+    functional_groups_by_age_month <- ifelse(
+      age_month_indices < 12,
+      "Fish (0yr)",
+      "Fish (1yr)"
+    )
+    age_month_column_names <- paste0(
+      functional_groups_by_age_month,
+      "_",
+      age_month_indices
+    )
+    weight_at_age_values <- data.frame(
+      Timestep = c(0, 1, 13, 25),
+      Region = c("Ecosim Base Values", 0, 0, 0),
+      matrix(1, nrow = 4, ncol = length(age_month_indices)),
+      check.names = FALSE
+    )
+    names(weight_at_age_values)[-(1:2)] <- age_month_column_names
+    number_at_age_values <- weight_at_age_values
+    number_at_age_values[1, -(1:2)] <- 0
+    number_at_age_values[2:4, -(1:2)] <- 100
+    number_at_age_values[3, 15:26] <- 20
+    number_at_age_values[4, 15:26] <- 5
+
+    write_age_file <- function(data, suffix) {
+      temporary_file <- tempfile()
+      utils::write.csv(data, temporary_file, row.names = FALSE, quote = FALSE)
+      output_file <- fs::path(
+        region_age_dir,
+        paste0("AgeStructure_Fish_Region_All_", suffix, ".csv")
+      )
+      writeLines(
+        c(
+          "EcoSpaceTimeStepLength,0.0833333333333333",
+          "StartYear,2000",
+          readLines(temporary_file)
+        ),
+        output_file
+      )
+    }
+    write_age_file(weight_at_age_values, "Weight")
+    write_age_file(number_at_age_values, "Number")
+
+    model <- load_model_ewe_ecospace(
+      directory = ".",
+      functional_groups = functional_groups,
+      verbose = FALSE
+    )
+
+    expect_equal(
+      colnames(model),
+      c(
+        "file_name", "type", "year", "month", "functional_group", "value",
+        "species", "group", "functional_group_snake_case", "unit"
+      )
+    )
+    expect_true(all(c(
+      "biomass", "catch", "weight", "total_mortality",
+      "fishing_mortality", "natural_mortality"
+    ) %in% unique(model[["type"]])))
+
+    fish_zero_year_one <- model |>
+      dplyr::filter(
+        functional_group == "Fish (0yr)",
+        year == 1,
+        month == 1
+      ) |>
+      dplyr::select(type, value) |>
+      tibble::deframe()
+    expected_total_mortality <- -log(80 / 100)
+    expected_fishing_mortality <- 0.1 * (
+      expected_total_mortality /
+        (1 - exp(-expected_total_mortality))
+    )
+    expect_equal(unname(fish_zero_year_one[["weight"]]), 1)
+    expect_equal(
+      unname(fish_zero_year_one[["total_mortality"]]),
+      expected_total_mortality
+    )
+    expect_equal(
+      unname(fish_zero_year_one[["fishing_mortality"]]),
+      expected_fishing_mortality
+    )
+    expect_equal(
+      unname(fish_zero_year_one[["natural_mortality"]]),
+      expected_total_mortality - expected_fishing_mortality
+    )
+  })
+})
