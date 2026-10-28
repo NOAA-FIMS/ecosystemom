@@ -434,5 +434,62 @@ test_that("load_model_ewe_ecospace() adds age weights and mortality in the stand
       unname(fish_zero_year_one[["natural_mortality"]]),
       expected_total_mortality - expected_fishing_mortality
     )
+
+    # Increase exploitation only in year 1 so the output contains both clamped
+    # and unchanged natural mortality, without altering cohort total mortality.
+    annual_catch[["Fleet|Fish (0yr)"]][1] <- 100
+    annual_catch[["Fleet|Fish (1yr)"]][1] <- 100
+    utils::write.csv(
+      annual_catch,
+      "Ecospace_Annual_Average_Catch.csv",
+      row.names = FALSE,
+      quote = FALSE
+    )
+    expect_no_warning(
+      model_high_catch <- load_model_ewe_ecospace(
+        directory = ".",
+        functional_groups = functional_groups,
+        verbose = FALSE
+      )
+    )
+    expect_warning(
+      model_with_warning <- load_model_ewe_ecospace(
+        directory = ".",
+        functional_groups = functional_groups,
+        verbose = TRUE
+      ),
+      regexp = paste0(
+        "Detected negative Ecospace natural mortality in year\\(s\\): 1\\.",
+        "[\\s\\S]*We used 0 for those negative natural mortality values for now\\.",
+        "[\\s\\S]*Please check the Ecospace catch and biomass inputs\\."
+      ),
+      perl = TRUE
+    )
+    expect_equal(model_with_warning, model_high_catch)
+    expect_identical(names(model_high_catch), names(model))
+
+    high_catch_mortality <- model_high_catch |>
+      dplyr::filter(year == 1, type == "natural_mortality") |>
+      dplyr::pull(value)
+    expect_length(high_catch_mortality, 1)
+    expect_equal(high_catch_mortality, 0)
+    expect_equal(
+      model_high_catch |>
+        dplyr::filter(year == 1, type == "fishing_mortality") |>
+        dplyr::pull(value),
+      10 * expected_fishing_mortality
+    )
+    expect_equal(
+      model_high_catch |>
+        dplyr::filter(type == "total_mortality"),
+      model |>
+        dplyr::filter(type == "total_mortality")
+    )
+    expect_equal(
+      model_high_catch |>
+        dplyr::filter(year == 2),
+      model |>
+        dplyr::filter(year == 2)
+    )
   })
 })

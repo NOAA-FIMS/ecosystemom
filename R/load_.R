@@ -357,6 +357,8 @@ load_model_ewe_ecosim <- function(
 #' matched by their `All_Weight` and `All_Number` suffixes; the Number data
 #' contributes to the number-weighted average weight, while cohort abundance
 #' for mortality is derived from annual biomass divided by that weight.
+#' Negative natural mortality is replaced with zero after cohort aggregation;
+#' total mortality and instantaneous fishing mortality are left unchanged.
 #'
 #' @param directory Path to an Ecospace output directory.
 #' @param functional_groups A tibble mapping functional-group names to species
@@ -649,9 +651,23 @@ load_model_ewe_ecospace <- function(
     if (nrow(negative_natural_mortality) > 0 && verbose) {
       years_with_negative_m <- paste(negative_natural_mortality[["year"]], collapse = ", ")
       cli::cli_warn(
-        "Detected negative Ecospace natural mortality in year(s): {years_with_negative_m}."
+        c(
+          "Detected negative Ecospace natural mortality in year(s): {years_with_negative_m}.",
+          "i" = "We used 0 for those negative natural mortality values for now.",
+          "i" = "Please check the Ecospace catch and biomass inputs. Are the input values reasonable? Is catch greater than biomass?"
+        )
       )
     }
+
+    # Clamp only the final natural mortality, even when warnings are suppressed.
+    mortality <- mortality |>
+      dplyr::mutate(
+        value = dplyr::if_else(
+          type == "natural_mortality",
+          pmax(value, 0),
+          value
+        )
+      )
   } else {
     weight_data <- tibble::tibble()
     mortality <- tibble::tibble()
