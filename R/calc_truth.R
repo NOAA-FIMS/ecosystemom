@@ -17,6 +17,9 @@ utils::globalVariables(c(
 #'   * weight
 #'   * age-structured total, fishing, and natural mortality when available
 #'
+#' Ecospace biomass truth uses the weight-times-number biomass calculated by
+#' [load_model()] from the first age-structure snapshot of each model year.
+#'
 #' @param data A tibble containing ecosystem model (e.g., Ecopath with Ecosim)
 #' outputs from [ecosystemom::load_model()].
 #' @param species_name A string specifying the desired species you want to

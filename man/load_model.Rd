@@ -28,3 +28,51 @@ A tibble is returned that matches the structure of \link{ewe_ecosim_base_nwatlan
 Load the necessary files from an ecosystem model and return a single, long
 data frame of information.
 }
+\details{
+For Ecospace, biomass is calculated from paired \code{All_Weight} and
+\code{All_Number} age-structure files, summed by functional group using the first
+snapshot of each model year. Annual and monthly biomass CSVs are not read.
+These calculated biomass values are also used by \code{\link[=get_truth]{get_truth()}}.
+Pass \code{weight_scale} as a positive scalar or a named numeric vector keyed by
+species (exactly matching \code{functional_groups[["species"]]} for species with
+age-structure data). Each raw weight is multiplied by this factor before
+biomass, average weight, and mortality are calculated. The default is \code{1}
+(no conversion). Numbers truth is unchanged because biomass and weight
+receive the same factor; catch is not scaled.
+For example, \code{weight_scale = 696 / 1e6} converts relative-to-Winf weights
+with Winf of 696 grams to metric tons per individual. Set \code{unit} to label
+the resulting biomass, catch, and weight units; labels do not convert values.
+When a non-identity scale is supplied without \code{unit}, weights are labeled
+\code{"scaled_weight"} rather than \code{"relative_to_Winf"}. The factor must also
+account for any spatial normalization needed to match the catch scale.
+}
+\examples{
+\dontrun{
+# Illustrative species and Winf values; replace with your model's values.
+functional_groups <- split_functional_groups(c(
+  "Fish A (0yr)", "Fish A (1yr)",
+  "Fish B (0yr)", "Fish B (1yr)"
+))
+unique(functional_groups[["species"]])
+# "Fish A" "Fish B"
+
+# Names must match species exactly, not functional-group age labels.
+# Include every species represented in the age-structure files.
+winf_grams <- c("Fish A" = 696, "Fish B" = 1200)
+weight_scale <- winf_grams / 1e6
+
+# Assuming catch is in metric tons and Number has compatible spatial units:
+model <- load_model(
+  directory = "path/to/ecospace/output",
+  functional_groups = functional_groups,
+  type = "ewe_ecospace",
+  weight_scale = weight_scale,
+  unit = c(biomass = "mt", catch = "mt", weight = "mt")
+)
+truth <- get_truth(model, species_name = "Fish A")
+
+# For a single-species model, a scalar is sufficient:
+# weight_scale = 696 / 1e6
+}
+
+}

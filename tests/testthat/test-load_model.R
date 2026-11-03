@@ -291,29 +291,17 @@ test_that("calculate_ecospace_mortality() derives instantaneous F and M from coh
 })
 
 test_that("load_model_ewe_ecospace() adds age weights and mortality in the standard schema", {
-  #' @description Test that the Ecospace age-structure file pair produces standard load_model rows using existing biomass and catch outputs.
+  #' @description Test that Ecospace derives biomass and truth from paired weights and numbers without biomass CSVs.
   withr::with_tempdir({
     region_age_dir <- fs::path("RegionAgeStructure")
     fs::dir_create(region_age_dir)
     functional_groups <- split_functional_groups(c("Fish (0yr)", "Fish (1yr)"))
 
-    annual_biomass <- data.frame(
-      Year = 1:3,
-      "Fish (0yr)" = 100,
-      "Fish (1yr)" = c(100, 80, 64),
-      check.names = FALSE
-    )
     annual_catch <- data.frame(
       Year = 1:3,
       "Fleet|Fish (0yr)" = 10,
       "Fleet|Fish (1yr)" = 10,
       check.names = FALSE
-    )
-    utils::write.csv(
-      annual_biomass,
-      "Ecospace_Annual_Average_Biomass.csv",
-      row.names = FALSE,
-      quote = FALSE
     )
     utils::write.csv(
       annual_catch,
@@ -322,23 +310,11 @@ test_that("load_model_ewe_ecospace() adds age weights and mortality in the stand
       quote = FALSE
     )
 
-    monthly_biomass <- data.frame(
-      TimeStep = 1:36,
-      "Fish (0yr)" = 100,
-      "Fish (1yr)" = 100,
-      check.names = FALSE
-    )
     monthly_catch <- data.frame(
       TimeStep = 1:36,
       "Fish (0yr)" = 10,
       "Fish (1yr)" = 10,
       check.names = FALSE
-    )
-    utils::write.csv(
-      monthly_biomass,
-      "Ecospace_Average_Biomass.csv",
-      row.names = FALSE,
-      quote = FALSE
     )
     utils::write.csv(
       monthly_catch,
@@ -359,17 +335,22 @@ test_that("load_model_ewe_ecospace() adds age weights and mortality in the stand
       age_month_indices
     )
     weight_at_age_values <- data.frame(
-      Timestep = c(0, 1, 13, 25),
-      Region = c("Ecosim Base Values", 0, 0, 0),
-      matrix(1, nrow = 4, ncol = length(age_month_indices)),
+      Timestep = c(0, 1, 13, 25, 2),
+      Region = c("Ecosim Base Values", 0, 0, 0, 0),
+      matrix(
+        rep(c(1, 2), 12), nrow = 5,
+        ncol = length(age_month_indices), byrow = TRUE
+      ),
       check.names = FALSE
     )
     names(weight_at_age_values)[-(1:2)] <- age_month_column_names
     number_at_age_values <- weight_at_age_values
     number_at_age_values[1, -(1:2)] <- 0
-    number_at_age_values[2:4, -(1:2)] <- 100
-    number_at_age_values[3, 15:26] <- 20
-    number_at_age_values[4, 15:26] <- 5
+    number_at_age_values[2:4, -(1:2)] <-
+      matrix(rep(c(100, 200), 12), nrow = 3, ncol = 24, byrow = TRUE)
+    number_at_age_values[3, 15:26] <- rep(c(20, 40), 6)
+    number_at_age_values[4, 15:26] <- rep(c(5, 10), 6)
+    number_at_age_values[5, -(1:2)] <- 5000
 
     write_age_file <- function(data, suffix) {
       temporary_file <- tempfile()
@@ -396,6 +377,23 @@ test_that("load_model_ewe_ecospace() adds age weights and mortality in the stand
       verbose = FALSE
     )
 
+    writeLines(
+      "This biomass file must not be read.",
+      "Ecospace_Annual_Average_Biomass.csv"
+    )
+    writeLines(
+      "This biomass file must not be read.",
+      "Ecospace_Average_Biomass.csv"
+    )
+    expect_equal(
+      load_model_ewe_ecospace(
+        directory = ".",
+        functional_groups = functional_groups,
+        verbose = FALSE
+      ),
+      model
+    )
+
     expect_equal(
       colnames(model),
       c(
@@ -416,12 +414,60 @@ test_that("load_model_ewe_ecospace() adds age weights and mortality in the stand
       ) |>
       dplyr::select(type, value) |>
       tibble::deframe()
-    expected_total_mortality <- -log(80 / 100)
-    expected_fishing_mortality <- 0.1 * (
+    expected_total_mortality <- -log(360 / 1800)
+    expected_fishing_mortality <- (10 / 3000) * (
       expected_total_mortality /
         (1 - exp(-expected_total_mortality))
     )
-    expect_equal(unname(fish_zero_year_one[["weight"]]), 1)
+    expect_equal(unname(fish_zero_year_one[["weight"]]), 5 / 3)
+    expect_equal(unname(fish_zero_year_one[["biomass"]]), 3000)
+    expect_equal(
+      model |>
+        dplyr::filter(type == "biomass") |>
+        dplyr::arrange(year, functional_group) |>
+        dplyr::pull(value),
+      c(3000, 3000, 3000, 600, 3000, 150)
+    )
+    expect_equal(
+      model |>
+        dplyr::filter(type == "catch") |>
+        dplyr::pull(value),
+      rep(10, 72)
+    )
+    truth <- get_truth(model, species_name = "Fish") |>
+      tidyr::unnest(cols = truth_om)
+    for (time_step in c("monthly", "yearly")) {
+      expect_equal(
+        truth |>
+          dplyr::filter(
+            truth_label == "biomass", truth_type == "agecomp",
+            truth_time_step == time_step
+          ) |>
+          dplyr::arrange(truth_year, truth_group) |>
+          dplyr::pull(truth_value),
+        c(3000, 3000, 3000, 600, 3000, 150)
+      )
+      expect_equal(
+        truth |>
+          dplyr::filter(
+            truth_label == "biomass", truth_type == "index",
+            truth_time_step == time_step
+          ) |>
+          dplyr::arrange(truth_year) |>
+          dplyr::pull(truth_value),
+        c(6000, 3600, 3150)
+      )
+      expect_equal(
+        truth |>
+          dplyr::filter(
+            truth_label == "numbers", truth_type == "agecomp",
+            truth_time_step == time_step
+          ) |>
+          dplyr::arrange(truth_year, truth_group) |>
+          dplyr::pull(truth_value),
+        c(1800, 1800, 1800, 360, 1800, 90)
+      )
+    }
     expect_equal(
       unname(fish_zero_year_one[["total_mortality"]]),
       expected_total_mortality
@@ -435,10 +481,189 @@ test_that("load_model_ewe_ecospace() adds age weights and mortality in the stand
       expected_total_mortality - expected_fishing_mortality
     )
 
+    weight_scale <- 696 / 1e6
+    scaled_model <- load_model(
+      directory = ".",
+      functional_groups = functional_groups,
+      type = "ewe_ecospace",
+      verbose = FALSE,
+      weight_scale = weight_scale,
+      unit = c(biomass = "mt", catch = "mt", weight = "mt")
+    )
+    for (output_type in c("biomass", "weight")) {
+      expect_equal(
+        scaled_model |>
+          dplyr::filter(type == output_type) |>
+          dplyr::pull(value),
+        weight_scale * (model |>
+          dplyr::filter(type == output_type) |>
+          dplyr::pull(value))
+      )
+    }
+    expect_equal(
+      scaled_model |>
+        dplyr::filter(type == "fishing_mortality") |>
+        dplyr::pull(value),
+      (model |>
+        dplyr::filter(type == "fishing_mortality") |>
+        dplyr::pull(value)) / weight_scale
+    )
+    for (output_type in c("catch", "total_mortality")) {
+      expect_equal(
+        scaled_model |>
+          dplyr::filter(type == output_type) |>
+          dplyr::pull(value),
+        model |>
+          dplyr::filter(type == output_type) |>
+          dplyr::pull(value)
+      )
+    }
+    scaled_truth <- get_truth(scaled_model, "Fish") |>
+      tidyr::unnest(cols = truth_om)
+    expect_equal(
+      scaled_truth |>
+        dplyr::filter(truth_label == "biomass") |>
+        dplyr::pull(truth_value),
+      weight_scale * (truth |>
+        dplyr::filter(truth_label == "biomass") |>
+        dplyr::pull(truth_value))
+    )
+    expect_equal(
+      scaled_truth |>
+        dplyr::filter(truth_label == "numbers"),
+      truth |>
+        dplyr::filter(truth_label == "numbers")
+    )
+    expect_equal(
+      scaled_model |>
+        dplyr::filter(type %in% c("biomass", "catch", "weight")) |>
+        dplyr::pull(unit) |>
+        unique(),
+      "mt"
+    )
+    expect_equal(
+      load_model_ewe_ecospace(
+        ".", functional_groups, verbose = FALSE, weight_scale = weight_scale
+      ) |>
+        dplyr::filter(type == "weight") |>
+        dplyr::pull(unit) |>
+        unique(),
+      "scaled_weight"
+    )
+    expect_equal(
+      load_model_ewe_ecospace(
+        ".", functional_groups, verbose = FALSE,
+        weight_scale = c(Fish = weight_scale),
+        unit = c(biomass = "mt", catch = "mt", weight = "mt")
+      ),
+      scaled_model
+    )
+    expect_error(
+      load_model_ewe_ecospace(
+        ".", functional_groups, verbose = FALSE,
+        weight_scale = c(Other = weight_scale)
+      ),
+      "Missing.*weight_scale.*Fish"
+    )
+    source_directory <- getwd()
+    withr::with_tempdir({
+      fs::dir_create("RegionAgeStructure")
+      for (suffix in c("Weight", "Number")) {
+        age_file <- paste0("AgeStructure_Fish_Region_All_", suffix, ".csv")
+        lines <- readLines(fs::path(
+          source_directory, "RegionAgeStructure", age_file
+        ))
+        writeLines(lines, fs::path("RegionAgeStructure", age_file))
+        writeLines(
+          gsub("Fish", "Other", lines, fixed = TRUE),
+          fs::path("RegionAgeStructure", sub("Fish", "Other", age_file))
+        )
+      }
+      two_species_catch <- annual_catch
+      two_species_catch[["Fleet|Other (0yr)"]] <- 10
+      two_species_catch[["Fleet|Other (1yr)"]] <- 10
+      utils::write.csv(
+        two_species_catch, "Ecospace_Annual_Average_Catch.csv",
+        row.names = FALSE, quote = FALSE
+      )
+      two_species_monthly_catch <- monthly_catch
+      two_species_monthly_catch[["Other (0yr)"]] <- 10
+      two_species_monthly_catch[["Other (1yr)"]] <- 10
+      utils::write.csv(
+        two_species_monthly_catch, "Ecospace_Average_Catch.csv",
+        row.names = FALSE, quote = FALSE
+      )
+      two_species_model <- load_model_ewe_ecospace(
+        ".", split_functional_groups(c(
+          "Fish (0yr)", "Fish (1yr)", "Other (0yr)", "Other (1yr)"
+        )),
+        verbose = FALSE,
+        weight_scale = c(Other = 2 * weight_scale, Fish = weight_scale)
+      )
+      for (species_name in c("Fish", "Other")) {
+        factor <- if (species_name == "Fish") {
+          weight_scale
+        } else {
+          2 * weight_scale
+        }
+        expect_equal(
+          two_species_model |>
+            dplyr::filter(species == species_name, type == "biomass") |>
+            dplyr::arrange(year, group) |>
+            dplyr::pull(value),
+          factor * c(3000, 3000, 3000, 600, 3000, 150)
+        )
+        expect_equal(
+          get_truth(two_species_model, species_name) |>
+            tidyr::unnest(cols = truth_om) |>
+            dplyr::filter(
+              truth_label == "numbers", truth_type == "agecomp",
+              truth_time_step == "yearly"
+            ) |>
+            dplyr::arrange(truth_year, truth_group) |>
+            dplyr::pull(truth_value),
+          c(1800, 1800, 1800, 360, 1800, 90)
+        )
+      }
+    })
+
+    second_region_weights <- weight_at_age_values[2:4, ]
+    second_region_weights[["Region"]] <- 1
+    second_region_numbers <- number_at_age_values[2:4, ]
+    second_region_numbers[["Region"]] <- 1
+    write_age_file(rbind(weight_at_age_values, second_region_weights), "Weight")
+    write_age_file(rbind(number_at_age_values, second_region_numbers), "Number")
+    model_two_regions <- load_model_ewe_ecospace(
+      ".", functional_groups, verbose = FALSE
+    )
+    expect_equal(
+      model_two_regions |>
+        dplyr::filter(type == "biomass") |>
+        dplyr::arrange(year, functional_group) |>
+        dplyr::pull(value),
+      2 * c(3000, 3000, 3000, 600, 3000, 150)
+    )
+    expect_equal(
+      model_two_regions |>
+        dplyr::filter(type == "weight") |>
+        dplyr::pull(value),
+      rep(5 / 3, 6)
+    )
+    expect_equal(
+      model_two_regions |>
+        dplyr::filter(type == "total_mortality") |>
+        dplyr::pull(value),
+      model |>
+        dplyr::filter(type == "total_mortality") |>
+        dplyr::pull(value)
+    )
+    write_age_file(weight_at_age_values, "Weight")
+    write_age_file(number_at_age_values, "Number")
+
     # Increase exploitation only in year 1 so the output contains both clamped
     # and unchanged natural mortality, without altering cohort total mortality.
-    annual_catch[["Fleet|Fish (0yr)"]][1] <- 100
-    annual_catch[["Fleet|Fish (1yr)"]][1] <- 100
+    annual_catch[["Fleet|Fish (0yr)"]][1] <- 30000
+    annual_catch[["Fleet|Fish (1yr)"]][1] <- 30000
     utils::write.csv(
       annual_catch,
       "Ecospace_Annual_Average_Catch.csv",
@@ -477,7 +702,7 @@ test_that("load_model_ewe_ecospace() adds age weights and mortality in the stand
       model_high_catch |>
         dplyr::filter(year == 1, type == "fishing_mortality") |>
         dplyr::pull(value),
-      10 * expected_fishing_mortality
+      3000 * expected_fishing_mortality
     )
     expect_equal(
       model_high_catch |>
@@ -491,5 +716,68 @@ test_that("load_model_ewe_ecospace() adds age weights and mortality in the stand
       model |>
         dplyr::filter(year == 2)
     )
+  })
+
+  test_that("load_model_ewe_ecospace() requires age-structure files for biomass", {
+    #' @description Test that Ecospace reports missing or unmatched biomass inputs explicitly.
+    withr::with_tempdir({
+      writeLines("Year,Fish (0yr)\n1,10", "Ecospace_Annual_Average_Catch.csv")
+      functional_groups <- split_functional_groups("Fish (0yr)")
+      expect_error(
+        load_model_ewe_ecospace(".", functional_groups, verbose = FALSE),
+        "Missing Ecospace age-structure weight and number files"
+      )
+      writeLines(
+        c(
+          "EcoSpaceTimeStepLength,0.0833333333333333",
+          "Timestep,Region,Fish (0yr)_0",
+          "1,0,1"
+        ),
+        "AgeStructure_Fish_Region_All_Weight.csv"
+      )
+      expect_error(
+        load_model_ewe_ecospace(".", functional_groups, verbose = FALSE),
+        "Missing matching Ecospace number file"
+      )
+      writeLines(
+        c(
+          "EcoSpaceTimeStepLength,0.0833333333333333",
+          "Timestep,Region,Fish (0yr)_0",
+          "1,1,100"
+        ),
+        "AgeStructure_Fish_Region_All_Number.csv"
+      )
+      expect_error(
+        load_model_ewe_ecospace(".", functional_groups, verbose = FALSE),
+        "non-matching rows"
+      )
+    })
+  })
+
+  test_that("load_model_ewe_ecospace() validates weight scaling", {
+    #' @description Test that invalid factors and ambiguous species names are rejected before loading files.
+    functional_groups <- split_functional_groups("Fish (0yr)")
+    for (scale in list(
+      0, -1, NA_real_, Inf, NaN, "696", numeric(), matrix(1), 1 + 1i
+    )) {
+      expect_error(
+        load_model_ewe_ecospace(".", functional_groups, weight_scale = scale),
+        "positive finite numeric"
+      )
+    }
+    expect_error(
+      load_model_ewe_ecospace(".", functional_groups, weight_scale = c(1, 2)),
+      "must be named by species"
+    )
+    for (scale in list(
+      c(Fish = 1, Fish = 2),
+      stats::setNames(1, ""),
+      stats::setNames(1, NA_character_)
+    )) {
+      expect_error(
+        load_model_ewe_ecospace(".", functional_groups, weight_scale = scale),
+        "species names must be"
+      )
+    }
   })
 })

@@ -60,6 +60,9 @@ The following values are calculated within this function:
 \item weight
 \item age-structured total, fishing, and natural mortality when available
 }
+
+Ecospace biomass truth uses the weight-times-number biomass calculated by
+\code{\link[=load_model]{load_model()}} from the first age-structure snapshot of each model year.
 }
 \examples{
 data(ewe_ecosim_base_nwatlantic)

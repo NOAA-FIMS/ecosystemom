@@ -219,6 +219,52 @@ load_csv_ewe <- function(file_path, model_years, functional_groups, verbose = TR
 #' @return
 #' A tibble is returned that matches the structure of [ewe_ecosim_base_nwatlantic].
 #'
+#' @details For Ecospace, biomass is calculated from paired `All_Weight` and
+#' `All_Number` age-structure files, summed by functional group using the first
+#' snapshot of each model year. Annual and monthly biomass CSVs are not read.
+#' These calculated biomass values are also used by [get_truth()].
+#' Pass `weight_scale` as a positive scalar or a named numeric vector keyed by
+#' species (exactly matching `functional_groups[["species"]]` for species with
+#' age-structure data). Each raw weight is multiplied by this factor before
+#' biomass, average weight, and mortality are calculated. The default is `1`
+#' (no conversion). Numbers truth is unchanged because biomass and weight
+#' receive the same factor; catch is not scaled.
+#' For example, `weight_scale = 696 / 1e6` converts relative-to-Winf weights
+#' with Winf of 696 grams to metric tons per individual. Set `unit` to label
+#' the resulting biomass, catch, and weight units; labels do not convert values.
+#' When a non-identity scale is supplied without `unit`, weights are labeled
+#' `"scaled_weight"` rather than `"relative_to_Winf"`. The factor must also
+#' account for any spatial normalization needed to match the catch scale.
+#'
+#' @examples
+#' \dontrun{
+#' # Illustrative species and Winf values; replace with your model's values.
+#' functional_groups <- split_functional_groups(c(
+#'   "Fish A (0yr)", "Fish A (1yr)",
+#'   "Fish B (0yr)", "Fish B (1yr)"
+#' ))
+#' unique(functional_groups[["species"]])
+#' # "Fish A" "Fish B"
+#'
+#' # Names must match species exactly, not functional-group age labels.
+#' # Include every species represented in the age-structure files.
+#' winf_grams <- c("Fish A" = 696, "Fish B" = 1200)
+#' weight_scale <- winf_grams / 1e6
+#'
+#' # Assuming catch is in metric tons and Number has compatible spatial units:
+#' model <- load_model(
+#'   directory = "path/to/ecospace/output",
+#'   functional_groups = functional_groups,
+#'   type = "ewe_ecospace",
+#'   weight_scale = weight_scale,
+#'   unit = c(biomass = "mt", catch = "mt", weight = "mt")
+#' )
+#' truth <- get_truth(model, species_name = "Fish A")
+#'
+#' # For a single-species model, a scalar is sufficient:
+#' # weight_scale = 696 / 1e6
+#' }
+#'
 load_model <- function(..., type = c("ewe_ecosim", "ewe_ecospace", "atlantis"), verbose = TRUE) {
   type <- tolower(type)
   type <- rlang::arg_match(type)
@@ -352,11 +398,12 @@ load_model_ewe_ecosim <- function(
 
 #' Load Ecospace model output
 #'
-#' Read monthly biomass and catch together with annual age-structure weights
-#' and derive age-structured mortality. Ecospace age-structure files are
-#' matched by their `All_Weight` and `All_Number` suffixes; the Number data
-#' contributes to the number-weighted average weight, while cohort abundance
-#' for mortality is derived from annual biomass divided by that weight.
+#' Read monthly catch together with annual age-structure snapshots and derive
+#' biomass, number-weighted weights, and age-structured mortality. Ecospace
+#' age-structure files are matched by their `All_Weight` and `All_Number`
+#' suffixes. Biomass is the sum of weight times number across monthly-age cells
+#' and regions for each functional group at the first snapshot of each year.
+#' The Number data supplies cohort abundance for mortality.
 #' Negative natural mortality is replaced with zero after cohort aggregation;
 #' total mortality and instantaneous fishing mortality are left unchanged.
 #'
@@ -366,9 +413,38 @@ load_model_ewe_ecosim <- function(
 #' @param verbose If `TRUE`, report warnings such as negative derived natural
 #'   mortality.
 #' @param unit Named character vector giving units for biomass, catch, and
-#'   weight output.
+#'   weight output. Labels do not perform conversions. When scaling weights,
+#'   provide the converted weight unit explicitly.
+#' @param weight_scale Positive finite numeric scalar applied to every raw
+#'   weight, or a named vector keyed by species with a factor for each species
+#'   represented in the age-structure files. Defaults to `1` (no conversion).
 #'
 #' @return A tibble in the standard `load_model()` output structure.
+#' @examples
+#' \dontrun{
+#' # Illustrative species and Winf values; replace with your model's values.
+#' functional_groups <- split_functional_groups(c(
+#'   "Fish A (0yr)", "Fish A (1yr)",
+#'   "Fish B (0yr)", "Fish B (1yr)"
+#' ))
+#' unique(functional_groups[["species"]])
+#' # "Fish A" "Fish B"
+#'
+#' # Names must match species exactly, not functional-group age labels.
+#' # Include every species represented in the age-structure files.
+#' winf_grams <- c("Fish A" = 696, "Fish B" = 1200)
+#' weight_scale <- winf_grams / 1e6
+#'
+#' # Assuming catch is in metric tons and Number has compatible spatial units:
+#' model <- ecosystemom:::load_model_ewe_ecospace(
+#'   directory = "path/to/ecospace/output",
+#'   functional_groups = functional_groups,
+#'   weight_scale = weight_scale,
+#'   unit = c(biomass = "mt", catch = "mt", weight = "mt")
+#' )
+#'
+#' truth <- get_truth(model, species_name = "Fish A")
+#' }
 #' @noRd
 load_model_ewe_ecospace <- function(
   directory,
@@ -377,24 +453,39 @@ load_model_ewe_ecospace <- function(
   unit = c(
     "biomass" = "mt_per_square_kilometer_per_year",
     "catch" = "mt_per_square_kilometer_per_year",
-    "weight" = "relative_to_Winf"
-  )
+    "weight" = if (all(weight_scale == 1)) "relative_to_Winf" else "scaled_weight"
+  ),
+  weight_scale = 1
 ) {
-  # Read annual files for the model year sequence and annual biomass/catch
-  # values; these are the biomass and catch sources used in the standard output.
-  annual_biomass_file <- fs::path(directory, "Ecospace_Annual_Average_Biomass.csv")
+  if (!is.numeric(weight_scale) || is.complex(weight_scale) ||
+      length(weight_scale) == 0 ||
+      !is.null(dim(weight_scale)) ||
+      any(!is.finite(weight_scale) | weight_scale <= 0)) {
+    cli::cli_abort(
+      "{.arg weight_scale} must be a positive finite numeric scalar or a named vector keyed by species."
+    )
+  }
+  scale_names <- names(weight_scale)
+  if (is.null(scale_names)) {
+    if (length(weight_scale) != 1) {
+      cli::cli_abort(
+        "A vector {.arg weight_scale} must be named by species."
+      )
+    }
+  } else if (anyNA(scale_names) || any(!nzchar(scale_names)) ||
+             anyDuplicated(scale_names)) {
+    cli::cli_abort(
+      "{.arg weight_scale} species names must be non-missing, non-empty, and unique."
+    )
+  }
+
   annual_catch_file <- fs::path(directory, "Ecospace_Annual_Average_Catch.csv")
-  years <- read_n_skip(annual_biomass_file, keyword = "Year") |>
+  years <- read_n_skip(annual_catch_file, keyword = "Year") |>
     dplyr::pull(1)
 
-  # Load monthly biomass and catch. These files are group-level outputs; the
-  # monthly age-structure files are processed separately below.
-  terms <- c("Biomass", "Catch")
   monthly_files <- fs::dir_ls(
     path = directory,
-    regexp = paste0(
-      "Ecospace_Average_(", paste(terms, collapse = "|"), ")\\.csv$"
-    ),
+    regexp = "Ecospace_Average_Catch\\.csv$",
     type = "file"
   )
 
@@ -407,9 +498,6 @@ load_model_ewe_ecospace <- function(
     verbose = verbose
   )
 
-  # Each age-structure weight file must have a matching Number file. The
-  # Number file is retained for the number-weighted weight average, not used as
-  # cohort abundance in the mortality calculation.
   weight_files <- fs::dir_ls(
     path = directory,
     recurse = TRUE,
@@ -422,6 +510,12 @@ load_model_ewe_ecospace <- function(
     regexp = "_All_Number\\.csv$",
     type = "file"
   )
+
+  if (length(weight_files) == 0 && length(number_files) == 0) {
+    cli::cli_abort(
+      "Missing Ecospace age-structure weight and number files required to calculate biomass."
+    )
+  }
 
   if (length(setdiff(
     sub("_All_Weight\\.csv$", "_All_Number.csv", weight_files),
@@ -509,8 +603,6 @@ load_model_ewe_ecospace <- function(
         )
       }
 
-      # Keep raw Number only long enough to calculate an abundance-weighted
-      # mean weight for each stanza and year.
       paired_data <- weight_data |>
         dplyr::inner_join(
           number_data,
@@ -528,12 +620,29 @@ load_model_ewe_ecospace <- function(
           weight = value_weight,
           number = value_number
         )
-      functional_groups_by_age_month <- weight_data |>
-        dplyr::distinct(age_month, functional_group)
-
+      if (is.null(scale_names)) {
+        paired_data[["weight"]] <- paired_data[["weight"]] * weight_scale
+      } else {
+        species <- functional_groups[["species"]][match(
+          paired_data[["functional_group"]],
+          functional_groups[["functional_group"]]
+        )]
+        if (length(species) != nrow(paired_data) || anyNA(species)) {
+          cli::cli_abort(
+            "Named {.arg weight_scale} requires a species mapping for every Ecospace age group in {.arg functional_groups}."
+          )
+        }
+        missing_species <- setdiff(unique(species), scale_names)
+        if (length(missing_species) > 0) {
+          cli::cli_abort(
+            "Missing {.arg weight_scale} for species: {.val {missing_species}}."
+          )
+        }
+        paired_data[["weight"]] <-
+          paired_data[["weight"]] * unname(weight_scale[species])
+      }
       list(
         data = paired_data,
-        functional_groups_by_age_month = functional_groups_by_age_month,
         steps_per_year = weight_structure[["steps_per_year"]],
         file_name = weight_file
       )
@@ -547,9 +656,21 @@ load_model_ewe_ecospace <- function(
 
     monthly_age_data <- purrr::map(age_structure_pairs, "data") |>
       dplyr::bind_rows()
-    # Collapse monthly age cells into one number-weighted average weight for
-    # each functional group and year. These annual weights also support
-    # biomass-to-number conversion in the mortality calculation below.
+    biomass_data <- monthly_age_data |>
+      dplyr::group_by(file_name, year, functional_group) |>
+      dplyr::summarise(
+        value = sum(weight * number, na.rm = TRUE),
+        .groups = "drop"
+      ) |>
+      dplyr::mutate(
+        month = 1L,
+        type = "biomass"
+      ) |>
+      dplyr::left_join(
+        functional_groups,
+        by = "functional_group"
+      )
+
     weight_data <- monthly_age_data |>
       dplyr::group_by(file_name, year, functional_group) |>
       dplyr::summarise(
@@ -570,11 +691,9 @@ load_model_ewe_ecospace <- function(
       )
 
     steps_per_year <- age_structure_pairs[[1]][["steps_per_year"]]
-    annual_biomass <- read_ecospace_annual_data(
-      annual_biomass_file,
-      functional_groups,
-      value_name = "biomass"
-    )
+    annual_biomass <- biomass_data |>
+      dplyr::group_by(year, functional_group) |>
+      dplyr::summarise(biomass = sum(value), .groups = "drop")
     annual_catch <- read_ecospace_annual_data(
       annual_catch_file,
       functional_groups,
@@ -583,43 +702,9 @@ load_model_ewe_ecospace <- function(
     mortality <- purrr::map(
       age_structure_pairs,
       function(age_structure_pair) {
-        # Preserve the age-column-to-functional-group mapping from the input.
-        functional_groups_by_age_month <-
-          age_structure_pair[["functional_groups_by_age_month"]] |>
-          dplyr::group_by(functional_group) |>
-          dplyr::mutate(monthly_age_cells_per_group = dplyr::n()) |>
-          dplyr::ungroup()
-        group_weights <- weight_data |>
-          dplyr::filter(file_name == age_structure_pair[["file_name"]]) |>
-          dplyr::select(year, functional_group, weight = value)
-        # The annual biomass and weight outputs only identify total abundance
-        # per functional group. Spread that total evenly across its monthly-age
-        # columns so the cohort calculation can sum corresponding age ranges.
-        numbers_by_age_month <- tidyr::crossing(
-          year = sort(unique(annual_biomass[["year"]])),
-          functional_groups_by_age_month
-        ) |>
-          dplyr::left_join(
-            annual_biomass,
-            by = c("year", "functional_group")
-          ) |>
-          dplyr::left_join(
-            group_weights,
-            by = c("year", "functional_group")
-          ) |>
-          dplyr::mutate(
-            number = dplyr::if_else(
-              weight > 0,
-              biomass / weight,
-              NA_real_
-            )
-          ) |>
-          dplyr::transmute(
-            year,
-            age_month,
-            functional_group,
-            number = number / monthly_age_cells_per_group
-          )
+        numbers_by_age_month <- age_structure_pair[["data"]] |>
+          dplyr::group_by(year, age_month, functional_group) |>
+          dplyr::summarise(number = sum(number, na.rm = TRUE), .groups = "drop")
 
         calculate_ecospace_mortality(
           numbers_by_age_month = numbers_by_age_month,
@@ -668,13 +753,11 @@ load_model_ewe_ecospace <- function(
           value
         )
       )
-  } else {
-    weight_data <- tibble::tibble()
-    mortality <- tibble::tibble()
   }
 
-  data_output <- data_monthly |>
-    dplyr::bind_rows(weight_data, mortality) |>
+  data_output <- dplyr::bind_rows(
+    data_monthly, biomass_data, weight_data, mortality
+  ) |>
     tibble::as_tibble() |>
     dplyr::mutate(
       unit = unit[type]
@@ -845,7 +928,7 @@ read_ecospace_annual_data <- function(file_path, functional_groups, value_name) 
 #' then calculate natural mortality as total mortality minus fishing mortality.
 #'
 #' @param numbers_by_age_month Tibble with year, monthly age index, functional
-#'   group, and biomass/weight-derived number values.
+#'   group, and number values from the age-structure files.
 #' @param annual_biomass Tibble with annual biomass by year and functional group.
 #' @param annual_catch Tibble with annual catch by year and functional group.
 #' @param steps_per_year Number of monthly-age columns in one annual age group.
